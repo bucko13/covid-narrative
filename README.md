@@ -1,3 +1,17 @@
+### Data Sources
+#### State
+https://covidtracking.com/data/api
+
+**Populations:** https://datausa.io/api/data?drilldowns=State&measures=Population&year=latest
+
+$R_t$ Data: https://rt.live/
+
+#### World
+**Our World In Data**
+https://github.com/owid/covid-19-data/tree/master/public/data/
+
+
+
 <!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
 <p align="center">
   <a href="https://www.gatsbyjs.org">

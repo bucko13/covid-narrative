@@ -1,8 +1,8 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `Choose Your COVID-19 Narrative`,
+    description: `To show how true data can be selectively shared to "prove" a given narrative.`,
+    author: `bucko`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -13,8 +13,32 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `data`,
+        path: `${__dirname}/src/data`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `owid`,
+        path: `${__dirname}/src/owid`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `states`,
+        path: `${__dirname}/src/states`,
+      },
+    },
+    `gatsby-transformer-json`,
     `gatsby-transformer-sharp`,
+    `gatsby-theme-material-ui`,
     `gatsby-plugin-sharp`,
+    `gatsby-plugin-sass`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -29,6 +53,7 @@ module.exports = {
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+    `gatsby-plugin-offline`,
+    `gatsby-plugin-typescript`,
   ],
 }
