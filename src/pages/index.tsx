@@ -1,205 +1,122 @@
 import React, { useEffect, useState } from "react"
 import { graphql } from "gatsby"
 import {Typography, Box} from "@material-ui/core"
-import {
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  Brush,
-  BarChart,
-  Bar,
-  CartesianAxis,
-} from "recharts"
-import { get } from 'axios';
+
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
+
 import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart";
-import statePops from '../states/populations.json';
+import { LocationData, StateData } from "../types/states";
+import TotalComparisonBarChart, { ComparisonData } from "../components/TotalComparisonBarChart";
+import { getPerMPop} from '../utils/utils'; 
+import codeToCountry_ from '../data/codeToCountry.json';
+import codeToState_ from '../states/codeToState.json';
+import statePops_ from '../states/populations.json';
 
-interface StateData {
-  date: number;
-  hospitalizedCurrently: number;
-  positiveIncrease: number;
-}
-
-interface CombinedData {
-  date: number;
-  ny: number;
-  tx: number;
-}
+// get index signature for ts so we can key by variable
+const codeToCountry: {[code: string]: string} = codeToCountry_
+const codeToState: {[code: string]: string} = codeToState_
+const statePops: { [code: string]: { Population: number }} = statePops_
 
 interface IndexPageProps {
   data: {
-    ny: {
-      nodes: StateData[]
-    },
-    tx: {
-      nodes: StateData[]
-    }
-    az: {
+    [state: string]: {
       nodes: StateData[]
     }
   }
 }
 
-console.log(statePops);
-interface CSSECountrySummary {
-  confirmed: {
-    value: number
-    detail: string
-  };
-  deaths: {
-    value: number
-    detail: string
-  };
-  recovered: {
-    value: number
-    detail: string
-  };
-  lastUpdate: string;
+// extract fatalities from query data based on location/country code
+const getFatalities = (data: any, key: string, perM = false) => {
+  const length = data[key].nodes[0].data.length
+  const lastDate = data[key].nodes[0].data[length - 1]
+  const { population } = data[key].nodes[0]
+  return perM ? getPerMPop(population, lastDate.total_deaths) : lastDate.total_deaths
 }
 
-interface CovidTrackingStateSummary {
-  date: number
-  state: string
-  positive: number
-  negative: number
-  death: number 
-}
-
-const NY_POP_2020 = 19440500
-const TX_POP_2020 = 29472300
-const NJ_POP_2020 = 8936570
-
-// https://www.worldometers.info/world-population/sweden-population/
-const SWEDEN_POP_2020 = 10107890
-const FRANCE_POP_2020 = 65293187
-const SPAIN_POP_2020 = 46757239
-const ITALY_POP_2020 = 60449775
-const US_POP_2020 = 331268378
-
-interface Object {
-  hasOwnProperty<T>(this: T, v: any): v is keyof T
-}
-
-const populations: { [key: string]: number } = {
-  ny: NY_POP_2020,
-  tx: TX_POP_2020,
-  nj: NJ_POP_2020,
-  az: statePops.arizona.Population,
-  se: SWEDEN_POP_2020,
-  es: SPAIN_POP_2020,
-  it: ITALY_POP_2020,
-  fr: FRANCE_POP_2020,
-  us: US_POP_2020,
-  usAdjusted: US_POP_2020 - NY_POP_2020 - NJ_POP_2020,
-}
-
-const getPerMPop = (name: string, value: number): number => 
-  Math.floor(value / (populations[name] / 100000))
+// states and countries for comparison (must be queried on this page and passed to component)
+const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
+const states = ["az", "ny", "nj", "tx", "fl"]
 
 const IndexPage = ({ data }: IndexPageProps) => {
-  const [swedenData, setSwedenData] = useState<CSSECountrySummary|undefined>()
-  const [italyData, setItalyData] = useState<CSSECountrySummary|undefined>()
-  const [franceData, setFranceData] = useState<CSSECountrySummary | undefined>()
-  const [spainData, setSpainData] = useState<CSSECountrySummary | undefined>()
-  const [usData, setUSData] = useState<CSSECountrySummary | undefined>()
-  const [nyData, setNyData] = useState<CovidTrackingStateSummary | undefined>()
-  const [njData, setNjData] = useState<CovidTrackingStateSummary | undefined>()
-  const [txData, setTxData] = useState<CovidTrackingStateSummary | undefined>()
-  const [fatalityData, setFatalityData] = useState<{name: string, fatalities: number}[]>()
 
-  useEffect(() => {
-    get("https://covid19.mathdro.id/api/countries/sweden")
-      .then(({data}: { data: CSSECountrySummary}) => setSwedenData(data));
-    get("https://covid19.mathdro.id/api/countries/us")
-      .then(({data}: { data: CSSECountrySummary}) => setUSData(data));
-    get("https://covid19.mathdro.id/api/countries/italy")
-      .then(({ data }: { data: CSSECountrySummary }) => setItalyData(data))      
-    get("https://covid19.mathdro.id/api/countries/france")
-      .then(({ data }: { data: CSSECountrySummary }) => setFranceData(data))          
-    get("https://covid19.mathdro.id/api/countries/spain")
-      .then(({ data }: { data: CSSECountrySummary }) => setSpainData(data)) 
-    get("https://api.covidtracking.com/v1/states/current.json")
-      .then(({data}: { data: CovidTrackingStateSummary[]}) => {
-        setNjData(data.find(({state}) => state === "NJ"))
-        setNyData(data.find(({ state }) => state === "NY"))
-        setTxData(data.find(({ state }) => state === "TX"))
-      })
-  }, []);
+  // get country populations based on countries we are comparing
+  const populations: { [key: string]: number } = countries.reduce((pops: {[key:string]: number}, code) => {
+    pops[code] = data[code].nodes[0].population;
+    return pops;
+  }, {})
+
+  // get state populations ased on countries we are comparing
+  const statePopulations: { [key: string]: number } = states.reduce((pops: { [key: string]: number }, code) => {
+    const state = codeToState[code.toUpperCase()].split(' ').map(word => word.toLowerCase()).join('-');
+    pops[code] = statePops[state].Population
+    return pops;
+  }, {})
+
+  // add special us adjusted case
+  statePopulations.usAdjusted = populations.us - populations.ny - populations.nj
+
+  // get data for bar chart that compares total fatalities (not per 100k)
+  const totalFatalities: ComparisonData[] = countries.map(code => ({
+    location: codeToCountry[code.toUpperCase()],
+    abbreviation: code,
+    value: getFatalities(data, code)
+  })) 
+
+  // get data for bar chart that compares total fatalities per 100k
+  const fatalityPerM = totalFatalities.map(data => ({
+    ...data,
+    value: getPerMPop(populations[data.abbreviation], data.value)
+  }))
   
-  useEffect(() => {
-    const fatalityData = [];
-    if (franceData)
-      fatalityData.push({
-        name: "France",
-        fatalities: getPerMPop('fr', franceData.deaths.value),
-      })
-    if (italyData)
-      fatalityData.push({
-        name: "Italy",
-        fatalities: getPerMPop('it', italyData.deaths.value),
-      })
-
-    if (swedenData) {
-      fatalityData.push({
-        name: "Sweden",
-        fatalities: getPerMPop('se', swedenData.deaths.value),
-      })
+  // add state data for comparison 
+  states.forEach(code => {
+    const obj = {
+      location: code.toUpperCase(),
+      abbreviation: code, 
     }
+    totalFatalities.push({
+      ...obj,
+      value: data[code].nodes.slice(-1)[0].death,
+    })
 
-    if (spainData) {
-      fatalityData.push({
-        name: "Spain",
-        fatalities: getPerMPop('es', spainData.deaths.value),
-      })
+    fatalityPerM.push({
+      ...obj,
+      value: getPerMPop(statePopulations[code], data[code].nodes.slice(-1)[0].death)
+    }) 
+  })
+
+  // special US adjusted for each comparison
+  totalFatalities.push(
+    {
+      location: "US Adj",
+      abbreviation: "usAdj",
+      value: getFatalities(data, 'us') -
+        data.ny.nodes.slice(-1)[0].death -
+        data.nj.nodes.slice(-1)[0].death,
     }
-
-    if (usData && nyData && njData && txData) {
-      fatalityData.push(
-        {
-          name: "US",
-          fatalities: getPerMPop('usAdjusted', usData.deaths.value - nyData.death - njData.death),
-        },
-        {
-          name: "NJ",
-          fatalities: getPerMPop('nj', njData.death),
-        },
-        {
-          name: "NY",
-          fatalities: getPerMPop('ny', nyData.death),
-        },
-        {
-          name: "TX",
-          fatalities: getPerMPop('tx', txData.death)
-        }
-      )}
-    setFatalityData(fatalityData);
-  }, [franceData, spainData, italyData, swedenData, usData, nyData, njData])
-
-  const testData = [
+  )
+  
+  fatalityPerM.push(
     {
-      location: "ny",
-      pop: populations.ny,
-      data: data.ny.nodes,
-    },
-    {
-      location: "tx",
-      pop: populations.tx,
-      data: data.tx.nodes,
-    },
-    {
-      location: "az",
-      pop: populations.az,
-      data: data.az.nodes,
+      location: "US Adj",
+      abbreviation: "usAdj",
+      value: getPerMPop(
+        populations.us - statePopulations.ny - statePopulations.nj,
+        getFatalities(data, 'us') -
+          data.ny.nodes.slice(-1)[0].death -
+          data.nj.nodes.slice(-1)[0].death
+      ),
     }
-  ];
+  )
+
+  // array of historic data for states to compare in line chart
+  const lineChartData: LocationData[] = states.map(code => ({
+      location: code,
+      pop: statePopulations[code],
+      data: data[code].nodes,
+  }))
 
   return (
     <Layout>
@@ -208,35 +125,42 @@ const IndexPage = ({ data }: IndexPageProps) => {
         "There are three kinds of lies: lies, damned lies, and statistics." -
         Mark Twain
       </Typography>
-
-      <h4>Hospitalized By State</h4>
+      
+      <Box my={5}>
+        <Typography variant="h5">Hospitalized By State</Typography>
+      </Box>
       <HistoricComparisonLineChart
-        comparisonData={testData}
+        comparisonData={lineChartData}
         comparitor="hospitalizedCurrently"
       />
 
-      <h4>Daily Hospitalized By State per 100k</h4>
+      <Box my={5}>
+        <Typography variant="h5">Daily Hospitalized By State per 100k</Typography>
+      </Box>
       <HistoricComparisonLineChart
-        comparisonData={testData}
+        comparisonData={lineChartData}
         comparitor="hospitalizedCurrently"
         perM={true}
       />
 
       <Box my={5}>
+        <Typography variant="h5">Daily Fatality Increase By State</Typography>
+      </Box>
+      <HistoricComparisonLineChart
+        comparisonData={lineChartData}
+        comparitor="deathIncrease"
+      />
+      <Box my={5}>
         <Typography variant="h5">Fatalities per 100k</Typography>
         <Typography variant="subtitle2">US Adjusted w/o NY and NJ</Typography>
       </Box>
-      <ResponsiveContainer width="80%" aspect={2}>
-        {fatalityData ? (
-          <BarChart data={fatalityData}>
-            <Bar dataKey="fatalities" fill="#663399" />
-            <Legend />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <CartesianGrid strokeDasharray="3 3" />
-          </BarChart>
-        ) : null}
-      </ResponsiveContainer>
+      <TotalComparisonBarChart comparisonData={fatalityPerM} sorted /> 
+
+      <Box my={5}>
+        <Typography variant="h5">Total Fatalities</Typography>
+        <Typography variant="subtitle2">US Adjusted w/o NY and NJ</Typography>
+      </Box>
+      <TotalComparisonBarChart comparisonData={totalFatalities} sorted /> 
     </Layout>
   )
 }
@@ -244,12 +168,14 @@ const IndexPage = ({ data }: IndexPageProps) => {
 export default IndexPage
 
 export const query = graphql`
-    query StateData {
+    query {
       ny: allNyHistoricJson(sort: { fields: date, order: ASC }) {
         nodes {
           positiveIncrease
-          hospitalizedCurrently 
+          hospitalizedCurrently
           date
+          death
+          deathIncrease
         }
       }
      az: allAzHistoricJson(sort: {fields: date, order: ASC}) {
@@ -257,6 +183,8 @@ export const query = graphql`
             positiveIncrease
             hospitalizedCurrently 
             date
+            death
+            deathIncrease
           }
         }
       tx: allTxHistoricJson(sort: {fields: date, order: ASC}) {
@@ -264,7 +192,62 @@ export const query = graphql`
             positiveIncrease
             hospitalizedCurrently 
             date
+            death
+            deathIncrease
           }
         }
+      nj: allNjHistoricJson(sort: {fields: date, order: ASC}) {
+          nodes {
+            positiveIncrease
+            hospitalizedCurrently
+            date
+            death
+            deathIncrease
+          }
+        }
+      fl: allFlHistoricJson(sort: {fields: date, order: ASC}) {
+          nodes {
+            positiveIncrease
+            hospitalizedCurrently 
+            date
+            death
+            deathIncrease
+          }
+        }
+      fr: allEurope1Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "France"}}) {
+        nodes {
+          ...europe1Fields
+        }
+      }
+      gb: allEurope2Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "United Kingdom"}}) {
+        nodes {
+          ...europe2Fields
+        }
+      }
+      es: allEurope2Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "Spain"}}) {
+        nodes {
+          ...europe2Fields
+        }
+      }
+      be: allEurope1Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "Belgium"}}) {
+        nodes {
+          ...europe1Fields
+        }
+      }
+      it: allEurope1Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "Italy"}}) {
+        nodes {
+          ...europe1Fields
+        }
+      }
+      se: allEurope2Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "Sweden"}}) {
+        nodes {
+          ...europe2Fields
+        }
+      }
+      us: allNorthAmerica2Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "United States"}}) {
+        nodes {
+          ...northAmerica2Fields
+        }
+      }
     }
   ` 
