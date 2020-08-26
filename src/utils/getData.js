@@ -145,7 +145,6 @@ async function getCountryTimeSeries(country) {
 
 async function convertOwid() {
   const owid = require('../data/owid-covid-data.json');
-  const data = []
   const byContinent = {}
   Object.keys(owid).reduce((prev, curr) => {
     const country = {
@@ -169,7 +168,7 @@ async function convertOwid() {
   // need to split into separate json files
   // for graphql to be able to consume (<= 40 countries per file)
   for (let continent in byContinent) {
-    const countriesPerFile = 40
+    const countriesPerFile = 30
     const segments = Math.ceil(byContinent[continent].length / countriesPerFile)
     
     let count = 1
@@ -179,7 +178,7 @@ async function convertOwid() {
       const data = byContinent[continent].slice(start, end);
 
       fs.writeFileSync(
-        path.resolve(__dirname, `../owid/${continent}_${count}.json`),
+        path.resolve(__dirname, `../owid/${continent.split(' ').join('_')}_${count}.json`),
         JSON.stringify(data, null , 2)
       )
       count++;
@@ -217,7 +216,7 @@ function getHistoricStatesCovidData() {
 }
 
 (async function() {
-
+  await convertOwid();
 })()
 
 module.exports = {

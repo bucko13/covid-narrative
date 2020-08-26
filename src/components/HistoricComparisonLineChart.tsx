@@ -11,15 +11,9 @@ import {
   Line,
   Brush,
 } from "recharts"
-import { StateData } from "../types/states";
+import { StateData, LocationData } from "../types/states";
 import randomColor from 'randomcolor';
 import { getPerMPop } from "../utils/utils";
-
-interface LocationData {
-  location: string;
-  pop: number;
-  data: StateData[];
-}
 
 interface ComparisonLineChartProps {
   comparisonData: LocationData[],
@@ -41,7 +35,7 @@ const HistoricComparisonLineChart = ({ comparisonData, comparitor, perM }: Compa
 
   // go through the first location to start and create a data object for each node
   // where it has the date and then creates a property for each location for the data we are comparing
-  const data = firstLocation.data.map((node: StateData): CombinedData => {
+  const data = firstLocation.data.map((node): CombinedData => {
     const date = node.date;
     const data = {
       date: node.date,
