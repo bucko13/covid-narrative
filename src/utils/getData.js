@@ -223,4 +223,5 @@ module.exports = {
   MATHDROID_API_BASE,
   CSSE_API_BASE,
   fromCodeLookupTable,
+  getStateHistoricData,
 }
