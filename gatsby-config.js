@@ -39,6 +39,7 @@ module.exports = {
     `gatsby-theme-material-ui`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-sass`,
+    `transform-all-populations`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {

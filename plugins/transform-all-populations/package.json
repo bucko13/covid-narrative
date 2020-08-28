@@ -1,0 +1,6 @@
+{
+  "name": "transform-all-populations",
+  "version": "1.0.0",
+  "description": "retrieving state and country populations and serving as gatsbyjs nodes via graphql",
+  "license": "MIT"
+}

@@ -32,12 +32,12 @@ export default function TotalComparisonBarChart({ comparisonData, sorted }: Comp
   return (
     <ResponsiveContainer width="80%" aspect={2}>
         <BarChart data={comparisonData}>
-          <Bar dataKey="value" fill="#663399" />
+          <Tooltip />
           <Legend />
           <XAxis dataKey="location" />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
+          <Bar dataKey="value" fill="#663399" />
         </BarChart>
     </ResponsiveContainer>
   )
