@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { graphql } from "gatsby"
-import {Typography, Box} from "@material-ui/core"
+import {Typography, Box, Tabs} from "@material-ui/core"
 
 import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
 
-import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart";
-import { LocationData, StateData } from "../types/states";
+import { StateData } from "../types/states";
 import TotalComparisonBarChart, { ComparisonData } from "../components/TotalComparisonBarChart";
 import { getPerMPop} from '../utils/utils'; 
 import codeToCountry_ from '../data/codeToCountry.json';
@@ -37,7 +34,7 @@ const getFatalities = (data: any, key: string, perM = false) => {
 
 // states and countries for comparison (must be queried on this page and passed to component)
 const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
-const states = ["az", "ny", "nj", "tx", "fl"]
+const states = ["ny", "nj"]
 
 const IndexPage = ({ data }: IndexPageProps) => {
 
@@ -111,45 +108,8 @@ const IndexPage = ({ data }: IndexPageProps) => {
     }
   )
 
-  // array of historic data for states to compare in line chart
-  const lineChartData: LocationData[] = states.map(code => ({
-      location: code,
-      pop: statePopulations[code],
-      data: data[code].nodes,
-  }))
-
   return (
     <Layout>
-      <SEO title="COVID-19 Data By the Numbers" />
-      <Typography>
-        "There are three kinds of lies: lies, damned lies, and statistics." -
-        Mark Twain
-      </Typography>
-      
-      <Box my={5}>
-        <Typography variant="h5">Hospitalized By State</Typography>
-      </Box>
-      <HistoricComparisonLineChart
-        comparisonData={lineChartData}
-        comparitor="hospitalizedCurrently"
-      />
-
-      <Box my={5}>
-        <Typography variant="h5">Daily Hospitalized By State per 100k</Typography>
-      </Box>
-      <HistoricComparisonLineChart
-        comparisonData={lineChartData}
-        comparitor="hospitalizedCurrently"
-        perM={true}
-      />
-
-      <Box my={5}>
-        <Typography variant="h5">Daily Fatality Increase By State</Typography>
-      </Box>
-      <HistoricComparisonLineChart
-        comparisonData={lineChartData}
-        comparitor="deathIncrease"
-      />
       <Box my={5}>
         <Typography variant="h5">Fatalities per 100k</Typography>
         <Typography variant="subtitle2">US Adjusted w/o NY and NJ</Typography>
@@ -178,37 +138,10 @@ export const query = graphql`
           deathIncrease
         }
       }
-     az: allAzHistoricJson(sort: {fields: date, order: ASC}) {
-          nodes {
-            positiveIncrease
-            hospitalizedCurrently 
-            date
-            death
-            deathIncrease
-          }
-        }
-      tx: allTxHistoricJson(sort: {fields: date, order: ASC}) {
-          nodes {
-            positiveIncrease
-            hospitalizedCurrently 
-            date
-            death
-            deathIncrease
-          }
-        }
       nj: allNjHistoricJson(sort: {fields: date, order: ASC}) {
           nodes {
             positiveIncrease
             hospitalizedCurrently
-            date
-            death
-            deathIncrease
-          }
-        }
-      fl: allFlHistoricJson(sort: {fields: date, order: ASC}) {
-          nodes {
-            positiveIncrease
-            hospitalizedCurrently 
             date
             death
             deathIncrease
