@@ -4,39 +4,39 @@ import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { Typography, Box } from "@material-ui/core"
-import { StateData, LocationData } from "../types/states"
+import { LocationData } from "../types/states"
 
 import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart"
+import { StateNodeData } from "../../plugins/source-state-data"
+import { states } from "../../plugins/source-state-data/constants"
 
-interface PopulationData {
+interface StateData {
   code: string
+  state: string
   population: number
+  data: StateNodeData[]
 }
 
 interface PageProps {
   data: {
-    [key: string]: {
-      nodes: StateData[] | PopulationData[]
-    }
-    populations: {
-      nodes: PopulationData[]
+    allStateHistoricalData: {
+      nodes: StateData[]
     }
   }
 }
 
-const states = ["ny", "tx", "fl", "nj"];
 
-const getPopulation = (pops:PopulationData[], code: string) => pops.find((state:PopulationData) => state.code === code)?.population
+// const getPopulation = (pops:PopulationData[], code: string) => pops.find((state:PopulationData) => state.code === code)?.population
 
 const NyMessedUp = ({ data }: PageProps) => {
+  const stateData = data.allStateHistoricalData.nodes;
   // array of historic data for states to compare in line chart
-  const lineChartData: LocationData[] = states.map((code:string): LocationData => {
-    const pop = getPopulation(data.populations.nodes, code)
+  const lineChartData: LocationData[] = stateData.map((state:StateData): LocationData => {
     
     return {
-      location: code,
-      pop: pop || 0,
-      data: data[code].nodes,
+      location: state.code,
+      pop: state.population,
+      data: state.data,
     }
   })
 
@@ -82,58 +82,11 @@ const NyMessedUp = ({ data }: PageProps) => {
 export default NyMessedUp
 
 export const query = graphql`
-  query {
-    populations: allStatePopulations(filter: {code: {in: ["ny","nj", "tx","fl", "ga"]}}) {
-        nodes {
-          code
-          state
-          population
-        }
+  query StateQuery {
+    allStateHistoricalData {
+      nodes {
+        ...stateHistoricalFields
       }
-     ny: allNyHistoricJson(sort: { fields: date, order: ASC }) {
-        nodes {
-          positiveIncrease
-          hospitalizedCurrently
-          date
-          death
-          deathIncrease
-        }
-      }
-     az: allAzHistoricJson(sort: {fields: date, order: ASC}) {
-          nodes {
-            positiveIncrease
-            hospitalizedCurrently 
-            date
-            death
-            deathIncrease
-          }
-        }
-      tx: allTxHistoricJson(sort: {fields: date, order: ASC}) {
-          nodes {
-            positiveIncrease
-            hospitalizedCurrently 
-            date
-            death
-            deathIncrease
-          }
-        }
-      nj: allNjHistoricJson(sort: {fields: date, order: ASC}) {
-          nodes {
-            positiveIncrease
-            hospitalizedCurrently
-            date
-            death
-            deathIncrease
-          }
-        }
-      fl: allFlHistoricJson(sort: {fields: date, order: ASC}) {
-          nodes {
-            positiveIncrease
-            hospitalizedCurrently 
-            date
-            death
-            deathIncrease
-          }
-        }
+    }
   }
 `

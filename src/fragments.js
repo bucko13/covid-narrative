@@ -32,3 +32,18 @@ export const northAmerica2Fields = graphql`
       }
     }    
 `
+
+export const stateHistoricalFields = graphql`
+  fragment stateHistoricalFields on StateHistoricalData {
+    state
+    code
+    population
+    data {
+      positiveIncrease
+      hospitalizedCurrently
+      date
+      death
+      deathIncrease
+    }
+  }
+`

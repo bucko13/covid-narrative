@@ -7,6 +7,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@types/axios": "^0.14.0",
+    "@types/node": "^14.6.1",
     "@types/randomcolor": "^0.5.5",
     "@types/react-helmet": "^6.1.0",
     "@types/recharts": "^1.8.14",
@@ -29,7 +30,9 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^6.1.0",
-    "recharts": "^1.8.5"
+    "recharts": "^1.8.5",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
   },
   "devDependencies": {
     "prettier": "2.0.5"

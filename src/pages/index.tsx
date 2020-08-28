@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { graphql } from "gatsby"
-import {Typography, Box, Tabs} from "@material-ui/core"
+import {Typography, Box} from "@material-ui/core"
 
 import Layout from "../components/layout"
 
-import { StateData } from "../types/states";
 import TotalComparisonBarChart, { ComparisonData } from "../components/TotalComparisonBarChart";
 import { getPerMPop} from '../utils/utils'; 
 import codeToCountry_ from '../data/codeToCountry.json';
-import codeToState_ from '../states/codeToState.json';
-import statePops_ from '../states/populations.json';
+import { StateData } from "../../plugins/source-state-data";
 
 // get index signature for ts so we can key by variable
 const codeToCountry: {[code: string]: string} = codeToCountry_
-const codeToState: {[code: string]: string} = codeToState_
-const statePops: { [code: string]: { Population: number }} = statePops_
 
 interface IndexPageProps {
   data: {
-    [state: string]: {
+    [key: string]: {
       nodes: StateData[]
     }
   }
@@ -37,6 +33,9 @@ const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
 const states = ["ny", "nj"]
 
 const IndexPage = ({ data }: IndexPageProps) => {
+  const getStateData = (code: string): StateData => data[code].nodes[0];
+  const ny = getStateData('ny');
+  const nj = getStateData('nj');
 
   // get country populations based on countries we are comparing
   const populations: { [key: string]: number } = countries.reduce((pops: {[key:string]: number}, code) => {
@@ -45,14 +44,12 @@ const IndexPage = ({ data }: IndexPageProps) => {
   }, {})
 
   // get state populations ased on countries we are comparing
-  const statePopulations: { [key: string]: number } = states.reduce((pops: { [key: string]: number }, code) => {
-    const state = codeToState[code.toUpperCase()].split(' ').map(word => word.toLowerCase()).join('-');
-    pops[code] = statePops[state].Population
-    return pops;
-  }, {})
-
-  // add special us adjusted case
-  statePopulations.usAdjusted = populations.us - populations.ny - populations.nj
+  const statePopulations: { [key: string]: number } = {
+    // add special us adjusted case
+    usAdjusted: populations.us - ny.population - nj.population,
+    ny: ny.population,
+    nj: nj.population,
+  }
 
   // get data for bar chart that compares total fatalities (not per 100k)
   const totalFatalities: ComparisonData[] = countries.map(code => ({
@@ -73,14 +70,15 @@ const IndexPage = ({ data }: IndexPageProps) => {
       location: code.toUpperCase(),
       abbreviation: code, 
     }
+
     totalFatalities.push({
       ...obj,
-      value: data[code].nodes.slice(-1)[0].death,
+      value: getStateData(code).total_deaths,
     })
 
     fatalityPerM.push({
       ...obj,
-      value: getPerMPop(statePopulations[code], data[code].nodes.slice(-1)[0].death)
+      value: getStateData(code).deaths_per_100k
     }) 
   })
 
@@ -90,8 +88,8 @@ const IndexPage = ({ data }: IndexPageProps) => {
       location: "US Adj",
       abbreviation: "usAdj",
       value: getFatalities(data, 'us') -
-        data.ny.nodes.slice(-1)[0].death -
-        data.nj.nodes.slice(-1)[0].death,
+        ny.total_deaths -
+        nj.total_deaths,
     }
   )
   
@@ -102,8 +100,8 @@ const IndexPage = ({ data }: IndexPageProps) => {
       value: getPerMPop(
         populations.us - statePopulations.ny - statePopulations.nj,
         getFatalities(data, 'us') -
-          data.ny.nodes.slice(-1)[0].death -
-          data.nj.nodes.slice(-1)[0].death
+          ny.total_deaths -
+          nj.total_deaths
       ),
     }
   )
@@ -129,24 +127,38 @@ export default IndexPage
 
 export const query = graphql`
     query {
-      ny: allNyHistoricJson(sort: { fields: date, order: ASC }) {
+      ny: allStateHistoricalData(filter: {code: {eq: "ny"}}) {
         nodes {
-          positiveIncrease
-          hospitalizedCurrently
-          date
-          death
-          deathIncrease
+          deaths_per_100k
+          deaths_per_million
+          hospitalized_per_100k
+          hospitalized_per_million
+          population
+          positives_per_100k
+          positives_per_million
+          total_deaths
+          total_hospitalized
+          total_positives
+          code
+          state
         }
       }
-      nj: allNjHistoricJson(sort: {fields: date, order: ASC}) {
-          nodes {
-            positiveIncrease
-            hospitalizedCurrently
-            date
-            death
-            deathIncrease
-          }
+      nj: allStateHistoricalData(filter: {code: {eq: "nj"}}) {
+        nodes {
+          deaths_per_100k
+          deaths_per_million
+          hospitalized_per_100k
+          hospitalized_per_million
+          population
+          positives_per_100k
+          positives_per_million
+          total_deaths
+          total_hospitalized
+          total_positives
+          code
+          state
         }
+      }
       fr: allEurope1Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "France"}}) {
         nodes {
           ...europe1Fields
