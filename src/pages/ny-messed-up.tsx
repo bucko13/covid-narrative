@@ -8,7 +8,6 @@ import { LocationData } from "../types/states"
 
 import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart"
 import { StateNodeData } from "../../plugins/source-state-data"
-import { states } from "../../plugins/source-state-data/constants"
 
 interface StateData {
   code: string
@@ -24,9 +23,6 @@ interface PageProps {
     }
   }
 }
-
-
-// const getPopulation = (pops:PopulationData[], code: string) => pops.find((state:PopulationData) => state.code === code)?.population
 
 const NyMessedUp = ({ data }: PageProps) => {
   const stateData = data.allStateHistoricalData.nodes;
@@ -72,7 +68,7 @@ const NyMessedUp = ({ data }: PageProps) => {
       </Box>
       <HistoricComparisonLineChart
         comparisonData={lineChartData}
-        comparitor="deathIncrease"
+        comparitor="deathsIncreaseRollingAverage"
       />
       <Link to="/">Go back to the homepage</Link>
     </Layout>

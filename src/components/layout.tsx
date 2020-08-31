@@ -29,13 +29,13 @@ const Layout = ({ children }: any) => {
       title: 'NY Messed Up',
       path: 'ny-messed-up'
     },
-    {
-      title: 'NY Beat COVID-19',
-      path: 'ny-beat-covid-19',
-    },
+    // {
+    //   title: 'NY Beat COVID-19',
+    //   path: 'ny-beat-covid-19',
+    // },
     {
       title: 'US Mishandled COVID-19',
-      path: 'us-mishandled-covid-19',
+      path: 'us-mishandled',
     },
     {
       title: 'US Outperformed',
@@ -45,9 +45,12 @@ const Layout = ({ children }: any) => {
 
   const onClick = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
-    navigate(path);
+    navigate(`/${path}`);
   
   }
+
+  const pathname = typeof window !== "undefined" ? window.location.pathname : ""
+
   return (
     <ThemeProvider theme={CustomTheme}>
       <Header siteTitle={data.site.siteMetadata.title} />
@@ -65,21 +68,18 @@ const Layout = ({ children }: any) => {
         </Typography>
         <Box my={3}>
           <Grid container justify="space-around">
-            {
-              navList.map(navItem => (
-                <Grid item>
-                  <Button 
-                    variant="outlined" 
-                    onClick={(e) => onClick(e, navItem.path)}
-                    key={navItem.path}
-                    color="primary"
-                    disabled={window.location.pathname.includes(navItem.path)}
-                    >
-                    {navItem.title}
-                  </Button>
-                </Grid>
-              ))
-            }
+            {navList.map((navItem) => (
+              <Grid item key={navItem.path}>
+                <Button
+                  variant="outlined"
+                  onClick={e => onClick(e, navItem.path)}
+                  color="primary"
+                  disabled={pathname.includes(navItem.path)}
+                >
+                  {navItem.title}
+                </Button>
+              </Grid>
+            ))}
           </Grid>
         </Box>
         <main>{children}</main>

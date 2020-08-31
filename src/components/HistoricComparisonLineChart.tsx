@@ -30,7 +30,6 @@ const HistoricComparisonLineChart = ({ comparisonData, comparitor, perM }: Compa
   const locations = comparisonData.map(({ location }) => location)
   comparisonData = [...comparisonData]
   const firstLocation = comparisonData.shift();
-  
   if (!firstLocation) return null;
 
   // go through the first location to start and create a data object for each node

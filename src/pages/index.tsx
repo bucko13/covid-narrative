@@ -1,13 +1,14 @@
 import React from "react"
 import { graphql } from "gatsby"
 import {Typography, Box} from "@material-ui/core"
-
+import randomColor from "randomcolor"
 import Layout from "../components/layout"
 
 import TotalComparisonBarChart, { ComparisonData } from "../components/TotalComparisonBarChart";
 import { getPerMPop} from '../utils/utils'; 
 import codeToCountry_ from '../data/codeToCountry.json';
 import { StateData } from "../../plugins/source-state-data";
+import { YAxis, CartesianGrid, XAxis, Tooltip, Legend, Line, ResponsiveContainer, ComposedChart, Bar, Brush } from "recharts";
 
 // get index signature for ts so we can key by variable
 const codeToCountry: {[code: string]: string} = codeToCountry_
@@ -105,6 +106,18 @@ const IndexPage = ({ data }: IndexPageProps) => {
       ),
     }
   )
+  const usHistoricData = data.us.nodes[0].data.filter((day) => {
+    const date = new Date(day.date)
+    return date > new Date('2020-03-01');
+  }).map((day) => {
+    const date = new Date(day.date)
+    return {
+      ...day,
+      cases: day.new_cases_smoothed_per_million,
+      deaths: day.new_deaths_smoothed_per_million,
+      // date: `${date.getMonth()}-${date.getDay()}`
+    }
+  })
 
   return (
     <Layout>
@@ -112,13 +125,49 @@ const IndexPage = ({ data }: IndexPageProps) => {
         <Typography variant="h5">Fatalities per 100k</Typography>
         <Typography variant="subtitle2">US Adjusted w/o NY and NJ</Typography>
       </Box>
-      <TotalComparisonBarChart comparisonData={fatalityPerM} sorted /> 
+      <TotalComparisonBarChart comparisonData={fatalityPerM} sorted />
 
       <Box my={5}>
         <Typography variant="h5">Total Fatalities</Typography>
         <Typography variant="subtitle2">US Adjusted w/o NY and NJ</Typography>
       </Box>
-      <TotalComparisonBarChart comparisonData={totalFatalities} sorted /> 
+      <TotalComparisonBarChart comparisonData={totalFatalities} sorted />
+
+      <Box my={5}>
+        <Typography variant="h5">Case Increases vs. Fatalities</Typography>
+        <ResponsiveContainer width="80%" aspect={2}>
+          <ComposedChart data={usHistoricData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis name="date" dataKey="date" />
+            <YAxis orientation="left" name="Cases" yAxisId="cases" />
+            <YAxis
+              orientation="right"
+              name="Fatalities"
+              yAxisId="fatalities"
+              domain={[0, "dataMax + 30"]}
+            />
+            <Tooltip />
+            <Legend />
+            <Line
+              yAxisId="cases"
+              dataKey="cases"
+              type="basisOpen"
+              dot={false}
+              stroke={randomColor({
+                seed: JSON.stringify(usHistoricData[0].cases),
+              })}
+            />
+            <Bar
+              yAxisId="fatalities"
+              dataKey="deaths"
+              fill={randomColor({
+                seed: JSON.stringify(usHistoricData[0].deaths),
+              })}
+            />
+            <Brush />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </Box>
     </Layout>
   )
 }
@@ -191,7 +240,16 @@ export const query = graphql`
       }
       us: allNorthAmerica2Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "United States"}}) {
         nodes {
-          ...northAmerica2Fields
+          location
+          population
+          data {
+            total_deaths 
+            date
+            new_deaths_smoothed
+            new_deaths_smoothed_per_million
+            new_cases_smoothed_per_million
+            new_tests_smoothed_per_thousand
+          }
         }
       }
     }
