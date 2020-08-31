@@ -10,6 +10,7 @@ export interface StateNodeData {
   hospitalizedIncrease: number
   hospitalizedCurrently: number
   fips: string
+  deathsIncreaseRollingAverage?: number
 }
 
 

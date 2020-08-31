@@ -27,6 +27,25 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
     const population = populations[name].Population
     const { death, hospitalized, positive, fips, date } = currentTotals
     // need to order data by date
+    const sortedData = data.sort((a, b) => {
+      if (a.date > b.date) return 1
+      else return -1
+    }).map((datum, index) => {
+      // calcuate rolling 7-day averages.
+      // start with deaths since this is the bumpiest data
+      let total = 0;
+      let counter = 0;
+      while (counter < 7 && counter <=index ) {
+        total += data[index - counter].deathIncrease
+        counter++
+      }
+
+      const rollingAverage = total / counter;
+      return {
+        ...datum,
+        deathsIncreaseRollingAverage: rollingAverage,
+      }
+    })
 
     const node: StateData = {
       population,
@@ -43,10 +62,7 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
       positives_per_million: getPerMillionPop(population, positive),
       hospitalized_per_100k: getPerMillionPop(population, hospitalized),
       hospitalized_per_million: getPerMPop(population, hospitalized),
-      data: data.sort((a, b) => {
-        if (a.date > b.date) return 1
-        else return -1
-      }),
+      data: sortedData,
     }
   
     createNode({
