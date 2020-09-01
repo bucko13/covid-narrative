@@ -11,12 +11,18 @@ import {
   Line,
   Brush,
 } from "recharts"
-import { StateData, LocationData } from "../types/states";
 import randomColor from 'randomcolor';
 import { getPerMPop } from "../utils/utils";
+import { StateNodeData } from "../../plugins/source-state-data";
+
+export interface ComparisonData {
+  location: string
+  population: number
+  data: StateNodeData[]
+}
 
 interface ComparisonLineChartProps {
-  comparisonData: LocationData[],
+  comparisonData: ComparisonData[],
   comparitor: string;
   perM?: boolean;
 }
@@ -38,17 +44,21 @@ const HistoricComparisonLineChart = ({ comparisonData, comparitor, perM }: Compa
     const date = node.date;
     const data = {
       date: node.date,
-      [firstLocation.location]: perM ? getPerMPop(firstLocation.pop, node[comparitor]) : node[comparitor]
+      [firstLocation.location]: perM ?
+        getPerMPop(firstLocation.population, +node[comparitor]) :
+        node[comparitor]
     }
     // for each other location, find the matching data for this date
     comparisonData.forEach(locationData => {
       // find the node for this date
       const node = locationData.data.find(
-        (locationNode: StateData): boolean => locationNode.date === date
+        (locationNode: StateNodeData): boolean => locationNode.date === date
       );
       
       if (node) {
-        data[locationData.location] = perM ? getPerMPop(locationData.pop, node[comparitor]) : node[comparitor]
+        data[locationData.location] = perM ?
+          getPerMPop(locationData.population, +node[comparitor]) :
+          node[comparitor]
       }
     })
     return data;

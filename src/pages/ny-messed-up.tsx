@@ -4,17 +4,9 @@ import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { Typography, Box } from "@material-ui/core"
-import { LocationData } from "../types/states"
 
-import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart"
-import { StateNodeData } from "../../plugins/source-state-data"
-
-interface StateData {
-  code: string
-  state: string
-  population: number
-  data: StateNodeData[]
-}
+import HistoricComparisonLineChart, { ComparisonData } from "../components/HistoricComparisonLineChart"
+import { StateData } from "../../plugins/source-state-data"
 
 interface PageProps {
   data: {
@@ -27,14 +19,12 @@ interface PageProps {
 const NyMessedUp = ({ data }: PageProps) => {
   const stateData = data.allStateHistoricalData.nodes;
   // array of historic data for states to compare in line chart
-  const lineChartData: LocationData[] = stateData.map((state:StateData): LocationData => {
-    
-    return {
-      location: state.code,
-      pop: state.population,
-      data: state.data,
-    }
-  })
+  const lineChartData: ComparisonData[] = stateData.map(
+    (state: StateData): ComparisonData => ({
+        location: state.code,
+        population: state.population,
+        data: state.data,
+    }))
 
   return (
     <Layout>
@@ -81,7 +71,14 @@ export const query = graphql`
   query StateQuery {
     allStateHistoricalData {
       nodes {
-        ...stateHistoricalFields
+          state
+          code
+          population
+          data {
+            hospitalizedCurrently
+            date
+            deathsIncreaseRollingAverage
+          }
       }
     }
   }

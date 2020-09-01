@@ -10,7 +10,8 @@ export interface StateNodeData {
   hospitalizedIncrease: number
   hospitalizedCurrently: number
   fips: string
-  deathsIncreaseRollingAverage?: number
+  deathsIncreaseRollingAverage: number
+  [comparitor: string]: number | string
 }
 
 
@@ -29,7 +30,7 @@ export interface StateData {
   total_hospitalized: number
   hospitalized_per_million: number
   hospitalized_per_100k: number
-  data?: StateNodeData[]
+  data: StateNodeData[]
 }
 
 export interface PopulationData {

@@ -61,7 +61,7 @@ const Layout = ({ children }: any) => {
           padding: `0 1.0875rem 1.45rem`,
         }}
       >
-        <SEO title="COVID-19 Data By the Numbers" />
+        <SEO title="COVID-19 Narratives By the Numbers" />
         <Typography>
           "There are three kinds of lies: lies, damned lies, and statistics." -
           Mark Twain
