@@ -8,9 +8,8 @@ import TotalComparisonBarChart, {
 } from "../components/TotalComparisonBarChart"
 import { getPerMPop } from "../utils/utils"
 import codeToCountry_ from "../data/codeToCountry.json"
-import { StateData } from "../../plugins/source-state-data"
 import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart"
-import { LocationData } from "../types/states"
+import { LocationData } from "../types/owid"
 
 // get index signature for ts so we can key by variable
 const codeToCountry: { [code: string]: string } = codeToCountry_
@@ -18,7 +17,7 @@ const codeToCountry: { [code: string]: string } = codeToCountry_
 interface IndexPageProps {
   data: {
     [key: string]: {
-      nodes: StateData[]
+      nodes: LocationData[]
     }
   }
 }
@@ -37,14 +36,6 @@ const getFatalities = (data: any, key: string, perM = false) => {
 const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
 
 const IndexPage = ({ data }: IndexPageProps) => {
-  // get country populations based on countries we are comparing
-  const populations: { [key: string]: number } = countries.reduce(
-    (pops: { [key: string]: number }, code) => {
-      pops[code] = data[code].nodes[0].population
-      return pops
-    },
-    {}
-  )
 
   // get data for bar chart that compares total fatalities (not per 100k)
   const totalFatalities: ComparisonData[] = countries.map(code => ({
@@ -59,7 +50,8 @@ const IndexPage = ({ data }: IndexPageProps) => {
       (abbreviation: string): LocationData => {
         return {
           location: data[abbreviation].nodes[0].location.toLowerCase(),
-          pop: data[abbreviation].nodes[0].population,
+          population: data[abbreviation].nodes[0].population,
+          // the first 60 are from Jan/Feb and not relevant
           data: data[abbreviation].nodes[0].data.slice(60),
         }
       }
@@ -89,74 +81,7 @@ export const query = graphql`
     fr: allEurope1Json(
       sort: { order: ASC, fields: data___date }
       filter: { 
-        location: { eq: "France" } 
-        data: {elemMatch: {date: {gte: "2020-03-01"}}}
-      }
-    ) {
-      nodes {
-        ...europe1Fields
-      }
-    }
-    gb: allEurope2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "United Kingdom" } 
-        data: {elemMatch: {date: {gte: "2020-03-01"}}}
-      }
-    ) {
-      nodes {
-        ...europe2Fields
-      }
-    }
-    es: allEurope2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "Spain" } 
-        data: {elemMatch: {date: {gte: "2020-03-01"}}}
-      }
-    ) {
-      nodes {
-        ...europe2Fields
-      }
-    }
-    be: allEurope1Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "Belgium" } 
-        data: {elemMatch: {date: {gte: "2020-03-01"}}}
-      }
-    ) {
-      nodes {
-        ...europe1Fields
-      }
-    }
-    it: allEurope1Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "Italy" } 
-        data: {elemMatch: {date: {gte: "2020-03-01"}}}
-      }
-    ) {
-      nodes {
-        ...europe1Fields
-      }
-    }
-    se: allEurope2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "Sweden" } 
-        data: {elemMatch: {date: {gte: "2020-03-01"}}}
-      }
-    ) {
-      nodes {
-        ...europe2Fields
-      }
-    }
-    us: allNorthAmerica2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "United States" } 
-        data: {elemMatch: {date: {gte: "2020-03-01"}}}
+        location: { eq: "France" }        
       }
     ) {
       nodes {
@@ -165,12 +90,103 @@ export const query = graphql`
         data {
           total_deaths
           date
-          new_deaths_smoothed
-          new_deaths_smoothed_per_million
-          new_cases_smoothed_per_million
-          new_tests_smoothed_per_thousand
           total_cases_per_million
-          total_cases
+        }
+      }
+    }
+    gb: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { 
+        location: { eq: "United Kingdom" }        
+      }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    es: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { 
+        location: { eq: "Spain" }        
+      }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          total_cases_per_million
+        }     
+      }
+    }
+    be: allEurope1Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { 
+        location: { eq: "Belgium" }        
+      }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    it: allEurope1Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { 
+        location: { eq: "Italy" }        
+      }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    se: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { 
+        location: { eq: "Sweden" }        
+      }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    us: allNorthAmerica2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { 
+        location: { eq: "United States" }        
+      }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          total_cases_per_million
         }
       }
     }

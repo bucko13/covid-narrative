@@ -33,7 +33,6 @@ const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
 const states = ["ny", "nj"]
 
 const USOutperformed = ({ data }: PageProps) => {
-  console.log('data:', data);
   const getStateData = (code: string): StateData => data[code].nodes[0];
   const ny = getStateData('ny');
   const nj = getStateData('nj');
@@ -84,6 +83,8 @@ const USOutperformed = ({ data }: PageProps) => {
   })
 
   // special US adjusted for each comparison
+  console.log('ny:', ny)
+  console.log('nj', nj)
   totalFatalities.push(
     {
       location: "US Adj",
@@ -94,6 +95,7 @@ const USOutperformed = ({ data }: PageProps) => {
     }
   )
   
+  console.log('ny:', ny)
   fatalityPerM.push(
     {
       location: "US Adj",
@@ -106,8 +108,6 @@ const USOutperformed = ({ data }: PageProps) => {
       ),
     }
   )
-
-  if (!data.us.nodes[0].data) return null;
 
   const usHistoricData = data.us.nodes[0].data.filter((day) => {
     const date = new Date(day.date)
@@ -165,32 +165,18 @@ export const query = graphql`
   query {
     ny: allStateHistoricalData(filter: { code: { eq: "ny" } }) {
       nodes {
-        deaths_per_100k
-        deaths_per_million
-        hospitalized_per_100k
-        hospitalized_per_million
         population
-        positives_per_100k
-        positives_per_million
+        deaths_per_100k
         total_deaths
-        total_hospitalized
-        total_positives
         code
         state
       }
     }
     nj: allStateHistoricalData(filter: { code: { eq: "nj" } }) {
       nodes {
-        deaths_per_100k
-        deaths_per_million
-        hospitalized_per_100k
-        hospitalized_per_million
         population
-        positives_per_100k
-        positives_per_million
+        deaths_per_100k
         total_deaths
-        total_hospitalized
-        total_positives
         code
         state
       }
@@ -253,12 +239,8 @@ export const query = graphql`
         data {
           total_deaths
           date
-          new_deaths_smoothed
           new_deaths_smoothed_per_million
           new_cases_smoothed_per_million
-          new_tests_smoothed_per_thousand
-          total_cases_per_million
-          total_cases
         }
       }
     }

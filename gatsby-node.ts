@@ -5,7 +5,6 @@
  */
 import { GatsbyNode } from 'gatsby';
 
-export const onCreateNode: GatsbyNode['onCreateNode'] = ({ actions, node }) => {
-  // console.log(node.internal.type)
-  return node;
-}
+// export const onCreateNode: GatsbyNode['onCreateNode'] = ({ actions, node }) => {
+//   return node;
+// }

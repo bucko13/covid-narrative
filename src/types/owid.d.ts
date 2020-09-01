@@ -1,4 +1,4 @@
-export interface StateData {
+export interface OwidData {
   date: number
   hospitalizedCurrently?: number
   positiveIncrease?: number
@@ -7,6 +7,6 @@ export interface StateData {
 
 export interface LocationData {
   location: string
-  pop: number
+  population: number
   data: StateData[]
 }
