@@ -5,14 +5,15 @@ export const europe2Fields = graphql`
       location
       population
       data {
-        total_deaths
         date
         new_deaths_smoothed
         new_deaths_smoothed_per_million
         new_cases_smoothed_per_million
         new_tests_smoothed_per_thousand
-        total_cases_per_million
         total_cases
+        total_cases_per_million
+        total_deaths
+        total_deaths_per_million
       }
     }    
 `
@@ -22,14 +23,15 @@ export const europe1Fields = graphql`
       location
       population
       data {
-        total_deaths
         date
         new_deaths_smoothed
         new_deaths_smoothed_per_million
         new_cases_smoothed_per_million
         new_tests_smoothed_per_thousand
-        total_cases_per_million
         total_cases
+        total_cases_per_million
+        total_deaths
+        total_deaths_per_million
       }
     }    
 `
@@ -39,14 +41,15 @@ export const northAmerica2Fields = graphql`
       location
       population
       data {
-        total_deaths
         date
         new_deaths_smoothed
         new_deaths_smoothed_per_million
         new_cases_smoothed_per_million
         new_tests_smoothed_per_thousand
-        total_cases_per_million
         total_cases
+        total_cases_per_million
+        total_deaths
+        total_deaths_per_million
       }
     }    
 `

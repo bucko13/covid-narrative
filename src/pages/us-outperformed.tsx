@@ -1,13 +1,16 @@
 import React from "react"
 import { graphql } from "gatsby"
-import {Typography, Box} from "@material-ui/core"
+import {Box} from "@material-ui/core"
 import Layout from "../components/layout"
 
 import TotalComparisonBarChart, { ComparisonData } from "../components/TotalComparisonBarChart";
-import { getPerMPop} from '../utils/utils'; 
+import { getPerMPop, convertOwidPageDataToLineChart } from '../utils/utils'; 
 import codeToCountry_ from '../data/codeToCountry.json';
 import { StateData } from "../../plugins/source-state-data";
 import ComposedHistoricalComparison from "../components/ComposedHistoricalComparison"
+import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart";
+import { LocationData, OwidData, OwidNodes } from "../types/owid";
+import { ComposedComparisonData } from "../types/charts";
 
 // get index signature for ts so we can key by variable
 const codeToCountry: {[code: string]: string} = codeToCountry_
@@ -15,6 +18,10 @@ const codeToCountry: {[code: string]: string} = codeToCountry_
 interface PageProps {
   data: {
     [key: string]: {
+      nodes: LocationData[]
+    }
+  } & { // <- union type so that the above catchall for the countries doesn't catch the states
+    states: {
       nodes: StateData[]
     }
   }
@@ -27,15 +34,22 @@ const getFatalities = (data: any, key: string, perM = false) => {
   const { population } = data[key].nodes[0]
   return perM ? getPerMPop(population, lastDate.total_deaths) : lastDate.total_deaths
 }
-
+  
 // states and countries for comparison (must be queried on this page and passed to component)
 const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
 const states = ["ny", "nj"]
 
 const USOutperformed = ({ data }: PageProps) => {
-  const getStateData = (code: string): StateData => data[code].nodes[0];
-  const ny = getStateData('ny');
-  const nj = getStateData('nj');
+  const getStateData = (code: string): StateData | undefined =>
+    data.states.nodes.find((state: StateData) => state.code === code)
+  
+  let stateData: { [code: string]: StateData } = {}
+
+  stateData = states.reduce((prev, code) => {
+    const data = getStateData(code)
+    if (data) prev[code] = data
+    return prev
+  }, stateData)
 
   // get country populations based on countries we are comparing
   const populations: { [key: string]: number } = countries.reduce((pops: {[key:string]: number}, code) => {
@@ -44,12 +58,24 @@ const USOutperformed = ({ data }: PageProps) => {
   }, {})
 
   // get state populations ased on countries we are comparing
-  const statePopulations: { [key: string]: number } = {
-    // add special us adjusted case
-    usAdjusted: populations.us - ny.population - nj.population,
-    ny: ny.population,
-    nj: nj.population,
+  let adjPopulations: { [key: string]: number } = {
+    // add special us adjusted case adjusted in reduce below
+    us: populations.us
   }
+
+  // for each state we want to adjust for, subtract their population
+  // from the US and add their population to the map.
+  adjPopulations = states.reduce((prev, code) => {
+    if (!stateData[code]) return prev;
+    prev.us -= stateData[code].population
+    prev[code] = stateData[code].population
+    return prev
+  }, adjPopulations)
+
+  // We're going to compose the data for a bar chart
+  // that compares the total fatalities b/w countries
+  // and a set of target states for which we "adjust" the US values
+  // to exclude
 
   // get data for bar chart that compares total fatalities (not per 100k)
   const totalFatalities: ComparisonData[] = countries.map(code => ({
@@ -73,106 +99,139 @@ const USOutperformed = ({ data }: PageProps) => {
 
     totalFatalities.push({
       ...obj,
-      value: getStateData(code).total_deaths,
+      value: stateData[code].total_deaths,
     })
-
     fatalityPerM.push({
       ...obj,
-      value: getStateData(code).deaths_per_100k
+      value: stateData[code].deaths_per_100k
     }) 
   })
 
-  // special US adjusted for each comparison
-  console.log('ny:', ny)
-  console.log('nj', nj)
+  // get total fatalities for all states being adjusted for
+  const adjStatesTotalFatalities = states.reduce(
+    (prev, code) => stateData[code] ? prev += stateData[code].total_deaths : prev
+  , 0)
+  
+  // then get us adjusted by subtracting from us total
+  const adjUSTotalFatalities =
+    getFatalities(data, "us") - adjStatesTotalFatalities
+  
+  // add "US Adjusted" item to comparison lists
   totalFatalities.push(
     {
       location: "US Adj",
       abbreviation: "usAdj",
-      value: getFatalities(data, 'us') -
-        ny.total_deaths -
-        nj.total_deaths,
+      value: adjUSTotalFatalities
     }
   )
   
-  console.log('ny:', ny)
   fatalityPerM.push(
     {
       location: "US Adj",
       abbreviation: "usAdj",
       value: getPerMPop(
-        populations.us - statePopulations.ny - statePopulations.nj,
-        getFatalities(data, 'us') -
-          ny.total_deaths -
-          nj.total_deaths
+        adjPopulations.us,
+        adjUSTotalFatalities
       ),
     }
   )
 
-  const usHistoricData = data.us.nodes[0].data.filter((day) => {
-    const date = new Date(day.date)
-    return date > new Date('2020-03-01');
-  }).map((day) => {
-    return {
-      ...day,
-      cases: day.new_cases_smoothed_per_million || 0,
-      deaths: day.new_deaths_smoothed_per_million || 0,
-    }
-  })
+  // collect data to show in the historic comparisons chart
+  // each item in the array will render a chart that contrasts
+  // fatalities to cases
+  let historicComparisons: {
+    name: string
+    code: string
+    data: ComposedComparisonData[]
+  }[] = []
 
-  const spainHistoricData = data.es.nodes[0].data.filter((day) => {
-    const date = new Date(day.date)
-    return date > new Date('2020-03-01');
-  }).map((day) => {
-    return {
-      ...day,
-      cases: day.new_cases_smoothed_per_million || 0,
-      deaths: day.new_deaths_smoothed_per_million || 0,
-    }
-  })
+  historicComparisons  = ['us', 'es'].reduce((prev, code) => { 
+    let node = data[code].nodes[0];
+    if (!node || !node.data) return prev;
+    
+    // filter out any days earlier than march
+    const countryData = node.data
+      .filter((day: OwidData) => {
+        const date = new Date(day.date)
+        return date && date > new Date("2020-03-01")
+      })
+      .map((day: OwidData) => {
+        // then compose the data for the fields we need
+        return {
+          date: day.date,
+          cases: day.new_cases_smoothed_per_million || 0,
+          deaths: day.new_deaths_smoothed_per_million || 0,
+        }
+      }) 
+    
+    prev.push({
+      name: node.location,
+      code: code,
+      data: countryData,
+    })
+    return prev;
+  }, historicComparisons)
+
+  let countryData: OwidNodes = {}
+    
+  // filter out states from page data so we can get line chart data
+  countryData = Object.keys(data).reduce((prev, curr) => {
+    if (curr !== 'states') prev[curr] = data[curr]
+    return prev;
+  }, countryData)
+
+  // get the country data and arrange in a format that the line chart 
+  // data can work with
+  const lineChartData = convertOwidPageDataToLineChart({ data: countryData })
 
   return (
     <Layout>
       <Box my={5}>
-        <Typography variant="h5">Fatalities per 100k</Typography>
-        <Typography variant="subtitle2">US Adjusted w/o NY and NJ</Typography>
+        <h4>Total Fatalities per 100k Pop.</h4>
+        <h5>US Adjusted w/o NY and NJ</h5>
       </Box>
       <TotalComparisonBarChart comparisonData={fatalityPerM} sorted />
 
+      {historicComparisons.map(props => (
+        <CaseVsFatalities {...props} key={props.code} />
+      ))}
       <Box my={5}>
-        <Typography variant="h5">US Case Increases vs. Fatalities</Typography>
+        <h4>Cumulative Fatalities Over Time By Country</h4>
       </Box>
-      <ComposedHistoricalComparison
-        comparisonData={usHistoricData}
-        largerComparitor="cases"
-        smallerComparitor="deaths"
-      />
-      <Box my={5}>
-        <Typography variant="h5">Spain Case Increases vs. Fatalities</Typography>
-      </Box>
-      <ComposedHistoricalComparison
-        comparisonData={spainHistoricData}
-        largerComparitor="cases"
-        smallerComparitor="deaths"
+      <HistoricComparisonLineChart
+        comparisonData={lineChartData}
+        comparitor="total_deaths_per_million"
       />
     </Layout>
   )
 }
 
+const CaseVsFatalities = ({ name, data }: {
+  name: string
+  data: ComposedComparisonData[]
+}) => (
+  <>
+    <Box my={5}>
+      <h4>
+        Daily New Cases vs. Fatalities - {name} (per mil.)
+      </h4>
+    </Box>
+    <ComposedHistoricalComparison
+      comparisonData={data}
+      largerComparitor="cases"
+      smallerComparitor="deaths"
+    />
+  </>
+)
+
 export default USOutperformed 
 
+// todo: states can be combined into a single request filtering for ny and nj
+// the countries have to be separated but should be able to account for this 
+// in type declaration
 export const query = graphql`
   query {
-    ny: allStateHistoricalData(filter: { code: { eq: "ny" } }) {
-      nodes {
-        population
-        deaths_per_100k
-        total_deaths
-        code
-        state
-      }
-    }
-    nj: allStateHistoricalData(filter: { code: { eq: "nj" } }) {
+    states: allStateHistoricalData(filter: { code: { in: ["ny","nj"] } }) {
       nodes {
         population
         deaths_per_100k
@@ -241,6 +300,7 @@ export const query = graphql`
           date
           new_deaths_smoothed_per_million
           new_cases_smoothed_per_million
+          total_deaths_per_million
         }
       }
     }

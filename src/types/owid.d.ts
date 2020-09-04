@@ -1,3 +1,5 @@
+import { StateData } from "../../plugins/source-state-data";
+
 export interface OwidData {
   date: number
   hospitalizedCurrently?: number
@@ -5,8 +7,17 @@ export interface OwidData {
   [comparitor: string]: number
 }
 
+// for country OWID data to make
+// it digestable for the charts
 export interface LocationData {
   location: string
   population: number
-  data: StateData[]
+  data: OwidData[]
+}
+
+// for graphql responses
+export interface OwidNodes {
+  [key: string]: {
+    nodes: LocationData[]
+  }
 }

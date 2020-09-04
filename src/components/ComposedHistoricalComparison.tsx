@@ -13,17 +13,12 @@ import {
   Bar,
 } from "recharts"
 import randomColor from "randomcolor"
+import { ComposedComparisonData } from '../types/charts';
 
 interface ComparisonLineChartProps {
-  comparisonData: CombinedData[]
+  comparisonData: ComposedComparisonData[]
   largerComparitor: string
   smallerComparitor: string
-  perM?: boolean
-}
-
-interface CombinedData {
-  date: number
-  [key: string]: string | number
 }
 
 const ComposedHistoricalComparison = ({

@@ -1,256 +1,52 @@
 import React from "react"
-import { graphql } from "gatsby"
-import {Typography, Box} from "@material-ui/core"
-import randomColor from "randomcolor"
+import {Box} from "@material-ui/core"
 import Layout from "../components/layout"
 
-import TotalComparisonBarChart, { ComparisonData } from "../components/TotalComparisonBarChart";
-import { getPerMPop} from '../utils/utils'; 
-import codeToCountry_ from '../data/codeToCountry.json';
-import { StateData } from "../../plugins/source-state-data";
-import { YAxis, CartesianGrid, XAxis, Tooltip, Legend, Line, ResponsiveContainer, ComposedChart, Bar, Brush } from "recharts";
-
-// get index signature for ts so we can key by variable
-const codeToCountry: {[code: string]: string} = codeToCountry_
-
-interface IndexPageProps {
-  data: {
-    [key: string]: {
-      nodes: StateData[]
-    }
-  }
-}
-
-// extract fatalities from query data based on location/country code
-const getFatalities = (data: any, key: string, perM = false) => {
-  const length = data[key].nodes[0].data.length
-  const lastDate = data[key].nodes[0].data[length - 1]
-  const { population } = data[key].nodes[0]
-  return perM ? getPerMPop(population, lastDate.total_deaths) : lastDate.total_deaths
-}
-
-// states and countries for comparison (must be queried on this page and passed to component)
-const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
-const states = ["ny", "nj"]
-
-const IndexPage = ({ data }: IndexPageProps) => {
-  const getStateData = (code: string): StateData => data[code].nodes[0];
-  const ny = getStateData('ny');
-  const nj = getStateData('nj');
-
-  // get country populations based on countries we are comparing
-  const populations: { [key: string]: number } = countries.reduce((pops: {[key:string]: number}, code) => {
-    pops[code] = data[code].nodes[0].population;
-    return pops;
-  }, {})
-
-  // get state populations ased on countries we are comparing
-  const statePopulations: { [key: string]: number } = {
-    // add special us adjusted case
-    usAdjusted: populations.us - ny.population - nj.population,
-    ny: ny.population,
-    nj: nj.population,
-  }
-
-  // get data for bar chart that compares total fatalities (not per 100k)
-  const totalFatalities: ComparisonData[] = countries.map(code => ({
-    location: codeToCountry[code.toUpperCase()],
-    abbreviation: code,
-    value: getFatalities(data, code)
-  })) 
-
-  // get data for bar chart that compares total fatalities per 100k
-  const fatalityPerM = totalFatalities.map(data => ({
-    ...data,
-    value: getPerMPop(populations[data.abbreviation], data.value)
-  }))
-  
-  // add state data for comparison 
-  states.forEach(code => {
-    const obj = {
-      location: code.toUpperCase(),
-      abbreviation: code, 
-    }
-
-    totalFatalities.push({
-      ...obj,
-      value: getStateData(code).total_deaths,
-    })
-
-    fatalityPerM.push({
-      ...obj,
-      value: getStateData(code).deaths_per_100k
-    }) 
-  })
-
-  // special US adjusted for each comparison
-  totalFatalities.push(
-    {
-      location: "US Adj",
-      abbreviation: "usAdj",
-      value: getFatalities(data, 'us') -
-        ny.total_deaths -
-        nj.total_deaths,
-    }
-  )
-  
-  fatalityPerM.push(
-    {
-      location: "US Adj",
-      abbreviation: "usAdj",
-      value: getPerMPop(
-        populations.us - statePopulations.ny - statePopulations.nj,
-        getFatalities(data, 'us') -
-          ny.total_deaths -
-          nj.total_deaths
-      ),
-    }
-  )
-  const usHistoricData = data.us.nodes[0].data.filter((day) => {
-    const date = new Date(day.date)
-    return date > new Date('2020-03-01');
-  }).map((day) => {
-    const date = new Date(day.date)
-    return {
-      ...day,
-      cases: day.new_cases_smoothed_per_million,
-      deaths: day.new_deaths_smoothed_per_million,
-      // date: `${date.getMonth()}-${date.getDay()}`
-    }
-  })
-
+const IndexPage = () => {
   return (
     <Layout>
-      <Box my={5}>
-        <Typography variant="h5">Fatalities per 100k</Typography>
-        <Typography variant="subtitle2">US Adjusted w/o NY and NJ</Typography>
+      <Box my={3}>
+        <h2>What is the purpose of this site?</h2>
+        <Box my={2} textAlign="center">
+          <h4>
+            "There are three kinds of lies: lies, damned lies, and statistics." -
+            Mark Twain
+          </h4>
+        </Box>
+        <p>
+          They say knowledge is power, but what about the narrative you craft
+          with that knowledge?
+        </p>
+        <p>
+          This isn't the first global pandemic the human race has ever faced,
+          but it is the first in which we have the full force of "Big Data",
+          open source software, and the Internet at our disposal.
+        </p>
       </Box>
-      <TotalComparisonBarChart comparisonData={fatalityPerM} sorted />
 
-      <Box my={5}>
-        <Typography variant="h5">Total Fatalities</Typography>
-        <Typography variant="subtitle2">US Adjusted w/o NY and NJ</Typography>
-      </Box>
-      <TotalComparisonBarChart comparisonData={totalFatalities} sorted />
-
-      <Box my={5}>
-        <Typography variant="h5">Case Increases vs. Fatalities</Typography>
-        <ResponsiveContainer width="80%" aspect={2}>
-          <ComposedChart data={usHistoricData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis name="date" dataKey="date" />
-            <YAxis orientation="left" name="Cases" yAxisId="cases" />
-            <YAxis
-              orientation="right"
-              name="Fatalities"
-              yAxisId="fatalities"
-              domain={[0, "dataMax + 30"]}
-            />
-            <Tooltip />
-            <Legend />
-            <Line
-              yAxisId="cases"
-              dataKey="cases"
-              type="basisOpen"
-              dot={false}
-              stroke={randomColor({
-                seed: JSON.stringify(usHistoricData[0].cases),
-              })}
-            />
-            <Bar
-              yAxisId="fatalities"
-              dataKey="deaths"
-              fill={randomColor({
-                seed: JSON.stringify(usHistoricData[0].deaths),
-              })}
-            />
-            <Brush />
-          </ComposedChart>
-        </ResponsiveContainer>
+      <Box my={3}>
+        <h3>Data Sources</h3>
+        <h5>
+          State Level Data:{" "}
+          <a href="https://covidtracking.com/data/api">
+            COVID Tracking Project
+          </a>
+        </h5>
+        <h5>
+          Populations (US): <a href="https://datausa.io/">DataUSA.io</a>
+        </h5>
+        <h5>
+          Rt (transmission rate) Data: <a href="https://rt.live/">Rt.live</a>
+        </h5>
+        <h5>
+          Country-level Data: <a href="https://github.com/owid/covid-19-data/tree/master/public/data/">
+            Our World In Data (OWID)
+          </a>
+        </h5>
+      
       </Box>
     </Layout>
   )
 }
 
 export default IndexPage
-
-export const query = graphql`
-    query {
-      ny: allStateHistoricalData(filter: {code: {eq: "ny"}}) {
-        nodes {
-          deaths_per_100k
-          deaths_per_million
-          hospitalized_per_100k
-          hospitalized_per_million
-          population
-          positives_per_100k
-          positives_per_million
-          total_deaths
-          total_hospitalized
-          total_positives
-          code
-          state
-        }
-      }
-      nj: allStateHistoricalData(filter: {code: {eq: "nj"}}) {
-        nodes {
-          deaths_per_100k
-          deaths_per_million
-          hospitalized_per_100k
-          hospitalized_per_million
-          population
-          positives_per_100k
-          positives_per_million
-          total_deaths
-          total_hospitalized
-          total_positives
-          code
-          state
-        }
-      }
-      fr: allEurope1Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "France"}}) {
-        nodes {
-          ...europe1Fields
-        }
-      }
-      gb: allEurope2Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "United Kingdom"}}) {
-        nodes {
-          ...europe2Fields
-        }
-      }
-      es: allEurope2Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "Spain"}}) {
-        nodes {
-          ...europe2Fields
-        }
-      }
-      be: allEurope1Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "Belgium"}}) {
-        nodes {
-          ...europe1Fields
-        }
-      }
-      it: allEurope1Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "Italy"}}) {
-        nodes {
-          ...europe1Fields
-        }
-      }
-      se: allEurope2Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "Sweden"}}) {
-        nodes {
-          ...europe2Fields
-        }
-      }
-      us: allNorthAmerica2Json(sort: {order: ASC, fields: data___date}, filter: {location: {eq: "United States"}}) {
-        nodes {
-          location
-          population
-          data {
-            total_deaths 
-            date
-            new_deaths_smoothed
-            new_deaths_smoothed_per_million
-            new_cases_smoothed_per_million
-            new_tests_smoothed_per_thousand
-          }
-        }
-      }
-    }
-  ` 
