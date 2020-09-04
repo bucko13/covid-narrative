@@ -9,15 +9,19 @@ import TotalComparisonBarChart, {
 import { getPerMPop } from "../utils/utils"
 import codeToCountry_ from "../data/codeToCountry.json"
 import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart"
-import { LocationData } from "../types/owid"
+import { LocationData, OwidData } from "../types/owid"
 
 // get index signature for ts so we can key by variable
 const codeToCountry: { [code: string]: string } = codeToCountry_
 
-interface IndexPageProps {
+interface PageProps {
   data: {
-    [key: string]: {
-      nodes: LocationData[]
+    [abbreviation: string]: {
+      nodes: {
+        location: string
+        population: number
+        data: OwidData[]
+      }[]      
     }
   }
 }
@@ -35,8 +39,7 @@ const getFatalities = (data: any, key: string, perM = false) => {
 // states and countries for comparison (must be queried on this page and passed to component)
 const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
 
-const IndexPage = ({ data }: IndexPageProps) => {
-
+const UsMishandled = ({ data }: PageProps) => {
   // get data for bar chart that compares total fatalities (not per 100k)
   const totalFatalities: ComparisonData[] = countries.map(code => ({
     location: codeToCountry[code.toUpperCase()],
@@ -56,25 +59,34 @@ const IndexPage = ({ data }: IndexPageProps) => {
         }
       }
   )
+  
   return (
     <Layout>
       <Box my={5}>
-        <Typography variant="h5">Total Fatalities</Typography>
+        <h4>Total Fatalities</h4>
       </Box>
       <TotalComparisonBarChart comparisonData={totalFatalities} sorted />
 
       <Box my={5}>
-        <Typography variant="h5">Total Cases Per Million Over Time</Typography>
+        <h4>Cumulative Cases Per Million</h4>
       </Box>
       <HistoricComparisonLineChart
         comparisonData={lineChartData}
         comparitor="total_cases_per_million"
       />
+
+      <Box my={5}>
+        <h4>Cumulative Fatalities</h4>
+      </Box>
+      <HistoricComparisonLineChart
+        comparisonData={lineChartData}
+        comparitor="total_deaths"
+      />
     </Layout>
   )
 }
 
-export default IndexPage
+export default UsMishandled 
 
 export const query = graphql`
   query {
@@ -89,6 +101,7 @@ export const query = graphql`
         population
         data {
           total_deaths
+          total_deaths_per_million
           date
           total_cases_per_million
         }
@@ -105,6 +118,7 @@ export const query = graphql`
         population
         data {
           total_deaths
+          total_deaths_per_million
           date
           total_cases_per_million
         }
@@ -121,6 +135,7 @@ export const query = graphql`
         population
         data {
           total_deaths
+          total_deaths_per_million
           date
           total_cases_per_million
         }     
@@ -137,6 +152,7 @@ export const query = graphql`
         population
         data {
           total_deaths
+          total_deaths_per_million
           date
           total_cases_per_million
         }
@@ -153,6 +169,7 @@ export const query = graphql`
         population
         data {
           total_deaths
+          total_deaths_per_million
           date
           total_cases_per_million
         }
@@ -169,6 +186,7 @@ export const query = graphql`
         population
         data {
           total_deaths
+          total_deaths_per_million
           date
           total_cases_per_million
         }
@@ -185,6 +203,7 @@ export const query = graphql`
         population
         data {
           total_deaths
+          total_deaths_per_million
           date
           total_cases_per_million
         }

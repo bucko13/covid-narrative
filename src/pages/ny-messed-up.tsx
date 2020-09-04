@@ -29,15 +29,15 @@ const NyMessedUp = ({ data }: PageProps) => {
   return (
     <Layout>
       <SEO title="New York Messed Up" />
-      <Typography variant="h1">The Narrative Where NY Handled COVID-19 Uniquely Poorly</Typography>
-      <Typography variant="body1">
+      <h2>The Narrative Where NY Handled COVID-19 Uniquely Poorly</h2>
+      <p>
         The point of this page is not necessarily to cast blame on NY, NYC, or any
         of its politicians in particular, but rather to show how the data construed a certain
         way can shape that narrative. 
-      </Typography>
+      </p>
 
       <Box my={5}>
-        <Typography variant="h5">Hospitalized By State</Typography>
+        <h4>Hospitalized By State</h4>
       </Box>
       <HistoricComparisonLineChart
         comparisonData={lineChartData}
@@ -45,7 +45,7 @@ const NyMessedUp = ({ data }: PageProps) => {
       />
 
       <Box my={5}>
-        <Typography variant="h5">Daily Hospitalized By State per 100k</Typography>
+        <h4>Daily Hospitalized By State per 100k</h4>
       </Box>
       <HistoricComparisonLineChart
         comparisonData={lineChartData}
@@ -54,7 +54,7 @@ const NyMessedUp = ({ data }: PageProps) => {
       />
 
       <Box my={5}>
-        <Typography variant="h5">Daily Fatality Increase By State</Typography>
+        <h4>Daily Fatality Increase By State</h4>
       </Box>
       <HistoricComparisonLineChart
         comparisonData={lineChartData}

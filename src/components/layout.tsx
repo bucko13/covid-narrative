@@ -62,10 +62,6 @@ const Layout = ({ children }: any) => {
         }}
       >
         <SEO title="COVID-19 Narratives By the Numbers" />
-        <Typography>
-          "There are three kinds of lies: lies, damned lies, and statistics." -
-          Mark Twain
-        </Typography>
         <Box my={3}>
           <Grid container justify="space-around">
             {navList.map((navItem) => (

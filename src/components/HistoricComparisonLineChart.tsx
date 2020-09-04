@@ -13,23 +13,12 @@ import {
 } from "recharts"
 import randomColor from 'randomcolor';
 import { getPerMPop } from "../utils/utils";
-import { StateNodeData } from "../../plugins/source-state-data";
-
-export interface ComparisonData {
-  location: string
-  population: number
-  data: StateNodeData[]
-}
+import { LineChartComparisonData, LineChartDataNode } from "../types/charts";
 
 interface ComparisonLineChartProps {
-  comparisonData: ComparisonData[],
+  comparisonData: LineChartComparisonData[],
   comparitor: string;
   perM?: boolean;
-}
-
-interface CombinedData {
-  date: number;
-  [key: string]: string|number;
 }
 
 const HistoricComparisonLineChart = ({ comparisonData, comparitor, perM }: ComparisonLineChartProps) => {
@@ -40,7 +29,7 @@ const HistoricComparisonLineChart = ({ comparisonData, comparitor, perM }: Compa
 
   // go through the first location to start and create a data object for each node
   // where it has the date and then creates a property for each location for the data we are comparing
-  const data = firstLocation.data.map((node): CombinedData => {
+  const data = firstLocation.data.map((node): LineChartDataNode => {
     const date = node.date;
     const data = {
       date: node.date,
@@ -52,7 +41,7 @@ const HistoricComparisonLineChart = ({ comparisonData, comparitor, perM }: Compa
     comparisonData.forEach(locationData => {
       // find the node for this date
       const node = locationData.data.find(
-        (locationNode: StateNodeData): boolean => locationNode.date === date
+        (locationNode: LineChartDataNode): boolean => locationNode.date === date
       );
       
       if (node) {
