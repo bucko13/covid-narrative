@@ -5,7 +5,7 @@ export interface ComposedComparisonData {
 
 export interface LineChartDataNode {
   date: number
-  [key: string]: number
+  [key: string]: number | string
 }
 
 export interface LineChartComparisonData {

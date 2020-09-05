@@ -29,10 +29,10 @@ const Layout = ({ children }: any) => {
       title: 'NY Messed Up',
       path: 'ny-messed-up'
     },
-    // {
-    //   title: 'NY Beat COVID-19',
-    //   path: 'ny-beat-covid-19',
-    // },
+    {
+      title: 'NY Beat COVID-19',
+      path: 'ny-beat-covid',
+    },
     {
       title: 'US Mishandled COVID-19',
       path: 'us-mishandled',
