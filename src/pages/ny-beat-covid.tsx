@@ -17,24 +17,25 @@ interface PageProps {
   }
 }
 
-const NyMessedUp = ({ data }: PageProps) => {
-  const stateData = data.allStateHistoricalData.nodes;
+const NyBeatCovid = ({ data }: PageProps) => {
+  const stateData = data.allStateHistoricalData.nodes
   // array of historic data for states to compare in line chart
   const lineChartData: LineChartComparisonData[] = stateData.map(
     (state: StateData): LineChartComparisonData => ({
-        location: state.code,
-        population: state.population,
-        data: state.data,
-    }))
+      location: state.code,
+      population: state.population,
+      data: state.data,
+    })
+  )
 
   return (
     <Layout>
-      <SEO title="New York Messed Up" />
+      <SEO title="NY Beat COVID-19" />
       <h2>The Narrative Where NY Handled COVID-19 Uniquely Poorly</h2>
       <p>
-        The point of this page is not necessarily to cast blame on NY, NYC, or any
-        of its politicians in particular, but rather to show how the data construed a certain
-        way can shape that narrative. 
+        The point of this page is not necessarily to cast blame on NY, NYC, or
+        any of its politicians in particular, but rather to show how the data
+        construed a certain way can shape that narrative.
       </p>
 
       <Box my={5}>
@@ -63,23 +64,23 @@ const NyMessedUp = ({ data }: PageProps) => {
       />
       <Link to="/">Go back to the homepage</Link>
     </Layout>
-  );
+  )
 }
 
-export default NyMessedUp
+export default NyBeatCovid 
 
 export const query = graphql`
-  query StateQuery {
+  query NyBeatCovidQuery {
     allStateHistoricalData {
       nodes {
-          state
-          code
-          population
-          data {
-            hospitalizedCurrently
-            date
-            deathsIncreaseRollingAverage
-          }
+        state
+        code
+        population
+        data {
+          hospitalizedCurrently
+          date
+          deathsIncreaseRollingAverage
+        }
       }
     }
   }

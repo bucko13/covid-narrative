@@ -4,6 +4,7 @@
   "description": "retrieving state historical data and latest totals",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.20.0"
+    "axios": "^0.20.0",
+    "moment": "^2.27.0"
   }
 }

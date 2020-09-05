@@ -4,6 +4,8 @@ https://covidtracking.com/data/api
 
 **Populations:** https://datausa.io/api/data?drilldowns=State&measures=Population&year=latest
 
+**Unemployment Data** https://datausa.io/api/covid19/employment/latest/
+
 $R_t$ Data: https://rt.live/
 
 #### World

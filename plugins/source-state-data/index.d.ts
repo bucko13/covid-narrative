@@ -11,6 +11,7 @@ export interface StateNodeData {
   hospitalizedCurrently: number
   fips: string
   deathsIncreaseRollingAverage: number
+  insuredUnemploymentRate: number
   [comparitor: string]: number | string
 }
 
@@ -38,4 +39,21 @@ export interface PopulationData {
     [key: string]: string | number,
     Population: number
   } 
+}
+
+export interface StateEmploymentDataNode {
+  week_ended: string
+  reflecting_week_end: string
+  fips_code: string
+  state_name: string
+  initial_claims: number
+  continued_claims: number
+  covered_employment: number
+  insured_unemployment_rate: number
+}
+
+export interface StateEmploymentData {
+  [date: string]: {
+    [state: string]: StateEmploymentDataNode
+  }
 }
