@@ -24,7 +24,14 @@ const NyBeatCovid = ({ data }: PageProps) => {
     (state: StateData): LineChartComparisonData => ({
       location: state.code,
       population: state.population,
-      // data: state.data.filter(node => node.date > 20200524),
+      data: state.data.filter(node => node.date > 20200524),
+    })
+  )
+
+  const fullData: LineChartComparisonData[] = stateData.map(
+    (state: StateData): LineChartComparisonData => ({
+      location: state.code,
+      population: state.population,
       data: state.data
     })
   )
@@ -35,10 +42,10 @@ const NyBeatCovid = ({ data }: PageProps) => {
       <h2>The Narrative Where NY Handled COVID-19 Well</h2>
 
       <Box my={5}>
-        <h4>Daily Case Increases after the Spring</h4>
+        <h4>Daily Positive Test Increases</h4>
       </Box>
       <HistoricComparisonLineChart
-        comparisonData={summerChartData}
+        comparisonData={fullData}
         comparitor="positiveIncreaseRollingAverage"
       />
 
