@@ -31,7 +31,7 @@ export default function TotalComparisonBarChart({ comparisonData, sorted }: Comp
     })
   }
   return (
-    <ResponsiveContainer width="80%" aspect={2}>
+    <ResponsiveContainer width="100%" aspect={2}>
         <BarChart data={comparisonData}>
           <Tooltip />
           <XAxis dataKey="location" />

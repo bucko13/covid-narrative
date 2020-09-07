@@ -28,7 +28,7 @@ const ComposedHistoricalComparison = ({
 }: ComparisonLineChartProps) => {
 
   return (
-    <ResponsiveContainer width="80%" aspect={2}>
+    <ResponsiveContainer width="100%" aspect={2}>
       <ComposedChart data={comparisonData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis name="date" dataKey="date" />

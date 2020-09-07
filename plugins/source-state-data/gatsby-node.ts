@@ -44,11 +44,20 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
   
     const population = populations[name].Population
     const { death, hospitalized, positive, fips, date } = currentTotals
+
     // need to order data by date
-    const sortedData = data.sort((a, b) => {
+    let sortedData = data.sort((a, b) => {
       if (a.date > b.date) return 1
       else return -1
     }).map((node, index) => {
+      /* 
+       * in this map function we calculate custom
+       * data points for each date based on available data
+       * 1. rolling 7-day averages
+       * 2. insured unemployment for a given week
+       * 3. estimated cases based on IFR
+       */
+
       // calcuate rolling 7-day averages.
       // start with deaths since this is the bumpiest data
       let totalDeathIncrease = 0;
@@ -68,13 +77,32 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
         return isClosestWeekend(dateString, node.date.toString())
       })
         
-      const insuredUnemploymentRate = closestWeekend ? employmentData[closestWeekend][name].insured_unemployment_rate : null
-      
+      const insuredUnemploymentRate = closestWeekend ?
+        employmentData[closestWeekend][name].insured_unemployment_rate : null
+
       return {
         ...node,
         insuredUnemploymentRate,
         deathsIncreaseRollingAverage,
         positiveIncreaseRollingAverage,
+      }
+    })
+      
+    sortedData = sortedData.map((node, index) => {
+      // finally calculate estimated cases based on IFR assuming 15 days to death
+      let estimatedCases: number | void;
+      const IFR = 0.0065;
+      const DAYS_TO_DEATH = 15;
+      if (index < data.length - DAYS_TO_DEATH) {
+        // estimated cases for day x equals the fatalities from DAYS_TO_DEATH in the future
+        // divided by the IFR, which represents the number of infected individuals that will 
+        // likely result in a fatality
+        estimatedCases = sortedData[index + DAYS_TO_DEATH].deathsIncreaseRollingAverage / IFR;
+      }
+
+      return {
+        ...node,
+        estimatedCases
       }
     })
 

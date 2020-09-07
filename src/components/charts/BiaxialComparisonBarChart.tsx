@@ -30,9 +30,9 @@ export default function BiaxialComparisonBarChart({
       return -1
     })
   }
-  console.log("comparisonData:", comparisonData)
+
   return (
-    <ResponsiveContainer width="80%" aspect={2}>
+    <ResponsiveContainer width="100%" aspect={2}>
       <BarChart data={comparisonData}>
         <Tooltip />
         <Legend />
