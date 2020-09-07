@@ -54,7 +54,7 @@ const HistoricComparisonLineChart = ({ comparisonData, comparitor, perM }: Compa
   })
 
   return (
-    <ResponsiveContainer width="80%" aspect={2}>
+    <ResponsiveContainer width="100%" aspect={2}>
       <LineChart data={data}>
         {
           locations.map((location: string) => (

@@ -24,11 +24,11 @@ const NyBeatCovid = ({ data }: PageProps) => {
     (state: StateData): LineChartComparisonData => ({
       location: state.code,
       population: state.population,
-      data: state.data.filter(node => node.date > 20200524),
+      // data: state.data.filter(node => node.date > 20200524),
+      data: state.data
     })
   )
 
-  console.log('summerChartData:', summerChartData);
   return (
     <Layout>
       <SEO title="NY Beat COVID-19" />

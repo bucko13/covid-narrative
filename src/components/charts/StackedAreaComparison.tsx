@@ -24,7 +24,7 @@ export default function StackedAreaComparison({
 }: StackedAreaChartProps) {
 
   return (
-    <ResponsiveContainer width="80%" aspect={2}>
+    <ResponsiveContainer width="100%" aspect={2}>
       <AreaChart data={comparisonData}>
         <XAxis dataKey="date" />
         <YAxis />

@@ -26,7 +26,8 @@ interface PageProps {
 const NyMessedUp = ({ data }: PageProps) => {
   const [fatalityPer100k, setFatalityPer100k] = useState(false)
   const [hospitalizedPer100k, setHospitalizedPer100k] = useState(false)
-  
+  const [casesPer100k, setCasesPer100k] = useState(false)
+
   const stateData = data.allStateHistoricalData.nodes
   const states: string[] = stateData.map(state => state.code);
 
@@ -142,6 +143,27 @@ const NyMessedUp = ({ data }: PageProps) => {
         comparisonData={totalFatalityComparison}
         sorted
       />
+
+      <Box my={5}>
+        <h4>Estimated Cases (based on 0.65% IFR)</h4>
+      </Box>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={casesPer100k}
+            onChange={() => setCasesPer100k(!casesPer100k)}
+            color="primary"
+            name="Show as Per 100k Pop"
+          />
+        }
+        label="Show as Per 100k Pop"
+      />
+
+      <HistoricComparisonLineChart
+        comparisonData={lineChartData}
+        comparitor="estimatedCases"
+        perM={casesPer100k}
+      />
       <Link to="/">Go back to the homepage</Link>
     </Layout>
   )
@@ -162,6 +184,7 @@ export const query = graphql`
             date
             deathsIncreaseRollingAverage
             insuredUnemploymentRate
+            estimatedCases
           }
       }
     }

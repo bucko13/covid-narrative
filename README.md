@@ -12,7 +12,9 @@ $R_t$ Data: https://rt.live/
 **Our World In Data**
 https://github.com/owid/covid-19-data/tree/master/public/data/
 
-
+Infection Fatality Rate Estimate (IFR):
+.65% 
+https://www.cdc.gov/coronavirus/2019-ncov/hcp/planning-scenarios.html
 
 <!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
 <p align="center">

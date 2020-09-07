@@ -13,7 +13,8 @@ export interface StateNodeData {
   deathsIncreaseRollingAverage: number
   insuredUnemploymentRate?: number
   positiveIncreaseRollingAverage: number
-  [comparitor: string]: number | string
+  estimatedCases?: numer
+  [comparitor: string]: number | string | void
 }
 
 
