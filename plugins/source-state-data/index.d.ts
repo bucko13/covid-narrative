@@ -11,7 +11,8 @@ export interface StateNodeData {
   hospitalizedCurrently: number
   fips: string
   deathsIncreaseRollingAverage: number
-  insuredUnemploymentRate: number
+  insuredUnemploymentRate?: number
+  positiveIncreaseRollingAverage: number
   [comparitor: string]: number | string
 }
 

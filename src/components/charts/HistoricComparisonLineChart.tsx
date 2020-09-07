@@ -12,8 +12,8 @@ import {
   Brush,
 } from "recharts"
 import randomColor from 'randomcolor';
-import { getPerMPop } from "../utils/utils";
-import { LineChartComparisonData, LineChartDataNode } from "../types/charts";
+import { getPerMPop } from "../../utils/utils";
+import { LineChartComparisonData, LineChartDataNode } from "../../types/charts";
 
 interface ComparisonLineChartProps {
   comparisonData: LineChartComparisonData[],

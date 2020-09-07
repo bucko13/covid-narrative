@@ -1,4 +1,5 @@
 import React from "react";
+import randomColor from "randomcolor";
 
 import {
   XAxis,
@@ -33,11 +34,10 @@ export default function TotalComparisonBarChart({ comparisonData, sorted }: Comp
     <ResponsiveContainer width="80%" aspect={2}>
         <BarChart data={comparisonData}>
           <Tooltip />
-          <Legend />
           <XAxis dataKey="location" />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" />
-          <Bar dataKey="value" fill="#663399" />
+          <Bar dataKey="value" fill={randomColor({ seed: comparisonData[3].location })} />
         </BarChart>
     </ResponsiveContainer>
   )

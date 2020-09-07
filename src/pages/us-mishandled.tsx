@@ -5,10 +5,10 @@ import { Typography, Box } from "@material-ui/core"
 import Layout from "../components/layout"
 import TotalComparisonBarChart, {
   ComparisonData,
-} from "../components/TotalComparisonBarChart"
+} from "../components/charts/TotalComparisonBarChart"
 import { getPerMPop } from "../utils/utils"
 import codeToCountry_ from "../data/codeToCountry.json"
-import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart"
+import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
 import { LocationData, OwidData } from "../types/owid"
 
 // get index signature for ts so we can key by variable

@@ -3,12 +3,12 @@ import { graphql } from "gatsby"
 import {Box} from "@material-ui/core"
 import Layout from "../components/layout"
 
-import TotalComparisonBarChart, { ComparisonData } from "../components/TotalComparisonBarChart";
+import TotalComparisonBarChart, { ComparisonData } from "../components/charts/TotalComparisonBarChart";
 import { getPerMPop, convertOwidPageDataToLineChart } from '../utils/utils'; 
 import codeToCountry_ from '../data/codeToCountry.json';
 import { StateData } from "../../plugins/source-state-data";
-import ComposedHistoricalComparison from "../components/ComposedHistoricalComparison"
-import HistoricComparisonLineChart from "../components/HistoricComparisonLineChart";
+import ComposedHistoricalComparison from "../components/charts/ComposedHistoricalComparison"
+import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart";
 import { LocationData, OwidData, OwidNodes } from "../types/owid";
 import { ComposedComparisonData } from "../types/charts";
 
@@ -145,7 +145,7 @@ const USOutperformed = ({ data }: PageProps) => {
     data: ComposedComparisonData[]
   }[] = []
 
-  historicComparisons  = ['us', 'es'].reduce((prev, code) => { 
+  historicComparisons  = ['us', 'es', 'it'].reduce((prev, code) => { 
     let node = data[code].nodes[0];
     if (!node || !node.data) return prev;
     
@@ -196,7 +196,7 @@ const USOutperformed = ({ data }: PageProps) => {
         <CaseVsFatalities {...props} key={props.code} />
       ))}
       <Box my={5}>
-        <h4>Cumulative Fatalities Over Time By Country</h4>
+        <h4>Cumulative Fatalities Over Time By Country (per mil.)</h4>
       </Box>
       <HistoricComparisonLineChart
         comparisonData={lineChartData}
