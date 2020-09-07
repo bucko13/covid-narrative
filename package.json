@@ -35,7 +35,10 @@
     "typescript": "^4.0.2"
   },
   "devDependencies": {
-    "prettier": "2.0.5"
+    "eslint-config-react-app": "^5.2.1",
+    "prettier": "2.0.5",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0"
   },
   "keywords": [
     "gatsby"
@@ -48,6 +51,7 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
+    "tslint": "tslint --project tsconfig.json",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "repository": {
