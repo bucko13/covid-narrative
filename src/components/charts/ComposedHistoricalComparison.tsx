@@ -13,7 +13,7 @@ import {
   Bar,
 } from "recharts"
 import randomColor from "randomcolor"
-import { ComposedComparisonData } from '../types/charts';
+import { ComposedComparisonData } from '../../types/charts';
 
 interface ComparisonLineChartProps {
   comparisonData: ComposedComparisonData[]

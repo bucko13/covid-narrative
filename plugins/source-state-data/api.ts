@@ -13,9 +13,22 @@ export const getStateHistoricData = async (state: string): Promise<any> => {
 }
 
 export const getCurrentStateData = async (state: string): Promise<any> => {
-  const { data } = await get(
-    `https://api.covidtracking.com/v1/states/${state}/current.json`
-  )
+  const DATA_FILE = path.resolve(__dirname, `./data/${state}_historic_data.json`)
+  let data
+
+  if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
+    console.log(`Reloading ${state}'s historic data...`)
+
+    const response = await get(
+      `https://api.covidtracking.com/v1/states/${state}/current.json`
+    )
+    data = response.data
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
+    console.log(`Finished loading ${state}'s data`)
+  } else {
+    data = JSON.parse(fs.readFileSync(DATA_FILE, { encoding: "utf-8" }))
+  }
+    
   return data;
 }
 

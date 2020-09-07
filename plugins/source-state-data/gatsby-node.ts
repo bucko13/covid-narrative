@@ -23,7 +23,7 @@ function isClosestWeekend(dateStringA:string, dateStringB:string): boolean {
   const dateA = moment(dateStringA)
   const dateB = moment(dateStringB)
   const diff = dateA.diff(dateB, 'days')
-  return diff < 7 && diff > 0
+  return diff <= 7 && diff > 0
 }
 
 export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: SourceNodesArgs) => {
@@ -48,29 +48,33 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
     const sortedData = data.sort((a, b) => {
       if (a.date > b.date) return 1
       else return -1
-    }).map((datum, index) => {
+    }).map((node, index) => {
       // calcuate rolling 7-day averages.
       // start with deaths since this is the bumpiest data
-      let total = 0;
+      let totalDeathIncrease = 0;
+      let totalPositiveIncrease = 0;
       let counter = 0;
       while (counter < 7 && counter <= index) {
-        total += data[index - counter].deathIncrease
+        totalDeathIncrease += data[index - counter].deathIncrease
+        totalPositiveIncrease += data[index-counter].positiveIncrease
         counter++
       }
 
-      const rollingAverage = total / counter;
+      const deathsIncreaseRollingAverage = totalDeathIncrease / counter
+      const positiveIncreaseRollingAverage = totalPositiveIncrease / counter
 
       // next we need to find the insured unemployment rate for this week
       const closestWeekend = employmentDataWeekends.find((dateString) => {
-        return isClosestWeekend(dateString, datum.date.toString())
+        return isClosestWeekend(dateString, node.date.toString())
       })
-
-      const insuredUnemploymentRate = closestWeekend ? employmentData[closestWeekend][name].insured_unemployment_rate : 0
+        
+      const insuredUnemploymentRate = closestWeekend ? employmentData[closestWeekend][name].insured_unemployment_rate : null
       
       return {
-        ...datum,
+        ...node,
         insuredUnemploymentRate,
-        deathsIncreaseRollingAverage: rollingAverage,
+        deathsIncreaseRollingAverage,
+        positiveIncreaseRollingAverage,
       }
     })
 
