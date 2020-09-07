@@ -48,8 +48,8 @@ const NyMessedUp = ({ data }: PageProps) => {
     })
   )
 
-  let unemploymentData = []
-  
+  const unemploymentData = []
+
   // to get unemployment data for a stacked area chart
   // we will take a data point for each week, add to an
   // object with the date and each state as a key
@@ -61,23 +61,23 @@ const NyMessedUp = ({ data }: PageProps) => {
     // for each state get the unemployment rate at this date
     // and add to an object that can be pushed onto data list
     let allHaveUnemployment = true;
-    const data = { date }
+    const composed = { date }
     stateData.reduce((prev: any, state): any => {
-      const node = state.data.find(node => node.date === date);
+      const node = state.data.find(stateNode => stateNode.date === date);
       if (node && node.insuredUnemploymentRate) {
         prev[state.code] = node.insuredUnemploymentRate
       } else {
         allHaveUnemployment = false
       }
       return prev;
-    }, data);
+    }, composed);
 
     // only add the data point if all have an unemployment value
     if (allHaveUnemployment) {
-      unemploymentData.push(data);
+      unemploymentData.push(composed);
     }
   }
-  
+
   return (
     <Layout>
       <SEO title="New York Messed Up" />

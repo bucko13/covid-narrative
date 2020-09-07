@@ -4,7 +4,7 @@ import {Box} from "@material-ui/core"
 import Layout from "../components/layout"
 
 import TotalComparisonBarChart, { ComparisonData } from "../components/charts/TotalComparisonBarChart";
-import { getPerMPop, convertOwidPageDataToLineChart } from '../utils/utils'; 
+import { getPerMPop, convertOwidPageDataToLineChart } from '../utils/utils';
 import codeToCountry_ from '../data/codeToCountry.json';
 import { StateData } from "../../plugins/source-state-data";
 import ComposedHistoricalComparison from "../components/charts/ComposedHistoricalComparison"
@@ -34,7 +34,7 @@ const getFatalities = (data: any, key: string, perM = false) => {
   const { population } = data[key].nodes[0]
   return perM ? getPerMPop(population, lastDate.total_deaths) : lastDate.total_deaths
 }
-  
+
 // states and countries for comparison (must be queried on this page and passed to component)
 const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
 const states = ["ny", "nj"]
@@ -42,12 +42,12 @@ const states = ["ny", "nj"]
 const USOutperformed = ({ data }: PageProps) => {
   const getStateData = (code: string): StateData | undefined =>
     data.states.nodes.find((state: StateData) => state.code === code)
-  
+
   let stateData: { [code: string]: StateData } = {}
 
   stateData = states.reduce((prev, code) => {
-    const data = getStateData(code)
-    if (data) prev[code] = data
+    const state = getStateData(code)
+    if (state) prev[code] = state
     return prev
   }, stateData)
 
@@ -82,19 +82,19 @@ const USOutperformed = ({ data }: PageProps) => {
     location: codeToCountry[code.toUpperCase()],
     abbreviation: code,
     value: getFatalities(data, code)
-  })) 
+  }))
 
   // get data for bar chart that compares total fatalities per 100k
-  const fatalityPerM = totalFatalities.map(data => ({
-    ...data,
-    value: getPerMPop(populations[data.abbreviation], data.value)
+  const fatalityPerM = totalFatalities.map(node => ({
+    ...node,
+    value: getPerMPop(populations[node.abbreviation], node.value)
   }))
-  
-  // add state data for comparison 
+
+  // add state data for comparison
   states.forEach(code => {
     const obj = {
       location: code.toUpperCase(),
-      abbreviation: code, 
+      abbreviation: code,
     }
 
     totalFatalities.push({
@@ -104,18 +104,18 @@ const USOutperformed = ({ data }: PageProps) => {
     fatalityPerM.push({
       ...obj,
       value: stateData[code].deaths_per_100k
-    }) 
+    })
   })
 
   // get total fatalities for all states being adjusted for
   const adjStatesTotalFatalities = states.reduce(
     (prev, code) => stateData[code] ? prev += stateData[code].total_deaths : prev
   , 0)
-  
+
   // then get us adjusted by subtracting from us total
   const adjUSTotalFatalities =
     getFatalities(data, "us") - adjStatesTotalFatalities
-  
+
   // add "US Adjusted" item to comparison lists
   totalFatalities.push(
     {
@@ -124,7 +124,7 @@ const USOutperformed = ({ data }: PageProps) => {
       value: adjUSTotalFatalities
     }
   )
-  
+
   fatalityPerM.push(
     {
       location: "US Adj",
@@ -145,12 +145,12 @@ const USOutperformed = ({ data }: PageProps) => {
     data: ComposedComparisonData[]
   }[] = []
 
-  historicComparisons  = ['us', 'es', 'it'].reduce((prev, code) => { 
-    let node = data[code].nodes[0];
+  historicComparisons  = ['us', 'es', 'it'].reduce((prev, code) => {
+    const node = data[code].nodes[0];
     if (!node || !node.data) return prev;
-    
+
     // filter out any days earlier than march
-    const countryData = node.data
+    const countryNodes = node.data
       .filter((day: OwidData) => {
         const date = new Date(day.date)
         return date && date > new Date("2020-03-01")
@@ -162,25 +162,25 @@ const USOutperformed = ({ data }: PageProps) => {
           cases: day.new_cases_smoothed_per_million || 0,
           deaths: day.new_deaths_smoothed_per_million || 0,
         }
-      }) 
-    
+      })
+
     prev.push({
       name: node.location,
-      code: code,
-      data: countryData,
+      code,
+      data: countryNodes,
     })
     return prev;
   }, historicComparisons)
 
   let countryData: OwidNodes = {}
-    
+
   // filter out states from page data so we can get line chart data
   countryData = Object.keys(data).reduce((prev, curr) => {
     if (curr !== 'states') prev[curr] = data[curr]
     return prev;
   }, countryData)
 
-  // get the country data and arrange in a format that the line chart 
+  // get the country data and arrange in a format that the line chart
   // data can work with
   const lineChartData = convertOwidPageDataToLineChart({ data: countryData })
 
@@ -224,10 +224,10 @@ const CaseVsFatalities = ({ name, data }: {
   </>
 )
 
-export default USOutperformed 
+export default USOutperformed
 
 // todo: states can be combined into a single request filtering for ny and nj
-// the countries have to be separated but should be able to account for this 
+// the countries have to be separated but should be able to account for this
 // in type declaration
 export const query = graphql`
   query {
@@ -305,4 +305,4 @@ export const query = graphql`
       }
     }
   }
-` 
+`

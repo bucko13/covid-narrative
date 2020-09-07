@@ -8,11 +8,12 @@ import { getStateHistoricData, getCurrentStateData, getStateUnemploymentData } f
 import { StateData, StateNodeData, PopulationData } from '.';
 import { getPerMPop, getPerMillionPop } from '../../src/utils/utils';
 import { states } from './constants';
+import dotenv from 'dotenv';
 
 const codeToState: { [key: string]: string } = codeToState_
 const populations: PopulationData = populations_
 
-require("dotenv").config({
+dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
@@ -37,11 +38,11 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
   // 3. collect and calculate totals
   // 4. sort historical data from earliest to most recent
   // 5. add unemployment data
-  for (let code of states) {
+  for (const code of states) {
     const data: StateNodeData[] = await getStateHistoricData(code);
     const currentTotals: StateNodeData = await getCurrentStateData(code);
     const name:string = codeToState[code.toUpperCase()].split(' ').map(state => state.toLowerCase()).join('-')
-  
+
     const population = populations[name].Population
     const { death, hospitalized, positive, fips, date } = currentTotals
 
@@ -49,8 +50,8 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
     let sortedData = data.sort((a, b) => {
       if (a.date > b.date) return 1
       else return -1
-    }).map((node, index) => {
-      /* 
+    }).map((stateNode, index) => {
+      /*
        * in this map function we calculate custom
        * data points for each date based on available data
        * 1. rolling 7-day averages
@@ -74,34 +75,34 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
 
       // next we need to find the insured unemployment rate for this week
       const closestWeekend = employmentDataWeekends.find((dateString) => {
-        return isClosestWeekend(dateString, node.date.toString())
+        return isClosestWeekend(dateString, stateNode.date.toString())
       })
-        
+
       const insuredUnemploymentRate = closestWeekend ?
         employmentData[closestWeekend][name].insured_unemployment_rate : null
 
       return {
-        ...node,
+        ...stateNode,
         insuredUnemploymentRate,
         deathsIncreaseRollingAverage,
         positiveIncreaseRollingAverage,
       }
     })
-      
-    sortedData = sortedData.map((node, index) => {
+
+    sortedData = sortedData.map((stateNode, index) => {
       // finally calculate estimated cases based on IFR assuming 15 days to death
       let estimatedCases: number | void;
       const IFR = 0.0065;
       const DAYS_TO_DEATH = 15;
       if (index < data.length - DAYS_TO_DEATH) {
         // estimated cases for day x equals the fatalities from DAYS_TO_DEATH in the future
-        // divided by the IFR, which represents the number of infected individuals that will 
+        // divided by the IFR, which represents the number of infected individuals that will
         // likely result in a fatality
         estimatedCases = sortedData[index + DAYS_TO_DEATH].deathsIncreaseRollingAverage / IFR;
       }
 
       return {
-        ...node,
+        ...stateNode,
         estimatedCases
       }
     })
@@ -123,7 +124,7 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
       hospitalized_per_million: getPerMPop(population, hospitalized),
       data: sortedData,
     }
-  
+
     createNode({
       ...node,
       id: node.fips,
@@ -136,7 +137,7 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
           .digest(`hex`),
         description: `State historical data and summaries`, // optional
       },
-    }) 
+    })
   }
   return;
 }
