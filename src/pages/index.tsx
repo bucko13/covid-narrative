@@ -43,7 +43,7 @@ const IndexPage = () => {
             Our World In Data (OWID)
           </a>
         </h5>
-      
+
       </Box>
     </Layout>
   )

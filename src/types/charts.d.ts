@@ -1,10 +1,10 @@
 export interface ComposedComparisonData {
-  date: number
+  date: number | string
   [key: string]: string | number
 }
 
 export interface LineChartDataNode {
-  date: number
+  date: string | number
   [key: string]: number | string
 }
 

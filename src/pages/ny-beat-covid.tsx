@@ -61,7 +61,7 @@ const NyBeatCovid = ({ data }: PageProps) => {
   )
 }
 
-export default NyBeatCovid 
+export default NyBeatCovid
 
 export const query = graphql`
   query NyBeatCovidQuery {

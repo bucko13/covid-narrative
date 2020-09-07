@@ -37,14 +37,14 @@ const HistoricComparisonLineChart = ({
   filter = true
 }: ComparisonLineChartProps) => {
   const locations = comparisonData.map(({ location }) => location)
-  
-  let stateObject: { [key: string]: boolean } = {}
+
+  const stateObject: { [key: string]: boolean } = {}
   const initialState = locations.reduce(
-    (state, location) => ({ ...state, [location]: true }),
+    (stateNode, location) => ({ ...stateNode, [location]: true }),
     stateObject
   )
   const [state, setState] = useState(initialState)
-  
+
   const handleChange = (event: React.ChangeEvent) => {
     const target = event.target as HTMLInputElement
     setState({ ...state, [target.name]: target.checked })
@@ -59,7 +59,7 @@ const HistoricComparisonLineChart = ({
   // where it has the date and then creates a property for each location for the data we are comparing
   const data = firstLocation.data.map((node): LineChartDataNode => {
     const date = node.date;
-    const data = {
+    const dataNode = {
       date: moment(node.date.toString()).format('MMM D'),
       [firstLocation.location]: perM ?
         getPerMPop(firstLocation.population, +node[comparitor]) :
@@ -68,17 +68,17 @@ const HistoricComparisonLineChart = ({
     // for each other location, find the matching data for this date
     comparisonData.forEach(locationData => {
       // find the node for this date
-      const node = locationData.data.find(
+      const currentNode = locationData.data.find(
         (locationNode: LineChartDataNode): boolean => locationNode.date === date
       );
-      
-      if (node) {
-        data[locationData.location] = perM ?
-          getPerMPop(locationData.population, +node[comparitor]) :
-          node[comparitor]
+
+      if (currentNode) {
+        dataNode[locationData.location] = perM ?
+          getPerMPop(locationData.population, +currentNode[comparitor]) :
+          currentNode[comparitor]
       }
     })
-    return data;
+    return dataNode;
   })
 
   return (

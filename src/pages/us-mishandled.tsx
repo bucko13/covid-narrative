@@ -21,7 +21,7 @@ interface PageProps {
         location: string
         population: number
         data: OwidData[]
-      }[]      
+      }[]
     }
   }
 }
@@ -46,7 +46,7 @@ const UsMishandled = ({ data }: PageProps) => {
     abbreviation: code,
     value: getFatalities(data, code),
   }))
-  
+
   const lineChartData: LocationData[] = Object.keys(data)
     // .filter(key => !['us'].includes(key))
     .map(
@@ -59,7 +59,7 @@ const UsMishandled = ({ data }: PageProps) => {
         }
       }
   )
-  
+
   return (
     <Layout>
       <Box my={5}>
@@ -86,14 +86,14 @@ const UsMishandled = ({ data }: PageProps) => {
   )
 }
 
-export default UsMishandled 
+export default UsMishandled
 
 export const query = graphql`
   query {
     fr: allEurope1Json(
       sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "France" }        
+      filter: {
+        location: { eq: "France" }
       }
     ) {
       nodes {
@@ -109,8 +109,8 @@ export const query = graphql`
     }
     gb: allEurope2Json(
       sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "United Kingdom" }        
+      filter: {
+        location: { eq: "United Kingdom" }
       }
     ) {
       nodes {
@@ -126,8 +126,8 @@ export const query = graphql`
     }
     es: allEurope2Json(
       sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "Spain" }        
+      filter: {
+        location: { eq: "Spain" }
       }
     ) {
       nodes {
@@ -138,13 +138,13 @@ export const query = graphql`
           total_deaths_per_million
           date
           total_cases_per_million
-        }     
+        }
       }
     }
     be: allEurope1Json(
       sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "Belgium" }        
+      filter: {
+        location: { eq: "Belgium" }
       }
     ) {
       nodes {
@@ -160,8 +160,8 @@ export const query = graphql`
     }
     it: allEurope1Json(
       sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "Italy" }        
+      filter: {
+        location: { eq: "Italy" }
       }
     ) {
       nodes {
@@ -177,8 +177,8 @@ export const query = graphql`
     }
     se: allEurope2Json(
       sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "Sweden" }        
+      filter: {
+        location: { eq: "Sweden" }
       }
     ) {
       nodes {
@@ -194,8 +194,8 @@ export const query = graphql`
     }
     us: allNorthAmerica2Json(
       sort: { order: ASC, fields: data___date }
-      filter: { 
-        location: { eq: "United States" }        
+      filter: {
+        location: { eq: "United States" }
       }
     ) {
       nodes {

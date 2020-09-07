@@ -52,6 +52,7 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "tslint": "tslint --project tsconfig.json",
+    "tslint:fix": "tslint --project tsconfig.json --fix",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "repository": {

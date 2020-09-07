@@ -46,7 +46,7 @@ const Layout = ({ children }: any) => {
   const onClick = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
     navigate(`/${path}`);
-  
+
   }
 
   const pathname = typeof window !== "undefined" ? window.location.pathname : ""

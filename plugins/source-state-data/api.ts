@@ -1,3 +1,5 @@
+/* tslint:disable no-console */
+
 import get from 'axios';
 import fs from 'fs';
 import path from 'path';
@@ -28,7 +30,7 @@ export const getCurrentStateData = async (state: string): Promise<any> => {
   } else {
     data = JSON.parse(fs.readFileSync(DATA_FILE, { encoding: "utf-8" }))
   }
-    
+
   return data;
 }
 
@@ -46,10 +48,10 @@ export const getStateUnemploymentData = async (): Promise<any> => {
         prev: StateEmploymentData,
         curr: StateEmploymentDataNode
       ) => {
-        // check that we're only getting data from this year 
+        // check that we're only getting data from this year
         if (moment(curr.week_ended) < moment('2020-01-01'))
           return prev;
-        
+
         if (!prev[curr.week_ended])
           prev[curr.week_ended] = {}
         prev[curr.week_ended][curr.state_name.toLowerCase().split(' ').join('-')] = curr;
@@ -63,6 +65,6 @@ export const getStateUnemploymentData = async (): Promise<any> => {
   } else {
     data = JSON.parse(fs.readFileSync(DATA_FILE, {encoding:'utf-8'}));
   }
-  
+
   return data;
 }
