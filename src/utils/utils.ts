@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import { LocationData, OwidNodes } from "../types/owid"
 
 export const getPerMPop = (pop: number, value: number): number =>
@@ -26,3 +28,5 @@ export const convertOwidPageDataToLineChart = ({
     data: data[code].nodes[0].data.slice(sliceData)
     })
   )
+
+export const readableDate = (date: number | string): string => moment(date.toString()).format('MMM D')

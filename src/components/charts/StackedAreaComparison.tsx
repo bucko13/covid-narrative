@@ -13,8 +13,8 @@ import {
 
 interface StackedAreaChartProps {
   comparisonData: {
-    date: number
-    [key: string]: number
+    date: string
+    [key: string]: number | string
   }[]
   dataKeys: string[]
 }

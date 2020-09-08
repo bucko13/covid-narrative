@@ -6,6 +6,7 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@types/axios": "^0.14.0",
     "@types/node": "^14.6.1",
     "@types/randomcolor": "^0.5.5",

@@ -20,21 +20,23 @@ import {
   Grid
 } from "@material-ui/core";
 
-import { getPerMPop } from "../../utils/utils";
+import { getPerMPop, readableDate } from "../../utils/utils";
 import { LineChartComparisonData, LineChartDataNode } from "../../types/charts";
 
 interface ComparisonLineChartProps {
-  comparisonData: LineChartComparisonData[],
-  comparitor: string;
-  perM?: boolean;
+  comparisonData: LineChartComparisonData[]
+  comparitor: string
+  perM?: boolean
   filter?: boolean
+  slice?: number
 }
 
 const HistoricComparisonLineChart = ({
   comparisonData,
   comparitor,
   perM,
-  filter = true
+  filter = true,
+  slice
 }: ComparisonLineChartProps) => {
   const locations = comparisonData.map(({ location }) => location)
 
@@ -57,10 +59,10 @@ const HistoricComparisonLineChart = ({
 
   // go through the first location to start and create a data object for each node
   // where it has the date and then creates a property for each location for the data we are comparing
-  const data = firstLocation.data.map((node): LineChartDataNode => {
+  let data = firstLocation.data.map((node): LineChartDataNode => {
     const date = node.date;
     const dataNode = {
-      date: moment(node.date.toString()).format('MMM D'),
+      date: readableDate(node.date),
       [firstLocation.location]: perM ?
         getPerMPop(firstLocation.population, +node[comparitor]) :
         node[comparitor]
@@ -80,6 +82,15 @@ const HistoricComparisonLineChart = ({
     })
     return dataNode;
   })
+
+  if (slice) {
+    // positive we will read as cutting off the beginning data
+    if (slice >= 0) {
+      data = data.slice(slice)
+    } else {
+      data = data.slice(0, slice)
+    }
+  }
 
   return (
     <div>
@@ -115,6 +126,7 @@ const HistoricComparisonLineChart = ({
               key={location}
               dataKey={location.toLowerCase()}
               stroke={randomColor({ seed: location })}
+              strokeWidth={3}
               dot={false}
               name={location.toUpperCase()}
             />

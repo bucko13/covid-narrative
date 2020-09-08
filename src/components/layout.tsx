@@ -11,7 +11,7 @@ import { useStaticQuery, graphql, navigate } from "gatsby"
 import SEO from "./seo"
 import Header from "./header"
 import "./layout.css"
-import { Typography, Button, Grid, Box, ThemeProvider } from "@material-ui/core"
+import { Button, Grid, Box, ThemeProvider } from "@material-ui/core"
 import CustomTheme from "../CustomTheme"
 
 const Layout = ({ children }: any) => {
@@ -20,6 +20,10 @@ const Layout = ({ children }: any) => {
       site {
         siteMetadata {
           title
+          menu {
+            name
+            path
+          }
         }
       }
     }
@@ -53,7 +57,7 @@ const Layout = ({ children }: any) => {
 
   return (
     <ThemeProvider theme={CustomTheme}>
-      <Header siteTitle={data.site.siteMetadata.title} />
+      <Header siteTitle={data.site.siteMetadata.title} menu={data.site.siteMetadata.menu} />
       <div
         style={{
           margin: `0 auto`,
@@ -62,7 +66,7 @@ const Layout = ({ children }: any) => {
         }}
       >
         <SEO title="COVID-19 Narratives By the Numbers" />
-        <Box my={3}>
+        <Box my={3} mt={15}>
           <Grid container justify="space-around">
             {navList.map((navItem) => (
               <Grid item key={navItem.path}>

@@ -20,32 +20,24 @@ interface PageProps {
 const NyBeatCovid = ({ data }: PageProps) => {
   const stateData = data.allStateHistoricalData.nodes
   // array of historic data for states to compare in line chart
-  const summerChartData: LineChartComparisonData[] = stateData.map(
+  const chartData: LineChartComparisonData[] = stateData.map(
     (state: StateData): LineChartComparisonData => ({
       location: state.code,
       population: state.population,
-      data: state.data.filter(node => node.date > 20200524),
-    })
-  )
-
-  const fullData: LineChartComparisonData[] = stateData.map(
-    (state: StateData): LineChartComparisonData => ({
-      location: state.code,
-      population: state.population,
-      data: state.data
+      data: state.data,
     })
   )
 
   return (
     <Layout>
       <SEO title="NY Beat COVID-19" />
-      <h2>The Narrative Where NY Handled COVID-19 Well</h2>
+      <h3>The Narrative Where NY Handled COVID-19 Well</h3>
 
       <Box my={5}>
         <h4>Daily Positive Test Increases</h4>
       </Box>
       <HistoricComparisonLineChart
-        comparisonData={fullData}
+        comparisonData={chartData}
         comparitor="positiveIncreaseRollingAverage"
       />
 
@@ -53,8 +45,9 @@ const NyBeatCovid = ({ data }: PageProps) => {
         <h4>Daily Fatality Increases after the Spring</h4>
       </Box>
       <HistoricComparisonLineChart
-        comparisonData={summerChartData}
+        comparisonData={chartData}
         comparitor="deathsIncreaseRollingAverage"
+        slice={80}
       />
       <Link to="/">Go back to the homepage</Link>
     </Layout>

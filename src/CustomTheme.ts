@@ -12,7 +12,15 @@ const CustomTheme = createMuiTheme({
     // body1: {
     //   margin: '20px 0px'
     // },
-  }
+  },
+  overrides: {
+    MuiAppBar: {
+      colorPrimary: {
+        backgroundColor: "black",
+        color: "white",
+      },
+    },
+  },
 })
 
 export default CustomTheme;
