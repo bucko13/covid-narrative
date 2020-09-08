@@ -3,6 +3,10 @@ module.exports = {
     title: `Choose Your COVID-19 Narrative`,
     description: `To show how true data can be selectively shared to "prove" a given narrative.`,
     author: `bucko`,
+    menu: [
+      { name: "About", path: "/#" },
+      { name: "Data Sources", path: "/#data" },
+    ],
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -27,13 +31,6 @@ module.exports = {
         path: `${__dirname}/src/owid`,
       },
     },
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     name: `states`,
-    //     path: `${__dirname}/src/states`,
-    //   },
-    // },
     `gatsby-transformer-json`,
     `gatsby-transformer-sharp`,
     `gatsby-theme-material-ui`,

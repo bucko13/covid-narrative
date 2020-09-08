@@ -13,6 +13,7 @@ import {
   TotalComparisonBarChart
 } from "../components/charts"
 import { ComparisonData } from "../components/charts/TotalComparisonBarChart"
+import { readableDate } from "../utils/utils"
 
 
 interface PageProps {
@@ -61,7 +62,7 @@ const NyMessedUp = ({ data }: PageProps) => {
     // for each state get the unemployment rate at this date
     // and add to an object that can be pushed onto data list
     let allHaveUnemployment = true;
-    const composed = { date }
+    const composed = { date: readableDate(date) }
     stateData.reduce((prev: any, state): any => {
       const node = state.data.find(stateNode => stateNode.date === date);
       if (node && node.insuredUnemploymentRate) {
@@ -80,12 +81,17 @@ const NyMessedUp = ({ data }: PageProps) => {
 
   return (
     <Layout>
-      <SEO title="New York Messed Up" />
-      <h2>The Narrative Where NY (and NJ) Handled COVID-19 Uniquely Poorly</h2>
+      <SEO
+        title="New York Messed Up"
+        description={`Examining COVID-19 related data through the
+        lense that NY mishandled the pandemic, showing how data analysis construed a certain
+        way can paint a politically convenient narrative.`}
+     />
       <p>
         The point of this page is not necessarily to cast blame on NY, NYC, or
         any of its politicians in particular, but rather to show how the data
-        construed a certain way can shape that narrative.
+        construed a certain way can shape the narrative to be used either in the
+        defense or to attack individuals or policy decisions.
       </p>
 
       <Box my={5}>
@@ -130,6 +136,26 @@ const NyMessedUp = ({ data }: PageProps) => {
 
       <Box my={5}>
         <h4>Unemployment Rate</h4>
+        <h6>About this graph</h6>
+        <p>
+          This is a {" "}
+          <a
+            href="http://seeingdata.org/taketime/inside-the-chart-100-stacked-area-chart/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            stacked area chart
+          </a>. The height of each state's unemployment graph doesn't represent
+          its absolute value but rather they are laid ontop of each other to make it
+          easier to compare their relative sizes over time. For example, on May 5th,
+          NY had an employment rate of 19.6% while TX had a rate of 9.6% and you'll
+          notice that the space for NY in the graph is larger than that for TX
+          (its height on the graph is irrelevant).
+        </p>
+        <p>
+          Together with fatality and hospitality rates, a graph like this <i>could</i>
+          be used to roughly judge the effects and efficacy of state level policies.
+        </p>
       </Box>
       <StackedAreaComparison
         comparisonData={unemploymentData}
@@ -146,6 +172,33 @@ const NyMessedUp = ({ data }: PageProps) => {
 
       <Box my={5}>
         <h4>Estimated Cases (based on 0.65% IFR)</h4>
+        <h6>About this graph</h6>
+        <p>
+          Given that available statistics telling us the amount of positive
+          COVID-19 cases is not constant over time, and early on in particular
+          available testing capacity was far lower than by May, 2020, the total
+          case count doesn't give us a very accurate picture of how many cases
+          actually hit a region.
+        </p>
+        <p>
+          A closer if imperfect alternative way to calculate this is by using
+          the IFR or Infection Fatality Rate, which gives us an estimate of how
+          many positive cases end up resulting in a fatality. By dividing the
+          number of fatalities for a given day by the IFR, we can estimate the{" "}
+          <i>actual</i> number of infected approximately 15 days prior assuming.
+          So if there are 100 fatalities on day 100, we can assume that on day
+          85 there were approximately 153,846 people infected (100 / .0065).
+        </p>
+        <p>
+          An IFR of 0.65% is assumed based off of the{" "}
+          <a
+            href="https://reason.com/2020/07/23/there-is-more-than-one-covid-19-infection-fatality-rate/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            estimates provided by the CDC.
+          </a>
+        </p>
       </Box>
       <FormControlLabel
         control={
@@ -163,6 +216,7 @@ const NyMessedUp = ({ data }: PageProps) => {
         comparisonData={lineChartData}
         comparitor="estimatedCases"
         perM={casesPer100k}
+        slice={-15}
       />
       <Link to="/">Go back to the homepage</Link>
     </Layout>
