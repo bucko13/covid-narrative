@@ -10,7 +10,7 @@ import PropTypes from "prop-types"
 import { useStaticQuery, graphql, navigate } from "gatsby"
 import SEO from "./seo"
 import Header from "./header"
-import "./layout.css"
+import "./layout.scss"
 import { Button, Grid, Box, ThemeProvider } from "@material-ui/core"
 import CustomTheme from "../CustomTheme"
 
@@ -57,7 +57,10 @@ const Layout = ({ children }: any) => {
 
   return (
     <ThemeProvider theme={CustomTheme}>
-      <Header siteTitle={data.site.siteMetadata.title} menu={data.site.siteMetadata.menu} />
+      <Header
+        siteTitle={data.site.siteMetadata.title}
+        menu={data.site.siteMetadata.menu}
+      />
       <div
         style={{
           margin: `0 auto`,
@@ -66,12 +69,18 @@ const Layout = ({ children }: any) => {
         }}
       >
         <SEO title="COVID-19 Narratives By the Numbers" />
-        <Box my={3} mt={15}>
+        <Box
+          mt={-13}
+          id="top"
+          style={{ position: "absolute" }}
+        ></Box>
+        <Box my={3} mt={13}>
           <Grid container justify="space-around">
-            {navList.map((navItem) => (
+            {navList.map(navItem => (
               <Grid item key={navItem.path}>
                 <Button
                   variant="outlined"
+                  size="large"
                   onClick={e => onClick(e, navItem.path)}
                   color="primary"
                   disabled={pathname.includes(navItem.path)}
