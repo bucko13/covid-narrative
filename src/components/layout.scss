@@ -321,7 +321,7 @@ h6 {
   font-weight: 700;
   line-height: 1.25;
   margin: 1.5rem 0px 0.5rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 hgroup {
   margin-left: 0;
@@ -390,7 +390,8 @@ p {
   line-height: 1.625;
   --baseline-multiplier: 0.179;
   --x-height-multiplier: 0.35;
-  font-size: 1.25rem
+  font-size: 1.25rem;
+  text-align: justify;
 }
 
 figure {

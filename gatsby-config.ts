@@ -6,6 +6,8 @@ module.exports = {
     menu: [
       { name: "About", path: "/#" },
       { name: "Data Sources", path: "/#data" },
+      { name: "FAQ", path: "/faq" },
+      { name: "Acknowledgements", path: "/#acknowledgements"},
     ],
   },
   plugins: [
@@ -53,5 +55,6 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     `gatsby-plugin-offline`,
     `gatsby-plugin-typescript`,
+    `gatsby-plugin-sass`,
   ],
 }

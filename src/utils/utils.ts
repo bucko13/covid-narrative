@@ -29,4 +29,12 @@ export const convertOwidPageDataToLineChart = ({
     })
   )
 
-export const readableDate = (date: number | string): string => moment(date.toString()).format('MMM D')
+export const readableDate =
+  (date: number | string): string => moment(date.toString()).format('MMM D')
+
+export const linkify =
+  (title: string) =>
+    title
+      .split(' ')
+      .map(word => word.replace(/[^A-Za-z0-9]/gi, '').toLowerCase())
+      .join('-');
