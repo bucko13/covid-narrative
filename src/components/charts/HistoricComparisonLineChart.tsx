@@ -20,7 +20,7 @@ import {
   Grid
 } from "@material-ui/core";
 
-import { getPerMPop, readableDate } from "../../utils/utils";
+import { getPerMPop, readableDate, sliceData } from "../../utils/utils";
 import { LineChartComparisonData, LineChartDataNode } from "../../types/charts";
 
 interface ComparisonLineChartProps {
@@ -84,12 +84,7 @@ const HistoricComparisonLineChart = ({
   })
 
   if (slice) {
-    // positive we will read as cutting off the beginning data
-    if (slice >= 0) {
-      data = data.slice(slice)
-    } else {
-      data = data.slice(0, slice)
-    }
+    data = sliceData(slice, data);
   }
 
   return (

@@ -7,7 +7,7 @@ module.exports = {
       { name: "About", path: "/#" },
       { name: "Data Sources", path: "/#data" },
       { name: "FAQ", path: "/faq" },
-      { name: "Acknowledgements", path: "/#acknowledgements"},
+      { name: "Acknowledgements", path: "/#acknowledgements" },
     ],
   },
   plugins: [

@@ -13,23 +13,23 @@ import {
   Bar,
 } from "recharts"
 import randomColor from "randomcolor"
-import { ComposedComparisonData } from '../../types/charts';
-
-interface ComparisonLineChartProps {
-  comparisonData: ComposedComparisonData[]
-  largerComparitor: string
-  smallerComparitor: string
-}
+import { sliceData } from '../../utils/utils';
+import { ComparisonLineChartProps } from '../../types/charts';
 
 const ComposedHistoricalComparison = ({
   comparisonData,
   largerComparitor,
   smallerComparitor,
+  slice
 }: ComparisonLineChartProps) => {
+  let data = comparisonData
+  if (slice) {
+    data = sliceData(slice, data)
+  }
 
   return (
     <ResponsiveContainer width="100%" aspect={2}>
-      <ComposedChart data={comparisonData}>
+      <ComposedChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis name="date" dataKey="date" />
         <YAxis orientation="left" name="Cases" yAxisId={largerComparitor} />
@@ -47,14 +47,14 @@ const ComposedHistoricalComparison = ({
           type="basisOpen"
           dot={false}
           stroke={randomColor({
-            seed: JSON.stringify(comparisonData[0][largerComparitor]),
+            seed: JSON.stringify(data[0]),
           })}
         />
         <Bar
           yAxisId={smallerComparitor}
           dataKey={smallerComparitor}
           fill={randomColor({
-            seed: JSON.stringify(comparisonData[0][smallerComparitor]),
+            seed: JSON.stringify(data[1]),
           })}
         />
         <Brush />

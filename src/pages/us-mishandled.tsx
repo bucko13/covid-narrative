@@ -1,5 +1,5 @@
 import React from "react"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 import { Typography, Box } from "@material-ui/core"
 
 import Layout from "../components/layout"
@@ -10,6 +10,7 @@ import { getPerMPop } from "../utils/utils"
 import codeToCountry_ from "../data/codeToCountry.json"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
 import { LocationData, OwidData } from "../types/owid"
+import AboutThisGraph from "../components/AboutThisGraph"
 
 // get index signature for ts so we can key by variable
 const codeToCountry: { [code: string]: string } = codeToCountry_
@@ -64,11 +65,30 @@ const UsMishandled = ({ data }: PageProps) => {
     <Layout>
       <Box my={5}>
         <h4>Total Fatalities</h4>
+        <AboutThisGraph name="total-fatalities">
+          <p>
+            This graph is based on absolute numbers, comparing various countries
+            not accounting for population differences. This seems obvious that
+            it would give a distorted view, but more often than not this is how
+            the data is shared regarding the "performance" of the U.S.
+          </p>
+        </AboutThisGraph>
       </Box>
       <TotalComparisonBarChart comparisonData={totalFatalities} sorted />
 
       <Box my={5}>
         <h4>Cumulative Cases Per Million</h4>
+        <AboutThisGraph name="cumulative-cases">
+          <p>
+            Graphing cumulative cases over time causes a similar distortion to
+            the total values above, since having more people is going to result
+            in a greater absolute number. For comparison, see the{" "}
+            <Link to="/us-outperformed/#fatalities-over-time">
+              cumulative fatalities
+            </Link>{" "}
+            adjusted by population
+          </p>
+        </AboutThisGraph>
       </Box>
       <HistoricComparisonLineChart
         comparisonData={lineChartData}
@@ -77,6 +97,17 @@ const UsMishandled = ({ data }: PageProps) => {
 
       <Box my={5}>
         <h4>Cumulative Fatalities</h4>
+        <AboutThisGraph name="cumulative-fatalities">
+          <p>
+            The difference is even more stark for cumulative
+            fatalities not accounting for population differences.
+            For comparison, see the{" "}
+            <Link to="/us-outperformed/#fatalities-over-time">
+              cumulative fatalities
+            </Link>{" "}
+            adjusted by population
+          </p>
+        </AboutThisGraph>
       </Box>
       <HistoricComparisonLineChart
         comparisonData={lineChartData}

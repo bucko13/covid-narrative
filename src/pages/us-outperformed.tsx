@@ -1,6 +1,6 @@
-import React from "react"
-import { graphql } from "gatsby"
-import {Box} from "@material-ui/core"
+import React, { useState } from "react"
+import { graphql, Link } from "gatsby"
+import {Box, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Switch} from "@material-ui/core"
 import Layout from "../components/layout"
 
 import TotalComparisonBarChart, { ComparisonData } from "../components/charts/TotalComparisonBarChart";
@@ -9,8 +9,8 @@ import codeToCountry_ from '../data/codeToCountry.json';
 import { StateData } from "../../plugins/source-state-data";
 import ComposedHistoricalComparison from "../components/charts/ComposedHistoricalComparison"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart";
-import { LocationData, OwidData, OwidNodes } from "../types/owid";
-import { ComposedComparisonData } from "../types/charts";
+import { LocationData, OwidNodes } from "../types/owid";
+import AboutThisGraph from "../components/AboutThisGraph";
 
 // get index signature for ts so we can key by variable
 const codeToCountry: {[code: string]: string} = codeToCountry_
@@ -40,9 +40,19 @@ const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
 const states = ["ny", "nj"]
 
 const USOutperformed = ({ data }: PageProps) => {
+  const [fatalitiesPerMil, setFatalitiesPerMil] = useState(true);
+  const [totalFalitiesPer100k, setTotalFatalitiesPer100k] = useState(true);
+  const [comparisonChartCountry, setComparisonChartCountry] = useState('us');
+
   const getStateData = (code: string): StateData | undefined =>
     data.states.nodes.find((state: StateData) => state.code === code)
 
+  const getCountryNodes = (code: string) => data[code].nodes[0]
+
+  const onChangeCountry = (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement
+    setComparisonChartCountry(target.value)
+  }
   let stateData: { [code: string]: StateData } = {}
 
   stateData = states.reduce((prev, code) => {
@@ -136,42 +146,6 @@ const USOutperformed = ({ data }: PageProps) => {
     }
   )
 
-  // collect data to show in the historic comparisons chart
-  // each item in the array will render a chart that contrasts
-  // fatalities to cases
-  let historicComparisons: {
-    name: string
-    code: string
-    data: ComposedComparisonData[]
-  }[] = []
-
-  historicComparisons  = ['us', 'es', 'it'].reduce((prev, code) => {
-    const node = data[code].nodes[0];
-    if (!node || !node.data) return prev;
-
-    // filter out any days earlier than march
-    const countryNodes = node.data
-      .filter((day: OwidData) => {
-        const date = new Date(day.date)
-        return date && date > new Date("2020-03-01")
-      })
-      .map((day: OwidData) => {
-        // then compose the data for the fields we need
-        return {
-          date: day.date,
-          cases: day.new_cases_smoothed_per_million || 0,
-          deaths: day.new_deaths_smoothed_per_million || 0,
-        }
-      })
-
-    prev.push({
-      name: node.location,
-      code,
-      data: countryNodes,
-    })
-    return prev;
-  }, historicComparisons)
-
   let countryData: OwidNodes = {}
 
   // filter out states from page data so we can get line chart data
@@ -189,40 +163,135 @@ const USOutperformed = ({ data }: PageProps) => {
       <Box my={5}>
         <h4>Total Fatalities per 100k Pop.</h4>
         <h5>US Adjusted w/o NY and NJ</h5>
+        <AboutThisGraph name="total-fatalities-adjusted">
+          <p>
+            For this page we include a value called "US Adjusted" which displays
+            the US totals without those from the worst hit areas in the country
+            (NY and NJ).
+          </p>
+          <p>
+            The "adjusted" value here helps to highlight a point with regards to
+            narrative crafting which is that even when adjusting for population,
+            there are some very major differences when the numbers (population,
+            area, etc...) get really big. NYC and by extension NJ (as well as
+            other surrounding areas) got hit by the Coronavirus incredibly hard
+            for a variety of a reasons not all of which were within the control
+            of policy makers (population density, transportation, volume of
+            international travel, etc.). But if we want to make the claim that
+            the United States as a country handled COVID-19 uniquely poorly then
+            surely we'd expect that relative fatality numbers across the
+            country, even without the hardest hit areas would still look bad.
+          </p>
+          <p>
+            As it turns out, this isn't what we see. Despite the data still
+            including some of the largest cities in the country and other areas
+            that got hit almost as hard, e.g. MA and CT, the Adjusted US number
+            compares favorably with similar European countries.
+          </p>
+          <p>
+            This should indicate that COVID-19 outcomes are much more likely
+            tied to circumstances, more of a regional, timing, and density
+            phenomenon, then a policy one. It would be a tenuous claim to say
+            the U.S. mishandled its COVID-19 response if a country of{" "}
+            {Math.floor(adjPopulations.us / 1000000)} million (once you've
+            discounted NY and NJ populations) measures up favorably against the
+            responses and outcomes of other countries.
+          </p>
+        </AboutThisGraph>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={totalFalitiesPer100k}
+              onChange={() => setTotalFatalitiesPer100k(!totalFalitiesPer100k)}
+              color="primary"
+              name="Show per million"
+            />
+          }
+          label="Show per million"
+        />
+        <TotalComparisonBarChart
+          comparisonData={totalFalitiesPer100k ? fatalityPerM : totalFatalities}
+          sorted
+        />
       </Box>
-      <TotalComparisonBarChart comparisonData={fatalityPerM} sorted />
 
-      {historicComparisons.map(props => (
-        <CaseVsFatalities {...props} key={props.code} />
-      ))}
+      <Box my={5}>
+        <h4>
+          Daily New Cases vs. Fatalities -{" "}
+          {getCountryNodes(comparisonChartCountry).location} (per mil.)
+        </h4>
+        <AboutThisGraph name="case-vs-fatalities">
+          <p>
+            This is a bi-axial graph (two Y axes). The left reflects the value
+            for case count, represented by the line while the right is for
+            fatalities (the bars).
+          </p>
+          <p>
+            There are a few useful things we can learn from this chart. First,
+            case increases are not necessarily signs of things getting worse,
+            especially since testing capacity and sensitivity changes over time.
+            Many of the countries listed demonstrate a second spike of new
+            cases, however none seem to have a commensurate increase in fatalities,
+            which is, along with hospitalizations, the most important item to track
+            and try and minimize from a policy standpoint.
+          </p>
+          <p>
+            Notice also for the U.S. that while we had regional first waves spread
+            across the timeline, which is also shown <Link to="/ny-messed-up">here</Link>, {" "}
+            fatalities only spiked once, and never reached the numbers (per million) as the
+            other countries (except maybe Sweden). This is desireable from the standpoint
+            of possible immunity as well as protecting and maintaining hospital capacity.
+          </p>
+        </AboutThisGraph>
+        <FormControl variant="filled" style={{ minWidth: '200px', marginBottom: '1rem' }}>
+          <InputLabel>Select Country</InputLabel>
+          <Select
+            labelId="select-country"
+            id="select-country"
+            value={comparisonChartCountry}
+            onChange={onChangeCountry}
+          >
+            {countries.map(code => (
+              <MenuItem value={code} key={code}>
+                {getCountryNodes(code).location}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <ComposedHistoricalComparison
+          comparisonData={getCountryNodes(comparisonChartCountry).data}
+          largerComparitor="new_cases_smoothed_per_million"
+          smallerComparitor="new_deaths_smoothed_per_million"
+          slice={60}
+        />
+      </Box>
+
       <Box my={5}>
         <h4>Cumulative Fatalities Over Time By Country (per mil.)</h4>
+        <AboutThisGraph name="fatalities-over-time">
+          <p></p>
+        </AboutThisGraph>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={fatalitiesPerMil}
+              onChange={() => setFatalitiesPerMil(!fatalitiesPerMil)}
+              color="primary"
+              name="Show per million"
+            />
+          }
+          label="Show per million"
+        />
+        <HistoricComparisonLineChart
+          comparisonData={lineChartData}
+          comparitor={
+            fatalitiesPerMil ? "total_deaths_per_million" : "total_deaths"
+          }
+        />
       </Box>
-      <HistoricComparisonLineChart
-        comparisonData={lineChartData}
-        comparitor="total_deaths_per_million"
-      />
     </Layout>
   )
 }
-
-const CaseVsFatalities = ({ name, data }: {
-  name: string
-  data: ComposedComparisonData[]
-}) => (
-  <>
-    <Box my={5}>
-      <h4>
-        Daily New Cases vs. Fatalities - {name} (per mil.)
-      </h4>
-    </Box>
-    <ComposedHistoricalComparison
-      comparisonData={data}
-      largerComparitor="cases"
-      smallerComparitor="deaths"
-    />
-  </>
-)
 
 export default USOutperformed
 
