@@ -1,10 +1,9 @@
 import React, { useState } from "react"
 import { Link, graphql } from "gatsby"
+import { Box, Switch, FormControlLabel } from "@material-ui/core"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { Box, Switch, FormControlLabel } from "@material-ui/core"
-
 import { StateData } from "../../plugins/source-state-data"
 import { LineChartComparisonData } from "../types/charts"
 import {
@@ -108,6 +107,11 @@ const NyMessedUp = ({ data }: PageProps) => {
             and those with comorbidities, hospitalizations can serve as a cheap stand-in
             for the types of people being effected at a given time and how a given region
             may have been able to protect the more vulnerable populations.
+          </p>
+          <p>
+            Please note that it appears not all states started tracking this data
+            at the same time and so some (in particular Florida) start much later in
+            timeline.
           </p>
         </AboutThisGraph>
         <FormControlLabel
@@ -241,6 +245,10 @@ const NyMessedUp = ({ data }: PageProps) => {
             >
               estimates provided by the CDC.
             </a>
+          </p>
+          <p>
+            This graph can be compared to the unadjusted graph that uses raw
+            positive case count in the <Link to="/ny-beat-covid">NY Beat COVID-19</Link>.
           </p>
         </AboutThisGraph>
       </Box>

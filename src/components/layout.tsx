@@ -11,8 +11,9 @@ import { useStaticQuery, graphql, navigate } from "gatsby"
 import SEO from "./seo"
 import Header from "./header"
 import "./layout.scss"
-import { Button, Grid, Box, ThemeProvider } from "@material-ui/core"
+import { Button, Grid, Box, ThemeProvider, Fab } from "@material-ui/core"
 import CustomTheme from "../CustomTheme"
+import { Navigation } from "@material-ui/icons"
 
 const Layout = ({ children }: any) => {
   const data = useStaticQuery(graphql`
@@ -92,6 +93,16 @@ const Layout = ({ children }: any) => {
           </Grid>
         </Box>
         <main>{children}</main>
+        <Fab color="primary"
+          style={{
+            position: 'fixed',
+            bottom: 20,
+            right: 20
+          }}
+          href="#top"
+        >
+          <Navigation />
+        </Fab>
         <footer>
           © {new Date().getFullYear()}, Built with
           {` `}

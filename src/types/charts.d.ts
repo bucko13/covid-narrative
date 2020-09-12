@@ -1,7 +1,4 @@
-export interface ComposedComparisonData {
-  date: number | string
-  [key: string]: string | number
-}
+import { OwidData } from "./owid";
 
 export interface LineChartDataNode {
   date: string | number
@@ -26,4 +23,11 @@ export interface ComparisonBarChartProps {
   sortedRight?: boolean
   leftKey: string
   rightKey: string
+}
+
+export interface ComparisonLineChartProps {
+  comparisonData: OwidData[]
+  largerComparitor: string
+  smallerComparitor: string
+  slice?: number
 }

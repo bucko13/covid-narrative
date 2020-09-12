@@ -14,18 +14,18 @@ export const convertOwidPageDataToLineChart = ({
   // any keys to skip
   filter = [],
   // how much to cut off the top (unecessary for comparison)
-  sliceData = 60
+  slice = 60
 }: {
   data: OwidNodes
   filter?: string[]
-  sliceData?: number
+  slice?: number
   }): LocationData[] =>
   Object.keys(data)
     .filter(key => !filter.includes(key))
     .map((code) => ({
     location: data[code].nodes[0].location.toLowerCase(),
     population: data[code].nodes[0].population,
-    data: data[code].nodes[0].data.slice(sliceData)
+    data: data[code].nodes[0].data.slice(slice)
     })
   )
 
@@ -35,6 +35,18 @@ export const readableDate =
 export const linkify =
   (title: string) =>
     title
-      .split(' ')
+      .split(/\s|-/g)
       .map(word => word.replace(/[^A-Za-z0-9]/gi, '').toLowerCase())
       .join('-');
+
+export const sliceData = (slice: number, data: any): any[] => {
+    if (slice) {
+      // positive we will read as cutting off the beginning data
+      if (slice >= 0) {
+        data = data.slice(slice)
+      } else {
+        data = data.slice(0, slice)
+      }
+    }
+  return data;
+}
