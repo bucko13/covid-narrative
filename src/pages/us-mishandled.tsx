@@ -1,12 +1,12 @@
 import React from "react"
 import { graphql, Link } from "gatsby"
-import { Typography, Box } from "@material-ui/core"
+import { Box } from "@material-ui/core"
 
 import Layout from "../components/layout"
 import TotalComparisonBarChart, {
   ComparisonData,
 } from "../components/charts/TotalComparisonBarChart"
-import { getPerMPop } from "../utils/utils"
+import { getLastDate, getPerMPop, readableDate } from "../utils/utils"
 import codeToCountry_ from "../data/codeToCountry.json"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
 import { LocationData, OwidData } from "../types/owid"
@@ -72,6 +72,7 @@ const UsMishandled = ({ data }: PageProps) => {
             it would give a distorted view, but more often than not this is how
             the data is shared regarding the "performance" of the U.S.
           </p>
+          <p>Data last updated: {readableDate(getLastDate(data))}</p>
         </AboutThisGraph>
       </Box>
       <TotalComparisonBarChart comparisonData={totalFatalities} sorted />
@@ -99,9 +100,8 @@ const UsMishandled = ({ data }: PageProps) => {
         <h4>Cumulative Fatalities</h4>
         <AboutThisGraph name="cumulative-fatalities">
           <p>
-            The difference is even more stark for cumulative
-            fatalities not accounting for population differences.
-            For comparison, see the{" "}
+            The difference is even more stark for cumulative fatalities not
+            accounting for population differences. For comparison, see the{" "}
             <Link to="/us-outperformed/#fatalities-over-time">
               cumulative fatalities
             </Link>{" "}

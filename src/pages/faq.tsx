@@ -33,12 +33,11 @@ const FAQPage = () => {
           You don't have to! All of the code for this website, including data
           sourcing and custom calculations, is open source and auditble by
           anyone on GitHub{" "}
-          <ExternalLink
-            href="https://github.com/bucko13/covid-narrative"
-          >
+          <ExternalLink href="https://github.com/bucko13/covid-narrative">
             here
-          </ExternalLink>. If you're comfortable running a couple commands in the
-          terminal, you can even run the site yourself with your own data.
+          </ExternalLink>
+          . If you're comfortable running a couple commands in the terminal, you
+          can even run the site yourself with your own data.
         </p>
       ),
     },
@@ -60,9 +59,7 @@ const FAQPage = () => {
             In particular, some countries don't make as much sense to compare
             together for data purposes. Different areas of the world got hit
             with{" "}
-            <ExternalLink
-              href="https://www.bloomberg.com/news/articles/2020-08-17/malaysia-detects-virus-strain-that-s-10-times-more-infectious"
-            >
+            <ExternalLink href="https://www.bloomberg.com/news/articles/2020-08-17/malaysia-detects-virus-strain-that-s-10-times-more-infectious">
               different strains of the virus
             </ExternalLink>{" "}
             for example, some (notably the European strain which is what
@@ -85,13 +82,92 @@ const FAQPage = () => {
       Answer: () => (
         <p>
           For now, requests and contributions are welcome in the{" "}
-          <ExternalLink
-            href="https://github.com/bucko13/covid-narrative"
-          >
+          <ExternalLink href="https://github.com/bucko13/covid-narrative">
             GitHub repo
-          </ExternalLink>. For those not as comfortable with GitHub, feel free to reach out on Twitter {" "}
-          <ExternalLink href="https://twitter.com/BuckPerley">@BuckPerley</ExternalLink>.
+          </ExternalLink>
+          . For those not as comfortable with GitHub, feel free to reach out on
+          Twitter{" "}
+          <ExternalLink href="https://twitter.com/BuckPerley">
+            @BuckPerley
+          </ExternalLink>
+          .
         </p>
+      ),
+    },
+    {
+      question: `What is "smoothed" data?`,
+      Answer: () => (
+        <p>
+          For "smoothed" data, I took the rolling 7-day average for any given
+          date. The reason for this is that the data reporting is not always
+          consistent over time, figures that get underreported on weekends.
+          Getting the average over the previous 7 days still gives us an
+          accurate picture (possibly more accurate) of the outcomes in a way
+          that is easier to decipher in the graph.
+        </p>
+      ),
+    },
+    {
+      question: `What are some other narratives you plan on adding?`,
+      Answer: () => (
+        <>
+          <p>
+            My next priorities of areas to look at are the narratives around
+            lockdowns, mobility, and possibly mask usage as these seem to be one
+            of the most contentious, political, and, as a result, likely
+            manipulated narratives.
+          </p>
+          <p>
+            I would also like look more into the economic ramifications of
+            policy decisions particularly when compared to health outcomes and
+            how they correlate.
+          </p>
+          <p>
+            Data isn't my specialty though and these are trickier things to
+            graph especially since the data is not as precise and there impacts
+            are harder to display graphically. If this is something you're
+            interested in and have experience with, feel free to reach out!
+          </p>
+        </>
+      ),
+    },
+    {
+      question: `Why are some of the colors so terrible?`,
+      Answer: () => (
+        <>
+          <p>
+            The colors are generated using a random color generator seeded by an
+            item from the data being displayed so that it is deterministic. The
+            generator is supposed to pick from an aesthetically pleasing palette
+            but it's not perfect. Picking the colors progamattically rather than
+            manually assigning colors to each chart, line, and bar means I can
+            easily remove and add new data sets with minimal changes, but it
+            also means that sometimes there are some jarring color choices.
+          </p>
+        </>
+      ),
+    },
+    {
+      question: `How often is the data updated?`,
+      Answer: () => (
+        <>
+          <p>
+            There's currently no set schedule, but every chart should make it
+            clear the time frames that are being used. If it's missing
+            somewhere, please let me know on Twitter or GitHub, or you can
+            submit a pull request with a fix. For any raw data that is kept in
+            JSON form on GitHub, you can also see the last date a file was
+            updated{" "}
+            <ExternalLink href="https://github.com/bucko13/covid-narrative/tree/master/src/data">
+              here
+            </ExternalLink>{" "}
+            or{" "}
+            <ExternalLink href="https://github.com/bucko13/covid-narrative/tree/master/plugins/source-state-data/data">
+              here
+            </ExternalLink>
+            .
+          </p>
+        </>
       ),
     },
   ]

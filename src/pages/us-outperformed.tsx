@@ -1,16 +1,24 @@
 import React, { useState } from "react"
 import { graphql, Link } from "gatsby"
-import {Box, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Switch} from "@material-ui/core"
+import {Box, FormControl, FormControlLabel, FormHelperText, InputLabel, makeStyles, MenuItem, Select, Switch} from "@material-ui/core"
 import Layout from "../components/layout"
 
 import TotalComparisonBarChart, { ComparisonData } from "../components/charts/TotalComparisonBarChart";
-import { getPerMPop, convertOwidPageDataToLineChart } from '../utils/utils';
+import { getPerMPop, convertOwidPageDataToLineChart, readableDate, getLastDate } from '../utils/utils';
 import codeToCountry_ from '../data/codeToCountry.json';
 import { StateData } from "../../plugins/source-state-data";
 import ComposedHistoricalComparison from "../components/charts/ComposedHistoricalComparison"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart";
 import { LocationData, OwidNodes } from "../types/owid";
 import AboutThisGraph from "../components/AboutThisGraph";
+
+const useStyles = makeStyles({
+  select: {
+    fontSize: '1.5rem',
+    marginTop: '5px',
+    paddingBottom: '0px',
+  },
+})
 
 // get index signature for ts so we can key by variable
 const codeToCountry: {[code: string]: string} = codeToCountry_
@@ -49,10 +57,14 @@ const USOutperformed = ({ data }: PageProps) => {
 
   const getCountryNodes = (code: string) => data[code].nodes[0]
 
-  const onChangeCountry = (e: React.ChangeEvent) => {
+  // handle country change for comparison graph
+  const onChangeCountry = (
+    e: React.ChangeEvent<{ name?: string; value: unknown }>
+  ): void => {
     const target = e.target as HTMLInputElement
     setComparisonChartCountry(target.value)
   }
+
   let stateData: { [code: string]: StateData } = {}
 
   stateData = states.reduce((prev, code) => {
@@ -157,7 +169,7 @@ const USOutperformed = ({ data }: PageProps) => {
   // get the country data and arrange in a format that the line chart
   // data can work with
   const lineChartData = convertOwidPageDataToLineChart({ data: countryData })
-
+  const classes = useStyles();
   return (
     <Layout>
       <Box my={5}>
@@ -197,6 +209,7 @@ const USOutperformed = ({ data }: PageProps) => {
             discounted NY and NJ populations) measures up favorably against the
             responses and outcomes of other countries.
           </p>
+          <p>Data last updated: {readableDate(getLastDate(data))}</p>
         </AboutThisGraph>
         <FormControlLabel
           control={
@@ -218,46 +231,62 @@ const USOutperformed = ({ data }: PageProps) => {
       <Box my={5}>
         <h4>
           Daily New Cases vs. Fatalities -{" "}
-          {getCountryNodes(comparisonChartCountry).location} (per mil.)
+          <FormControl
+            style={{
+              minWidth: "150px",
+              marginBottom: "1rem",
+              fontSize: "1.5rem",
+            }}
+          >
+            <Select
+              labelId="select-country"
+              id="select-country"
+              value={comparisonChartCountry}
+              onChange={onChangeCountry}
+              inputProps={{ style: { fontSize: "1.5rem" } }}
+              classes={{ select: classes.select }}
+            >
+              {countries.map(code => (
+                <MenuItem value={code} key={code}>
+                  {getCountryNodes(code).location}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>Select country</FormHelperText>
+          </FormControl>{" "}
+          (per mil.)
         </h4>
         <AboutThisGraph name="case-vs-fatalities">
           <p>
-            This is a bi-axial graph (two Y axes). The left reflects the value
+            This is a composed, bi-axial graph (two Y axes). The left reflects the value
             for case count, represented by the line while the right is for
-            fatalities (the bars).
+            fatalities (the bars). Change the country you'd like to view the comparison
+            of by selecting from the menu in the title.
+          </p>
+          <p>
+            If you're curious why the data is "smoothed" and what that means,{" "}
+            <Link to="/faq#what-is-smoothed-data">checkout the FAQ</Link> page.
           </p>
           <p>
             There are a few useful things we can learn from this chart. First,
             case increases are not necessarily signs of things getting worse,
             especially since testing capacity and sensitivity changes over time.
             Many of the countries listed demonstrate a second spike of new
-            cases, however none seem to have a commensurate increase in fatalities,
-            which is, along with hospitalizations, the most important item to track
-            and try and minimize from a policy standpoint.
+            cases, however none seem to have a commensurate increase in
+            fatalities, which is, along with hospitalizations, the most
+            important item to track and try and minimize from a policy
+            standpoint.
           </p>
           <p>
-            Notice also for the U.S. that while we had regional first waves spread
-            across the timeline, which is also shown <Link to="/ny-messed-up">here</Link>, {" "}
-            fatalities only spiked once, and never reached the numbers (per million) as the
-            other countries (except maybe Sweden). This is desireable from the standpoint
-            of possible immunity as well as protecting and maintaining hospital capacity.
+            Notice also for the U.S. that while we had regional first waves
+            spread across the timeline, which is also shown{" "}
+            <Link to="/ny-messed-up">here</Link>, fatalities only spiked once,
+            and never reached the numbers (per million) as the other countries
+            (except maybe Sweden). This is desireable from the standpoint of
+            possible immunity as well as protecting and maintaining hospital
+            capacity.
           </p>
         </AboutThisGraph>
-        <FormControl variant="filled" style={{ minWidth: '200px', marginBottom: '1rem' }}>
-          <InputLabel>Select Country</InputLabel>
-          <Select
-            labelId="select-country"
-            id="select-country"
-            value={comparisonChartCountry}
-            onChange={onChangeCountry}
-          >
-            {countries.map(code => (
-              <MenuItem value={code} key={code}>
-                {getCountryNodes(code).location}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
         <ComposedHistoricalComparison
           comparisonData={getCountryNodes(comparisonChartCountry).data}
           largerComparitor="new_cases_smoothed_per_million"
@@ -269,7 +298,15 @@ const USOutperformed = ({ data }: PageProps) => {
       <Box my={5}>
         <h4>Cumulative Fatalities Over Time By Country (per mil.)</h4>
         <AboutThisGraph name="fatalities-over-time">
-          <p></p>
+          <p>
+            Here we can see the value in comparing different datasets in
+            relative terms vs. absolute. This graph tells a very different story
+            than that of the cumulative fatalities{" "}
+            <Link to="/us-mishandled#cumulative-fatalities">
+              in absolute terms
+            </Link>
+            . You can flip the switch to see how the narrative changes.
+          </p>
         </AboutThisGraph>
         <FormControlLabel
           control={

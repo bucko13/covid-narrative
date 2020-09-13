@@ -1,5 +1,3 @@
-import { StateData } from "../../plugins/source-state-data";
-
 export interface OwidData {
   date: number
   hospitalizedCurrently?: number

@@ -36,7 +36,7 @@ export default function TotalComparisonBarChart({ comparisonData, sorted }: Comp
           <XAxis dataKey="location" />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" />
-          <Bar dataKey="value" fill={randomColor({ seed: comparisonData[3].location })} />
+          <Bar dataKey="value" fill={randomColor({ seed: comparisonData[0].location, hue: 'dark' })} />
         </BarChart>
     </ResponsiveContainer>
   )

@@ -78,8 +78,10 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
         return isClosestWeekend(dateString, stateNode.date.toString())
       })
 
-      const insuredUnemploymentRate = closestWeekend ?
-        employmentData[closestWeekend][name].insured_unemployment_rate : null
+      const insuredUnemploymentRate =
+        closestWeekend && employmentData[closestWeekend][name]
+          ? employmentData[closestWeekend][name].insured_unemployment_rate
+          : null
 
       return {
         ...stateNode,

@@ -20,7 +20,7 @@ import {
   Grid
 } from "@material-ui/core";
 
-import { getPerMPop, readableDate, sliceData } from "../../utils/utils";
+import { getPerMPop, readableChartDate, sliceData } from "../../utils/utils";
 import { LineChartComparisonData, LineChartDataNode } from "../../types/charts";
 
 interface ComparisonLineChartProps {
@@ -62,7 +62,7 @@ const HistoricComparisonLineChart = ({
   let data = firstLocation.data.map((node): LineChartDataNode => {
     const date = node.date;
     const dataNode = {
-      date: readableDate(node.date),
+      date: readableChartDate(node.date),
       [firstLocation.location]: perM ?
         getPerMPop(firstLocation.population, +node[comparitor]) :
         node[comparitor]

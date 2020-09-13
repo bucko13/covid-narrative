@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import PropTypes from "prop-types"
 import { Link } from "gatsby"
-import { AppBar, Toolbar, IconButton, SwipeableDrawer, List, ListItem, ListItemText, Grid } from "@material-ui/core"
+import { AppBar, Toolbar, IconButton, SwipeableDrawer, List, ListItem, ListItemText, Grid, FormControlLabel, Switch } from "@material-ui/core"
 import { Home, Menu } from "@material-ui/icons"
+import { ShowAboutContext } from "./layout"
 
 interface HeaderProps {
   siteTitle: string
@@ -14,6 +15,7 @@ interface HeaderProps {
 
 const Header = ({ siteTitle, menu }: HeaderProps) => {
   const [open, setOpen] = useState(false)
+  const { showAbout, setShowAbout } = useContext(ShowAboutContext);
 
   const toggleDrawer = (
     event: React.KeyboardEvent | React.MouseEvent
@@ -74,6 +76,22 @@ const Header = ({ siteTitle, menu }: HeaderProps) => {
                     <ListItemText primary={item.name.toUpperCase()} />
                 </ListItem>
               ))}
+                <ListItem
+                  component={ () =>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={showAbout}
+                          onChange={() => setShowAbout(!showAbout)}
+                          name="Show Graph Explanations"
+                          color="primary"
+                        />
+                      }
+                      labelPlacement="bottom"
+                      label="Show Graph Explanations"
+                    />
+                  }
+                 />
             </List>
             </div>
           </SwipeableDrawer>
