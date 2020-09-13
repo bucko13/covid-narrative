@@ -43,12 +43,12 @@ export default function BiaxialComparisonBarChart({
         <Bar
           dataKey={leftKey}
           yAxisId="left"
-          fill={randomColor({ seed: leftKey })}
+          fill={randomColor({ luminosity: "dark", seed: leftKey })}
         />
         <Bar
           dataKey={rightKey}
           yAxisId="right"
-          fill={randomColor({ seed: rightKey })}
+          fill={randomColor({ luminosity: "dark", seed: rightKey })}
         />
       </BarChart>
     </ResponsiveContainer>

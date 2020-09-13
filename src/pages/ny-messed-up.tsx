@@ -12,7 +12,7 @@ import {
   TotalComparisonBarChart
 } from "../components/charts"
 import { ComparisonData } from "../components/charts/TotalComparisonBarChart"
-import { readableDate } from "../utils/utils"
+import { readableChartDate, readableDate } from "../utils/utils"
 import AboutThisGraph from "../components/AboutThisGraph"
 
 
@@ -62,7 +62,7 @@ const NyMessedUp = ({ data }: PageProps) => {
     // for each state get the unemployment rate at this date
     // and add to an object that can be pushed onto data list
     let allHaveUnemployment = true;
-    const composed = { date: readableDate(date) }
+    const composed = { date: readableChartDate(date) }
     stateData.reduce((prev: any, state): any => {
       const node = state.data.find(stateNode => stateNode.date === date);
       if (node && node.insuredUnemploymentRate) {
@@ -211,6 +211,7 @@ const NyMessedUp = ({ data }: PageProps) => {
           is the measure we want here. 10 fatalities in a group of 100 (10%!) is very different
           then in a group of 10,000 (.1%).
         </p>
+        <p>Data last updated: {readableDate(stateData[0].date)}</p>
       </AboutThisGraph>
       <TotalComparisonBarChart
         comparisonData={totalFatalityComparison}
@@ -284,6 +285,7 @@ export const query = graphql`
           state
           code
           population
+          date
           deaths_per_100k
           data {
             hospitalizedCurrently

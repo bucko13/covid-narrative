@@ -13,7 +13,7 @@ import {
   Bar,
 } from "recharts"
 import randomColor from "randomcolor"
-import { sliceData } from '../../utils/utils';
+import { readableChartDate, sliceData } from '../../utils/utils';
 import { ComparisonLineChartProps } from '../../types/charts';
 
 const ComposedHistoricalComparison = ({
@@ -31,7 +31,7 @@ const ComposedHistoricalComparison = ({
     <ResponsiveContainer width="100%" aspect={2}>
       <ComposedChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis name="date" dataKey="date" />
+        <XAxis name="date" dataKey="date" tickFormatter={(date) => readableChartDate(date)} />
         <YAxis orientation="left" name="Cases" yAxisId={largerComparitor} />
         <YAxis
           orientation="right"

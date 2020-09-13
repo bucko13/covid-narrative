@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { LocationData, OwidNodes } from "../types/owid"
+import { LocationData, OwidData, OwidNodes } from "../types/owid"
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
@@ -29,8 +29,11 @@ export const convertOwidPageDataToLineChart = ({
     })
   )
 
-export const readableDate =
+export const readableChartDate =
   (date: number | string): string => moment(date.toString()).format('MMM D')
+
+export const readableDate = (date: number | string): string =>
+  moment(date.toString()).format("MMM D, YYYY")
 
 export const linkify =
   (title: string) =>
@@ -50,3 +53,6 @@ export const sliceData = (slice: number, data: any): any[] => {
     }
   return data;
 }
+
+export const getLastDate = (data: OwidNodes) =>
+         data.us.nodes[0].data[data.us.nodes[0].data.length - 1].date
