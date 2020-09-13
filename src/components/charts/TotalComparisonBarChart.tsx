@@ -13,7 +13,7 @@ import {
 
 export interface ComparisonData {
   location: string
-  abbreviation?: string
+  abbreviation: string
   value: number
 }
 

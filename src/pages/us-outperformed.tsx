@@ -1,10 +1,24 @@
 import React, { useState } from "react"
 import { graphql, Link } from "gatsby"
-import {Box, FormControl, FormControlLabel, FormHelperText, InputLabel, makeStyles, MenuItem, Select, Switch} from "@material-ui/core"
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  makeStyles,
+  MenuItem,
+  Select,
+  Switch
+} from "@material-ui/core"
 import Layout from "../components/layout"
 
 import TotalComparisonBarChart, { ComparisonData } from "../components/charts/TotalComparisonBarChart";
-import { getPerMPop, convertOwidPageDataToLineChart, readableDate, getLastDate } from '../utils/utils';
+import {
+  getPerMPop,
+  convertOwidPageDataToLineChart,
+  readableDate,
+  getLastDate
+} from '../utils/utils';
 import codeToCountry_ from '../data/codeToCountry.json';
 import { StateData } from "../../plugins/source-state-data";
 import ComposedHistoricalComparison from "../components/charts/ComposedHistoricalComparison"
@@ -42,6 +56,8 @@ const getFatalities = (data: any, key: string, perM = false) => {
   const { population } = data[key].nodes[0]
   return perM ? getPerMPop(population, lastDate.total_deaths) : lastDate.total_deaths
 }
+
+const getStateTotalDeaths = (d: StateData) => d.jhu_deaths || d.total_deaths
 
 // states and countries for comparison (must be queried on this page and passed to component)
 const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
@@ -121,17 +137,17 @@ const USOutperformed = ({ data }: PageProps) => {
 
     totalFatalities.push({
       ...obj,
-      value: stateData[code].total_deaths,
+      value: getStateTotalDeaths(stateData[code]),
     })
     fatalityPerM.push({
       ...obj,
-      value: stateData[code].deaths_per_100k
+      value: getPerMPop(stateData[code].population, getStateTotalDeaths(stateData[code]))
     })
   })
 
   // get total fatalities for all states being adjusted for
   const adjStatesTotalFatalities = states.reduce(
-    (prev, code) => stateData[code] ? prev += stateData[code].total_deaths : prev
+    (prev, code) => stateData[code] ? prev += getStateTotalDeaths(stateData[code]) : prev
   , 0)
 
   // then get us adjusted by subtracting from us total
@@ -341,6 +357,7 @@ export const query = graphql`
       nodes {
         population
         deaths_per_100k
+        jhu_deaths
         total_deaths
         code
         state
