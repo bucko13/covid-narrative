@@ -87,7 +87,7 @@ const Header = ({ siteTitle, menu }: HeaderProps) => {
                           color="primary"
                         />
                       }
-                      labelPlacement="bottom"
+                      labelPlacement="end"
                       label="Show Graph Explanations"
                     />
                   }

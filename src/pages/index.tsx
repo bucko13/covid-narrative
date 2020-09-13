@@ -6,15 +6,16 @@ import { Link } from "gatsby"
 import ExternalLink from "../components/ExternalLink"
 
 const IndexPage = () => {
-  const acknowledgements: string[] =
-    [
-      'politicalmath',
-      'gummibear737',
-      'EconTalker',
-      'boriquagato',
-      'BallouxFrancois',
-      'EthicalSkeptic'
-    ];
+  const acknowledgements: string[] = [
+    "politicalmath",
+    "gummibear737",
+    "EconTalker",
+    "boriquagato",
+    "BallouxFrancois",
+    "EthicalSkeptic",
+    "Hold2LLC",
+  ]
+  
   return (
     <Layout>
       <div className="home-content">
@@ -66,30 +67,30 @@ const IndexPage = () => {
           </p>
           <h5>Cargo Cult Science</h5>
           <p>
-            When someone says that they only
-            trust in science or they're listening to the "experts", more often
-            than not it's a way to shut down debate. Who can argue with science
-            after all! Unfortunately, the truth is that science is only as
-            effective as the dissent that is allowed to be brought to it and
-            data on its own isn't the same thing as doing science.
+            When someone says that they only trust in science or they're
+            listening to the "experts", more often than not it's a way to shut
+            down debate. Who can argue with science after all! Unfortunately,
+            the truth is that science is only as effective as the dissent that
+            is allowed to be brought to it and data on its own isn't the same
+            thing as doing science.
           </p>
           <p>
             While data itself doesn't lie, people can use real data in service
             of one.
           </p>
           <p>
-            This is the general idea of "Cargo Cult Science",first introduced
-            by Doctor Richard Feynman in 1974: the process of going
-            through the motions of "science" more as a performative exercise
-            but which ultimately undermines the search for knowledge that
-            it is meant to represent. This project is meant to highlight
-            how seductive this tendency can be by showing some examples of
-            how this has been happening with our current narratives, even
-            for something as important as a global pandemic.
+            This is the general idea of "Cargo Cult Science",first introduced by
+            Doctor Richard Feynman in 1974: the process of going through the
+            motions of "science" more as a performative exercise but which
+            ultimately undermines the search for knowledge that it is meant to
+            represent. This project is meant to highlight how seductive this
+            tendency can be by showing some examples of how this has been
+            happening with our current narratives, even for something as
+            important as a global pandemic.
           </p>
           <p>
-            Learn more about this idea of "Cargo Cult Scientists" and
-            what Dr. Feynman had to say about it{" "}
+            Learn more about this idea of "Cargo Cult Scientists" and what Dr.
+            Feynman had to say about it{" "}
             <ExternalLink href="https://medium.com/@BuckPerley/beware-the-cargo-cult-scientists-ab18758bf878">
               here
             </ExternalLink>
@@ -124,6 +125,18 @@ const IndexPage = () => {
             being done. These explanations can be toggled on and off via the
             main menu accessible from the header navigation.
           </p>
+          <h6>The Filters + Comparisons</h6>
+          <p>
+            Many visualizations offer filters so that you can view
+            comparisons between regions in a more isolated way. It's useful
+            to have many regions available to make the comparisons but it can
+            sometimes make the graph too crowded. There are also switches
+            on some graphs so that you can alternate between absolute and
+            relative views (e.g. cases per 100k). Most narratives have
+            corresponding alternatives in an opposing narrative that you can
+            also look to for comparision. Where relevant, this will be linked
+            in the graph explanation.
+          </p>
           <p>
             <Box textAlign="center">
               <strong>This is not meant to be a political statement</strong>
@@ -141,9 +154,9 @@ const IndexPage = () => {
             virus first hit and how the story of what happened, what worked, and
             what didn't is a more complicated one. One major difference between
             the first and second halves of 2020 though is that at the beginning
-            of the year, we didn't have access to this much data nor the
-            ability to see the types of patterns that are becoming much more
-            clear in hindsight.
+            of the year, we didn't have access to this much data nor the ability
+            to see the types of patterns that are becoming much more clear in
+            hindsight.
           </p>
           <p>
             My hope is that by not letting demagogues control public fear and
@@ -197,6 +210,13 @@ const IndexPage = () => {
               Our World In Data (OWID)
             </a>
           </p>
+          <p>
+            Polimath has a great list of data sources on{" "}
+            <ExternalLink href="https://polimath.substack.com/p/measuring-certainty-and-mountains">
+              his substack
+            </ExternalLink> and his own data visualization tool on{" "}
+            <ExternalLink href="https://github.com/politicalmath/covid-sharp">GitHub</ExternalLink>.
+          </p>
         </Box>
 
         <Box my={3}>
@@ -204,26 +224,29 @@ const IndexPage = () => {
             Acknowledgements
           </h3>
           <p>
-            While the data was all sourced via the channels listed above, I was 
-            greatly influenced in my thinking and data/trend discovery by the 
-            following individuals. I found it interesting, as you might too, that I quickly
-            found that while primary news sources, the self-proclaimed "most trusted names",
-            seemed to be the least scrutinized and the most shallow, the sources that I started
-            to turn to below were almost all pseudonymous and on Twitter (not on official
-            publications). All provided more details, more background, and opened themselves
-            up to more scrutiny than what I found in the most common "mainstream" narratives.
+            While the data was all sourced via the channels listed above, I was
+            greatly influenced in my thinking and data/trend discovery by the
+            following individuals. I found it interesting, as you might too,
+            that I quickly found that while primary news sources, the
+            self-proclaimed "most trusted names", seemed to be the least
+            scrutinized and the most shallow, the sources that I started to turn
+            to below were almost all pseudonymous and on Twitter (not on
+            official publications). All provided more details, more background,
+            and opened themselves up to more scrutiny than what I found in the
+            most common "mainstream" narratives.
           </p>
           <p>
-            I'm grateful to them for taking the time to put this information out there
-            and allowing others to come to their own conclusions with the most information possible.
+            I'm grateful to them for taking the time to put this information out
+            there and allowing others to come to their own conclusions with the
+            most information possible.
           </p>
-          {acknowledgements.map((handle: string) =>
+          {acknowledgements.map((handle: string) => (
             <p key={handle}>
               <ExternalLink href={`https://twitter.com/${handle}`}>
                 @{handle}
               </ExternalLink>
             </p>
-          )}
+          ))}
         </Box>
       </div>
     </Layout>
