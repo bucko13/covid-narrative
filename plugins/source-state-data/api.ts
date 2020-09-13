@@ -2,10 +2,11 @@
 
 import get from 'axios';
 import fs from 'fs';
-import path from 'path';
+import path, { format } from 'path';
 import moment from 'moment';
+import csv from 'csvtojson';
 
-import { StateEmploymentDataNode, StateEmploymentData } from '.';
+import { StateEmploymentDataNode, StateEmploymentData, JHUStateData } from '.';
 
 export const getStateHistoricData = async (state: string): Promise<any> => {
   const { data } = await get(
@@ -31,6 +32,15 @@ export const getCurrentStateData = async (state: string): Promise<any> => {
     data = JSON.parse(fs.readFileSync(DATA_FILE, { encoding: "utf-8" }))
   }
 
+  return data;
+}
+
+export const getJHUStateDataSingleDay = async (date: string): Promise<JHUStateData[]> => {
+  const formattedDate = moment(date).format('MM-DD-YYYY');
+  const CCSE_API =
+    `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/${formattedDate}.csv`
+  const { data: csvString } = await get(CCSE_API);
+  const data: JHUStateData[] = await csv().fromString(csvString);
   return data;
 }
 

@@ -31,3 +31,13 @@ export interface ComparisonLineChartProps {
   smallerComparitor: string
   slice?: number
 }
+
+export interface StackedAreaChartData {
+  date: string
+  [key: string]: number | string
+}
+
+export interface StackedAreaChartProps {
+  comparisonData: StackedAreaChartData[]
+  dataKeys: string[]
+}

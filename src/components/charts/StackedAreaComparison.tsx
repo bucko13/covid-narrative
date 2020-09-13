@@ -10,14 +10,9 @@ import {
   AreaChart,
   Area,
 } from "recharts"
+import { StackedAreaChartProps } from "../../types/charts"
 
-interface StackedAreaChartProps {
-  comparisonData: {
-    date: string
-    [key: string]: number | string
-  }[]
-  dataKeys: string[]
-}
+
 export default function StackedAreaComparison({
   comparisonData,
   dataKeys,
