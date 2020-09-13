@@ -31,6 +31,11 @@ export interface StateData {
   total_hospitalized: number
   hospitalized_per_million: number
   hospitalized_per_100k: number
+  jhu_deaths?: number 
+  jhu_cases?: number
+  jhu_tested?: number
+  jhu_mortality?: number
+  jhu_testing_rate?: number
   data: StateNodeData[]
 }
 
@@ -56,4 +61,13 @@ export interface StateEmploymentData {
   [date: string]: {
     [state: string]: StateEmploymentDataNode
   }
+}
+
+export interface JHUStateData {
+  Deaths: string
+  Cases: string
+  People_Tested: string
+  Mortality_Rate: string
+  Testing_Rate: string
+  Province_State: string
 }

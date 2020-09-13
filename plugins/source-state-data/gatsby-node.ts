@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import codeToState_ from '../../src/states/codeToState.json';
 import populations_ from '../../src/states/populations.json';
-import { getStateHistoricData, getCurrentStateData, getStateUnemploymentData } from './api';
+import { getStateHistoricData, getCurrentStateData, getStateUnemploymentData, getJHUStateDataSingleDay } from './api';
 import { StateData, StateNodeData, PopulationData } from '.';
 import { getPerMPop, getPerMillionPop } from '../../src/utils/utils';
 import { states } from './constants';
@@ -109,6 +109,9 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
       }
     })
 
+    const latestTotals = (await getJHUStateDataSingleDay(date.toString()))
+                          .find(state => state.Province_State === codeToState[code.toUpperCase()]);
+
     const node: StateData = {
       population,
       state: codeToState[code.toUpperCase()],
@@ -124,6 +127,11 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
       positives_per_million: getPerMillionPop(population, positive),
       hospitalized_per_100k: getPerMillionPop(population, hospitalized),
       hospitalized_per_million: getPerMPop(population, hospitalized),
+      jhu_deaths: latestTotals && parseFloat(latestTotals?.Deaths),
+      jhu_cases: latestTotals && parseFloat(latestTotals.Cases),
+      jhu_tested: latestTotals && parseFloat(latestTotals.People_Tested),
+      jhu_mortality: latestTotals && parseFloat(latestTotals.Mortality_Rate),
+      jhu_testing_rate: latestTotals && parseFloat(latestTotals.Testing_Rate),
       data: sortedData,
     }
 

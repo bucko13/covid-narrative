@@ -15,7 +15,7 @@ const IndexPage = () => {
     "EthicalSkeptic",
     "Hold2LLC",
   ]
-  
+
   return (
     <Layout>
       <div className="home-content">
@@ -192,7 +192,10 @@ const IndexPage = () => {
             State Level Data:{" "}
             <a href="https://covidtracking.com/data/api">
               COVID Tracking Project
-            </a>
+            </a> and{" "}
+            <ExternalLink href="https://github.com/CSSEGISandData/COVID-19">
+              Johns Hopkins University
+            </ExternalLink>
           </p>
           <p>
             Populations (US): <a href="https://datausa.io/">DataUSA.io</a>
