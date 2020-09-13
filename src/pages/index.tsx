@@ -6,6 +6,15 @@ import { Link } from "gatsby"
 import ExternalLink from "../components/ExternalLink"
 
 const IndexPage = () => {
+  const acknowledgements: string[] =
+    [
+      'politicalmath',
+      'gummibear737',
+      'EconTalker',
+      'boriquagato',
+      'BallouxFrancois',
+      'EthicalSkeptic'
+    ];
   return (
     <Layout>
       <div className="home-content">
@@ -194,6 +203,27 @@ const IndexPage = () => {
           <h3 className="divider" id="acknowledgements">
             Acknowledgements
           </h3>
+          <p>
+            While the data was all sourced via the channels listed above, I was 
+            greatly influenced in my thinking and data/trend discovery by the 
+            following individuals. I found it interesting, as you might too, that I quickly
+            found that while primary news sources, the self-proclaimed "most trusted names",
+            seemed to be the least scrutinized and the most shallow, the sources that I started
+            to turn to below were almost all pseudonymous and on Twitter (not on official
+            publications). All provided more details, more background, and opened themselves
+            up to more scrutiny than what I found in the most common "mainstream" narratives.
+          </p>
+          <p>
+            I'm grateful to them for taking the time to put this information out there
+            and allowing others to come to their own conclusions with the most information possible.
+          </p>
+          {acknowledgements.map((handle: string) =>
+            <p key={handle}>
+              <ExternalLink href={`https://twitter.com/${handle}`}>
+                @{handle}
+              </ExternalLink>
+            </p>
+          )}
         </Box>
       </div>
     </Layout>
