@@ -170,6 +170,27 @@ const FAQPage = () => {
         </>
       ),
     },
+    {
+      question: `What's the tech stack you use?`,
+      Answer: () => (
+        <>
+          <p>
+            Everything is written in Typescript for no other reason than that (JS)
+            is the language I'm most comfortable with, performance wasn't a huge
+            issue, and I built this as a side project without too much time to work
+            with more data friendly languages.
+          </p>
+          <p>
+            The site is built and deployed as a serverless app using{" "}
+            <ExternalLink href="https://gatsbyjs.com/">Gatsby</ExternalLink>.
+            Data pre-processing is done in Nodejs and it's hosted/deployed
+            automatically using <ExternalLink href="https://vercel.com">Vercel</ExternalLink>
+            . Visualizations are rendered using a wrapper library around <ExternalLink href="">D3</ExternalLink>
+            {" "}called <ExternalLink href="http://recharts.org/">recharts</ExternalLink>.
+          </p>
+        </>
+      )
+    }
   ]
   return (
     <Layout>
