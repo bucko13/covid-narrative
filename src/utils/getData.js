@@ -1,3 +1,5 @@
+/* tslint:disable no-console */
+
 const { get } = require('axios');
 const fs = require('fs');
 const path = require('path')
@@ -6,7 +8,7 @@ const csv = require('csvtojson')
 const MATHDROID_API_BASE = "https://covid19.mathdro.id/api";
 const CSSE_API_BASE =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data"
-
+const OWID_DATA_API = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json"
 const RT_DATASET_API = `https://d14wlfuexuxgcm.cloudfront.net/covid/rt.csv`
 
 const getStateHistoricData = async (state) => {
@@ -143,8 +145,24 @@ async function getCountryTimeSeries(country) {
   )
 }
 
+async function getOwidData() {
+  const DATA_FILE = path.resolve(__dirname, '../data/owid-covid-data.json');
+  let data
+
+  if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
+    console.log('Reloading OWID country time series data');
+    const response = await get(OWID_DATA_API)
+    data = response.data;
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
+    console.log('Done reloading OWID data from GitHub')
+  } else {
+    data = require(DATA_FILE);
+  }
+  return data;
+}
+
 async function convertOwid() {
-  const owid = require('../data/owid-covid-data.json');
+  const owid = await getOwidData();
   const byContinent = {}
   Object.keys(owid).reduce((prev, curr) => {
     const country = {
@@ -167,7 +185,7 @@ async function convertOwid() {
   
   // need to split into separate json files
   // for graphql to be able to consume (<= 40 countries per file)
-  for (let continent in byContinent) {
+  for (let continent of Object.keys(byContinent)) {
     const countriesPerFile = 30
     const segments = Math.ceil(byContinent[continent].length / countriesPerFile)
     
