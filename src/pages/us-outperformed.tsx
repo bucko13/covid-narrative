@@ -233,10 +233,10 @@ const USOutperformed = ({ data }: PageProps) => {
               checked={totalFalitiesPer100k}
               onChange={() => setTotalFatalitiesPer100k(!totalFalitiesPer100k)}
               color="primary"
-              name="Show per million"
+              name="Show per 100k"
             />
           }
-          label="Show per million"
+          label="Show per 100k"
         />
         <TotalComparisonBarChart
           comparisonData={totalFalitiesPer100k ? fatalityPerM : totalFatalities}
