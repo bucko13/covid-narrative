@@ -39,5 +39,6 @@ export interface StackedAreaChartData {
 
 export interface StackedAreaChartProps {
   comparisonData: StackedAreaChartData[]
+  yAxisLabel?: string
   dataKeys: string[]
 }
