@@ -16,13 +16,14 @@ import { StackedAreaChartProps } from "../../types/charts"
 export default function StackedAreaComparison({
   comparisonData,
   dataKeys,
+  yAxisLabel,
 }: StackedAreaChartProps) {
 
   return (
     <ResponsiveContainer width="100%" aspect={2}>
       <AreaChart data={comparisonData}>
         <XAxis dataKey="date" />
-        <YAxis />
+        <YAxis tick={false} label={{ value: yAxisLabel, angle: -90,}} />
         <Legend />
         <CartesianGrid />
         <Tooltip />

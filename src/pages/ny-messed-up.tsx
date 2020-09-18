@@ -15,7 +15,6 @@ import { ComparisonData } from "../components/charts/TotalComparisonBarChart"
 import { getPerMPop, readableChartDate, readableDate } from "../utils/utils"
 import AboutThisGraph from "../components/AboutThisGraph"
 
-
 interface PageProps {
   data: {
     allStateHistoricalData: {
@@ -226,6 +225,7 @@ const NyMessedUp = ({ data }: PageProps) => {
       <StackedAreaComparison
         comparisonData={unemploymentData}
         dataKeys={sortedStatesByUnemployment}
+        yAxisLabel="Unemployment Rate"
       />
       <h5>Average Unemployment Rates ({
         unemploymentData[0].date} - {unemploymentData[unemploymentData.length - 1].date
