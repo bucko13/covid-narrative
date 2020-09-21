@@ -25,6 +25,7 @@ import ComposedHistoricalComparison from "../components/charts/ComposedHistorica
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart";
 import { LocationData, OwidNodes } from "../types/owid";
 import AboutThisGraph from "../components/AboutThisGraph";
+import { MeasurementSwitch } from "../components/ui";
 
 const useStyles = makeStyles({
   select: {
@@ -66,6 +67,7 @@ const states = ["ny", "nj"]
 const USOutperformed = ({ data }: PageProps) => {
   const [fatalitiesPerMil, setFatalitiesPerMil] = useState(true);
   const [totalFalitiesPer100k, setTotalFatalitiesPer100k] = useState(true);
+  const [newCasesPerMil, setNewCasesPerMil] = useState(true)
   const [comparisonChartCountry, setComparisonChartCountry] = useState('us');
 
   const getStateData = (code: string): StateData | undefined =>
@@ -175,7 +177,6 @@ const USOutperformed = ({ data }: PageProps) => {
   )
 
   let countryData: OwidNodes = {}
-
   // filter out states from page data so we can get line chart data
   countryData = Object.keys(data).reduce((prev, curr) => {
     if (curr !== 'states') prev[curr] = data[curr]
@@ -185,6 +186,7 @@ const USOutperformed = ({ data }: PageProps) => {
   // get the country data and arrange in a format that the line chart
   // data can work with
   const lineChartData = convertOwidPageDataToLineChart({ data: countryData })
+
   const classes = useStyles();
   return (
     <Layout>
@@ -282,7 +284,7 @@ const USOutperformed = ({ data }: PageProps) => {
           </p>
           <p>
             If you're curious why the data is "smoothed" and what that means,{" "}
-            <Link to="/faq#what-is-smoothed-data">checkout the FAQ</Link> page.
+            <Link to="/faq#what-is-smoothed-data">check out the FAQ</Link> page.
           </p>
           <p>
             There are a few useful things we can learn from this chart. First,
@@ -311,6 +313,20 @@ const USOutperformed = ({ data }: PageProps) => {
           yAxisLabelLeft="New Cases (per mil.)"
           yAxisLabelRight="New Fatalities (per mil.)"
           slice={60}
+        />
+      </Box>
+
+      <Box my={5}>
+        <h4>Daily New Cases (per million)</h4>
+        <MeasurementSwitch
+          isChecked={newCasesPerMil}
+          onSwitch={setNewCasesPerMil}
+          label="Show per million"
+        />
+        <HistoricComparisonLineChart
+          comparisonData={lineChartData}
+          comparitor={newCasesPerMil ? "new_cases_smoothed_per_million" : "new_cases_smoothed"}
+          yAxisLabel={newCasesPerMil ? "Daily new cases (per mil)" : "Daily new cases"}
         />
       </Box>
 
@@ -426,6 +442,7 @@ export const query = graphql`
           total_deaths
           date
           new_deaths_smoothed_per_million
+          new_cases_smoothed
           new_cases_smoothed_per_million
           total_deaths_per_million
         }

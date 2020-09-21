@@ -4,9 +4,10 @@ import { useStaticQuery, graphql, navigate } from "gatsby"
 import SEO from "./seo"
 import Header from "./header"
 import "./layout.scss"
-import { Button, Grid, Box, ThemeProvider, Fab, IconButton } from "@material-ui/core"
+import { Grid, Box, ThemeProvider, Fab, IconButton } from "@material-ui/core"
 import CustomTheme from "../CustomTheme"
 import { GitHub, Navigation, Twitter } from "@material-ui/icons"
+import { NarrativeMenu } from "./ui"
 
 export const ShowAboutContext = React.createContext({
   showAbout: true,
@@ -31,32 +32,6 @@ const Layout = ({ children }: any) => {
       }
     }
   `)
-  const navList: {title: string; path: string}[] = [
-    {
-      title: 'NY Messed Up',
-      path: 'ny-messed-up'
-    },
-    {
-      title: 'NY Beat COVID-19',
-      path: 'ny-beat-covid',
-    },
-    {
-      title: 'US Mishandled COVID-19',
-      path: 'us-mishandled',
-    },
-    {
-      title: 'US Outperformed',
-      path: 'us-outperformed',
-    }
-  ];
-
-  const onClick = (e: React.MouseEvent, path: string) => {
-    e.preventDefault();
-    navigate(`/${path}`);
-
-  }
-
-  const pathname = typeof window !== "undefined" ? window.location.pathname : ""
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -74,22 +49,8 @@ const Layout = ({ children }: any) => {
         >
           <SEO title="COVID-19 Narratives By the Numbers" />
           <Box mt={-13} id="top" style={{ position: "absolute" }}></Box>
-          <Box my={3} mt={13}>
-            <Grid container justify="space-around">
-              {navList.map(navItem => (
-                <Grid item key={navItem.path}>
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    onClick={e => onClick(e, navItem.path)}
-                    color="primary"
-                    disabled={pathname.includes(navItem.path)}
-                  >
-                    {navItem.title}
-                  </Button>
-                </Grid>
-              ))}
-            </Grid>
+          <Box mt={13}>
+            <NarrativeMenu />
           </Box>
           <main>{children}</main>
           <Fab

@@ -66,12 +66,13 @@ const FAQPage = () => {
             primarily effected the U.S.) being more deadly than others.
           </p>
           <p>
-            In another example, while New Zealand is widely considered to have
-            handled the pandemic well, their situation, being incredibly remote,
-            an island that is easier to block travel to and from, and being much
-            more sparsely populated than other parts of the world, doesn't give
-            an accurate comparisons in terms of situations that countries in
-            Europe and North America faced.
+            New Zealand is often example of country that is widely considered to
+            have handled the pandemic well. However, if we consider their
+            situation, being incredibly remote, an island that is easier to
+            block travel to and from, and being much more sparsely populated
+            than other parts of the world, it doesn't give as useful of a
+            comparison in terms of situations that countries in Europe and North
+            America faced.
           </p>
         </>
       ),
@@ -99,11 +100,13 @@ const FAQPage = () => {
       Answer: () => (
         <p>
           For "smoothed" data, I took the rolling 7-day average for any given
-          date. The reason for this is that the data reporting is not always
-          consistent over time, figures that get underreported on weekends.
-          Getting the average over the previous 7 days still gives us an
-          accurate picture (possibly more accurate) of the outcomes in a way
-          that is easier to decipher in the graph.
+          date. Some data sources provide this out of the box and for others it
+          needed to be calculated manually. The reason to use this is that the
+          data reporting is not always consistent over time. For example, some
+          data points get underreported on weekends. Getting the average over
+          the previous 7 days still gives us an accurate picture (possibly more
+          accurate) of the outcomes in a way that is easier and more accurate to
+          illustrate in the graph when smoothed.
         </p>
       ),
     },
@@ -112,10 +115,10 @@ const FAQPage = () => {
       Answer: () => (
         <>
           <p>
-            My next priorities of areas to look at are the narratives around
-            lockdowns, mobility, and possibly mask usage as these seem to be one
-            of the most contentious, political, and, as a result, likely
-            manipulated narratives.
+            My next priorities are the narratives around lockdowns, mobility,
+            and possibly mask usage as these seem to be some of the most
+            contentious, political, and, as a result, likely manipulated
+            narratives.
           </p>
           <p>
             I would also like look more into the economic ramifications of
@@ -124,7 +127,7 @@ const FAQPage = () => {
           </p>
           <p>
             Data isn't my specialty though and these are trickier things to
-            graph especially since the data is not as precise and there impacts
+            graph especially since the data is not as precise and the impacts
             are harder to display graphically. If this is something you're
             interested in and have experience with, feel free to reach out!
           </p>
@@ -137,12 +140,13 @@ const FAQPage = () => {
         <>
           <p>
             The colors are generated using a random color generator seeded by an
-            item from the data being displayed so that it is deterministic. The
-            generator is supposed to pick from an aesthetically pleasing palette
-            but it's not perfect. Picking the colors progamattically rather than
-            manually assigning colors to each chart, line, and bar means I can
-            easily remove and add new data sets with minimal changes, but it
-            also means that sometimes there are some jarring color choices.
+            item from the data being displayed, making the color deterministic
+            and consistent. The generator is supposed to pick from an
+            aesthetically pleasing palette but it's not perfect. Picking the
+            colors progamattically rather than manually assigning colors to each
+            chart, line, and bar means I can easily remove and add new data sets
+            with minimal effort, but it also means that sometimes there are some
+            jarring color choices.
           </p>
         </>
       ),
@@ -165,7 +169,8 @@ const FAQPage = () => {
             <ExternalLink href="https://github.com/bucko13/covid-narrative/tree/master/plugins/source-state-data/data">
               here
             </ExternalLink>
-            .
+            . Sometimes though shorter selective timeframes are deliberate as
+            this can be a common way to shape a narrative with data.
           </p>
         </>
       ),
@@ -175,22 +180,42 @@ const FAQPage = () => {
       Answer: () => (
         <>
           <p>
-            Everything is written in Typescript for no other reason than that (JS)
-            is the language I'm most comfortable with, performance wasn't a huge
-            issue, and I built this as a side project without too much time to work
-            with more data friendly languages.
+            Everything is written in Typescript for no other reason than that
+            (JS) is the language I'm most comfortable with, performance wasn't a
+            huge issue, and I built this as a side project without too much time
+            to work with more data friendly languages.
           </p>
           <p>
             The site is built and deployed as a serverless app using{" "}
             <ExternalLink href="https://gatsbyjs.com/">Gatsby</ExternalLink>.
             Data pre-processing is done in Nodejs and it's hosted/deployed
-            automatically using <ExternalLink href="https://vercel.com">Vercel</ExternalLink>
-            . Visualizations are rendered using a wrapper library around <ExternalLink href="">D3</ExternalLink>
-            {" "}called <ExternalLink href="http://recharts.org/">recharts</ExternalLink>.
+            automatically using{" "}
+            <ExternalLink href="https://vercel.com">Vercel</ExternalLink>.
+            Visualizations are rendered using a wrapper library around{" "}
+            <ExternalLink href="">D3</ExternalLink> called{" "}
+            <ExternalLink href="http://recharts.org/">recharts</ExternalLink>.
           </p>
         </>
-      )
-    }
+      ),
+    },
+    {
+      question: `Got more questions?`,
+      Answer: () => (
+        <>
+          <p>
+            Let me know on{" "}
+            <ExternalLink href="https://github.com/bucko13/covid-narrative">
+              GitHub
+            </ExternalLink>{" "}
+            or
+            Twitter,{" "}
+            <ExternalLink href="https://twitter.com/BuckPerley">
+              @BuckPerley
+            </ExternalLink>, and I'll do my best to answer!
+          </p>
+        </>
+      ),
+    },
   ]
   return (
     <Layout>

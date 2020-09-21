@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { LocationData, OwidData, OwidNodes } from "../types/owid"
+import { LocationData, OwidNodes } from "../types/owid"
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
@@ -41,6 +41,18 @@ export const linkify =
       .split(/\s|-/g)
       .map(word => word.replace(/[^A-Za-z0-9]/gi, '').toLowerCase())
       .join('-');
+
+export const titleify = (link: string):string =>
+  link
+    .replace(/[^0-9a-z]/gi, " ")
+    .split(' ')
+    .map(word => {
+      if (['NY', 'US', 'COVID'].includes(word.toUpperCase())) {
+        return word.toUpperCase();
+      }
+      return word.substr(0, 1).toUpperCase() + word.substr(1)
+    })
+    .join(' ');
 
 export const sliceData = (slice: number, data: any): any[] => {
     if (slice) {

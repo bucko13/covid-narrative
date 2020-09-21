@@ -4,6 +4,7 @@ import { Link } from "gatsby"
 import { AppBar, Toolbar, IconButton, SwipeableDrawer, List, ListItem, ListItemText, Grid, FormControlLabel, Switch } from "@material-ui/core"
 import { Home, Menu } from "@material-ui/icons"
 import { ShowAboutContext } from "./layout"
+import { titleify } from "../utils/utils"
 
 interface HeaderProps {
   siteTitle: string
@@ -31,6 +32,8 @@ const Header = ({ siteTitle, menu }: HeaderProps) => {
     setOpen(!open);
   }
 
+  const pageTitle = typeof window !== "undefined" && window.location ? titleify(window.location.pathname) : ''
+
   return (
     <header>
       <AppBar position="fixed" color="primary">
@@ -48,7 +51,7 @@ const Header = ({ siteTitle, menu }: HeaderProps) => {
                 <Home fontSize="large" />
               </Grid>
               <Grid item>
-                <h1>{siteTitle}</h1>
+                <h1>{siteTitle}{pageTitle.length > 1 ? ` - ${pageTitle}` : ''}</h1>
               </Grid>
             </Grid>
           </Link>

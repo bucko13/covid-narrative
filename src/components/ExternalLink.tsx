@@ -1,6 +1,4 @@
-import { ReactComponentLike } from 'prop-types';
-import React, { ReactChildren, ReactComponentElement } from 'react';
-
+import React from 'react';
 
 const ExternalLink = ({
   href,
