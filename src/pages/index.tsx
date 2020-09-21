@@ -4,6 +4,7 @@ import Layout from "../components/layout"
 import './index.scss'
 import { Link } from "gatsby"
 import ExternalLink from "../components/ExternalLink"
+import { NarrativeMenu } from "../components/ui"
 
 const IndexPage = () => {
   const acknowledgements: string[] = [
@@ -26,7 +27,7 @@ const IndexPage = () => {
           </h5>
           <p>
             The best way to think about data is as a tool. On its own and
-            without context, data can't really tell you very much. If someone
+            without context data can't really tell you very much. If someone
             tells you that they make $60k a year, how much does that really tell
             you about their standard of living or how well they are able to
             support a family? This obviously depends on context, first and
@@ -40,11 +41,11 @@ const IndexPage = () => {
             demand completely divergent policy responses. The same is true when
             we're talking about testing. 1k positive test results tells us
             something very different when there are 50% positive or 4% or when
-            half of them are asymptomatic vs. only 5%. All of which has wildly
+            half of them are asymptomatic vs. only 5%, all of which has wildly
             divergent implications on an area's hospital system. The list of
             confounding variables goes on and on: patient age, demographics,
-            comorbitities, date of first recorded cases, population density,
-            culture, etc.
+            comorbitities, type of tests, testing levels, date of first recorded
+            cases, population density, culture, etc.
           </p>
 
           <h4>What is the purpose of this site?</h4>
@@ -69,18 +70,18 @@ const IndexPage = () => {
           <p>
             When someone says that they only trust in science or they're
             listening to the "experts", more often than not it's a way to shut
-            down debate. Who can argue with science after all! Unfortunately,
-            the truth is that science is only as effective as the dissent that
-            is allowed to be brought to it and data on its own isn't the same
-            thing as doing science.
+            down debate. <strong>Who can argue with science after all!</strong>{" "}
+            Unfortunately, the truth is that science is only as effective as the
+            dissent that is allowed to be brought to it. Data on its own isn't
+            the same thing as "doing science".
           </p>
           <p>
             While data itself doesn't lie, people can use real data in service
             of one.
           </p>
           <p>
-            This is the general idea of "Cargo Cult Science",first introduced by
-            Doctor Richard Feynman in 1974: the process of going through the
+            This is the general idea of "Cargo Cult Science", first introduced
+            by Doctor Richard Feynman in 1974: the process of going through the
             motions of "science" more as a performative exercise but which
             ultimately undermines the search for knowledge that it is meant to
             represent. This project is meant to highlight how seductive this
@@ -100,14 +101,21 @@ const IndexPage = () => {
 
         <Box my={3}>
           <h3 className="divider">How to use this site</h3>
+          <p>
+            <i>
+              (See the <Link to="/faq">FAQ</Link> page for any other questions
+              not answered here)
+            </i>
+          </p>
           <h6>The Narratives</h6>
           <p>
             At the <Link to="#top">top</Link> of every page is a list of buttons
-            that list out a series of narratives commonly heard about COVID-19.
-            Each "Narrative Page" contains a set of visualizations using
-            publicly available <Link to="#">data</Link> to make the case for
-            that narrative.
+            (like the ones below this paragraph) that list out a series of
+            narratives commonly heard about COVID-19. Each "Narrative Page"
+            contains a set of visualizations using publicly available{" "}
+            <Link to="#">data</Link> to make the case for that narrative.
           </p>
+          <NarrativeMenu />
           <p>
             For example, if you want to make the case that{" "}
             <Link to="/ny-beat-covid">New York State "beat" COVID-19</Link>, you
@@ -127,20 +135,17 @@ const IndexPage = () => {
           </p>
           <h6>The Filters + Comparisons</h6>
           <p>
-            Many visualizations offer filters so that you can view
-            comparisons between regions in a more isolated way. It's useful
-            to have many regions available to make the comparisons but it can
-            sometimes make the graph too crowded. There are also switches
-            on some graphs so that you can alternate between absolute and
-            relative views (e.g. cases per 100k). Most narratives have
-            corresponding alternatives in an opposing narrative that you can
-            also look to for comparision. Where relevant, this will be linked
-            in the graph explanation.
+            Many visualizations offer filters so that you can view comparisons
+            between regions in a more isolated way. It's useful to have many
+            regions available to make the comparisons but it can sometimes make
+            the graph too crowded. There are also switches on some graphs so
+            that you can alternate between absolute and relative views (e.g.
+            cases per 100k). Most narratives have corresponding alternatives in
+            an opposing narrative that you can also look to for comparision.
+            Where relevant, this will be linked in the graph explanation.
           </p>
-          <p>
-            <Box textAlign="center">
-              <strong>This is not meant to be a political statement</strong>
-            </Box>
+          <p style={{ textAlign: "center" }}>
+            <strong>This is not meant to be a political statement</strong>
           </p>
           <p>
             While there are some conclusions that can be clearly drawn when all
@@ -163,8 +168,8 @@ const IndexPage = () => {
             perception by telling us to trust them because they "believe in
             science", but rather look at the story the data is telling us for
             ourselves, we can make better, more informed decisions as a society,
-            and hopefully start to better hold our political leaders accountable
-            in a more honest way.
+            and hopefully start being smarter about holding our political
+            leaders and leaders in the scientific community more accountable.
           </p>
         </Box>
 
@@ -176,10 +181,10 @@ const IndexPage = () => {
             All of the data you see on this site was sourced from the following
             websites and API services. Not all of the data may even have been
             used yet in any visualizations, but they were helpful nonetheless
-            and could find their way into future visualizations. Some
-            pre-processing is done for certain fields. All data handling as well
-            as the saved versions of the raw data files themselves can be viewed
-            and reviewed on{" "}
+            and could find their way into future visualizations. Some{" "}
+            <Link to="/faq/#what-is-smoothed-data">pre-processing</Link> is done
+            for certain fields. All data handling as well as the saved versions
+            of the raw data files themselves can be viewed and reviewed on{" "}
             <ExternalLink href="https://github.com/bucko13/covid-narrative">
               GitHub
             </ExternalLink>
@@ -189,26 +194,29 @@ const IndexPage = () => {
             Check the <Link to="/faq">FAQ</Link> for any other questions.
           </p>
           <p>
-            State Level Data:{" "}
+            <strong>State Level Data:</strong>{" "}
             <a href="https://covidtracking.com/data/api">
               COVID Tracking Project
-            </a> and{" "}
+            </a>{" "}
+            and{" "}
             <ExternalLink href="https://github.com/CSSEGISandData/COVID-19">
               Johns Hopkins University
             </ExternalLink>
           </p>
           <p>
-            Populations (US): <a href="https://datausa.io/">DataUSA.io</a>
-          </p>
-          <p>
-            Employment Statistics (US):{" "}
+            <strong>Populations (US):</strong>{" "}
             <a href="https://datausa.io/">DataUSA.io</a>
           </p>
           <p>
-            Rt (transmission rate) Data: <a href="https://rt.live/">Rt.live</a>
+            <strong>Employment Statistics (US): </strong>
+            <a href="https://datausa.io/">DataUSA.io</a>
           </p>
           <p>
-            Country-level Data:{" "}
+            <strong>Rt (transmission rate) Data: </strong>
+            <a href="https://rt.live/">Rt.live</a>
+          </p>
+          <p>
+            <strong>Country-level Data: </strong>
             <a href="https://github.com/owid/covid-19-data/tree/master/public/data/">
               Our World In Data (OWID)
             </a>
@@ -217,8 +225,12 @@ const IndexPage = () => {
             Polimath has a great list of data sources on{" "}
             <ExternalLink href="https://polimath.substack.com/p/measuring-certainty-and-mountains">
               his substack
-            </ExternalLink> and his own data visualization tool on{" "}
-            <ExternalLink href="https://github.com/politicalmath/covid-sharp">GitHub</ExternalLink>.
+            </ExternalLink>{" "}
+            and his own data visualization tool on{" "}
+            <ExternalLink href="https://github.com/politicalmath/covid-sharp">
+              GitHub
+            </ExternalLink>
+            .
           </p>
         </Box>
 
