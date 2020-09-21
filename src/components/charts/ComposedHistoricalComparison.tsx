@@ -20,7 +20,9 @@ const ComposedHistoricalComparison = ({
   comparisonData,
   largerComparitor,
   smallerComparitor,
-  slice
+  slice,
+  yAxisLabelLeft,
+  yAxisLabelRight,
 }: ComparisonLineChartProps) => {
   let data = comparisonData
   if (slice) {
@@ -31,13 +33,23 @@ const ComposedHistoricalComparison = ({
     <ResponsiveContainer width="100%" aspect={2}>
       <ComposedChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis name="date" dataKey="date" tickFormatter={(date) => readableChartDate(date)} />
-        <YAxis orientation="left" name="Cases" yAxisId={largerComparitor} />
+        <XAxis
+          name="date"
+          dataKey="date"
+          tickFormatter={date => readableChartDate(date)}
+        />
+        <YAxis
+          orientation="left"
+          name="Cases"
+          yAxisId={largerComparitor}
+          label={{ value: yAxisLabelLeft, angle: -90, position: "insideLeft" }}
+        />
         <YAxis
           orientation="right"
           name={smallerComparitor}
           yAxisId={smallerComparitor}
           domain={[0, "dataMax + 30"]}
+          label={{ value: yAxisLabelRight, angle: 90, position: "insideRight" }}
         />
         <Tooltip />
         <Legend />

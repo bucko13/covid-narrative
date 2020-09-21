@@ -240,6 +240,7 @@ const USOutperformed = ({ data }: PageProps) => {
         />
         <TotalComparisonBarChart
           comparisonData={totalFalitiesPer100k ? fatalityPerM : totalFatalities}
+          yAxisLabel={totalFalitiesPer100k ? 'Fatalities Per 100k' : "Total Fatalities"}
           sorted
         />
       </Box>
@@ -307,6 +308,8 @@ const USOutperformed = ({ data }: PageProps) => {
           comparisonData={getCountryNodes(comparisonChartCountry).data}
           largerComparitor="new_cases_smoothed_per_million"
           smallerComparitor="new_deaths_smoothed_per_million"
+          yAxisLabelLeft="New Cases (per mil.)"
+          yAxisLabelRight="New Fatalities (per mil.)"
           slice={60}
         />
       </Box>
@@ -336,6 +339,7 @@ const USOutperformed = ({ data }: PageProps) => {
           label="Show per million"
         />
         <HistoricComparisonLineChart
+          yAxisLabel={fatalitiesPerMil ? 'Total Fatalities (per mil)' : 'Total Fatalities'}
           comparisonData={lineChartData}
           comparitor={
             fatalitiesPerMil ? "total_deaths_per_million" : "total_deaths"

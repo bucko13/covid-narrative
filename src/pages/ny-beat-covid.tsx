@@ -64,6 +64,7 @@ const NyBeatCovid = ({ data }: PageProps) => {
       <HistoricComparisonLineChart
         comparisonData={chartData}
         comparitor="positiveIncreaseRollingAverage"
+        yAxisLabel="New Daily Positives"
       />
 
       <Box my={5}>
@@ -95,6 +96,7 @@ const NyBeatCovid = ({ data }: PageProps) => {
         comparisonData={chartData}
         comparitor="deathsIncreaseRollingAverage"
         slice={90}
+        yAxisLabel="New Fatalities"
       />
       <Link to="/">Go back to the homepage</Link>
     </Layout>

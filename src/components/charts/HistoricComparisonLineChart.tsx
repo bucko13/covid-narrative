@@ -21,23 +21,19 @@ import {
 } from "@material-ui/core";
 
 import { getPerMPop, readableChartDate, sliceData } from "../../utils/utils";
-import { LineChartComparisonData, LineChartDataNode } from "../../types/charts";
-
-interface ComparisonLineChartProps {
-  comparisonData: LineChartComparisonData[]
-  comparitor: string
-  perM?: boolean
-  filter?: boolean
-  slice?: number
-}
+import {
+  HistoricLineChartProps,
+  LineChartDataNode,
+} from "../../types/charts"
 
 const HistoricComparisonLineChart = ({
   comparisonData,
   comparitor,
   perM,
   filter = true,
-  slice
-}: ComparisonLineChartProps) => {
+  slice,
+  yAxisLabel,
+}: HistoricLineChartProps) => {
   const locations = comparisonData.map(({ location }) => location)
 
   const stateObject: { [key: string]: boolean } = {}
@@ -91,43 +87,49 @@ const HistoricComparisonLineChart = ({
     <div>
       {filter && locations.length > 2 ? (
         <FormControl component="fieldset">
-            <FormGroup>
-              <Grid container>
-                {locations.map(location => (
-                  <Grid item key={location}>
-                    <FormControlLabel
+          <FormGroup>
+            <Grid container>
+              {locations.map(location => (
+                <Grid item key={location}>
+                  <FormControlLabel
                     control={
                       <Checkbox
-                      checked={state[location]}
-                      onChange={handleChange}
-                      name={location}
+                        checked={state[location]}
+                        onChange={handleChange}
+                        name={location}
                       />
                     }
                     label={location.toUpperCase()}
-                    />
+                  />
                 </Grid>
-                ))}
-              </Grid>
-            </FormGroup>
-          </FormControl>
+              ))}
+            </Grid>
+          </FormGroup>
+        </FormControl>
       ) : null}
       <ResponsiveContainer width="100%" aspect={2}>
         <LineChart data={data}>
           {locations
             .filter(location => state[location])
             .map((location: string) => (
-            <Line
-              type="basisOpen"
-              key={location}
-              dataKey={location.toLowerCase()}
-              stroke={randomColor({ seed: location })}
-              strokeWidth={3}
-              dot={false}
-              name={location.toUpperCase()}
-            />
-          ))}
+              <Line
+                type="basisOpen"
+                key={location}
+                dataKey={location.toLowerCase()}
+                stroke={randomColor({ seed: location })}
+                strokeWidth={3}
+                dot={false}
+                name={location.toUpperCase()}
+              />
+            ))}
           <XAxis dataKey="date" />
-          <YAxis />
+          <YAxis
+            label={{
+              value: yAxisLabel,
+              angle: -90,
+              position: "insideBottomLeft",
+            }}
+          />
           <CartesianGrid />
           <Legend />
           <Tooltip />
