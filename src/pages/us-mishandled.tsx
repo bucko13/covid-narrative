@@ -75,7 +75,11 @@ const UsMishandled = ({ data }: PageProps) => {
           <p>Data last updated: {readableDate(getLastDate(data))}</p>
         </AboutThisGraph>
       </Box>
-      <TotalComparisonBarChart comparisonData={totalFatalities} sorted />
+      <TotalComparisonBarChart
+        comparisonData={totalFatalities}
+        sorted
+        yAxisLabel="Total Fatalities"
+      />
 
       <Box my={5}>
         <h4>Cumulative Cases Per Million</h4>
@@ -94,6 +98,7 @@ const UsMishandled = ({ data }: PageProps) => {
       <HistoricComparisonLineChart
         comparisonData={lineChartData}
         comparitor="total_cases_per_million"
+        yAxisLabel="Total cases per million"
       />
 
       <Box my={5}>
@@ -112,6 +117,7 @@ const UsMishandled = ({ data }: PageProps) => {
       <HistoricComparisonLineChart
         comparisonData={lineChartData}
         comparitor="total_deaths"
+        yAxisLabel="Fatalities"
       />
     </Layout>
   )

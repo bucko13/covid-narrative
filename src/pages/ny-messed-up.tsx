@@ -158,6 +158,9 @@ const NyMessedUp = ({ data }: PageProps) => {
         comparisonData={lineChartData}
         comparitor="hospitalizedCurrently"
         perM={hospitalizedPer100k}
+        yAxisLabel={
+          hospitalizedPer100k ? "Hospitalized (per 100k)" : "Hospitalized"
+        }
       />
 
       <Box my={5}>
@@ -188,6 +191,9 @@ const NyMessedUp = ({ data }: PageProps) => {
           comparisonData={lineChartData}
           comparitor="deathsIncreaseRollingAverage"
           perM={fatalityPer100k}
+          yAxisLabel={
+            fatalityPer100k ? "Daily Fatalities (per 100k)" : "Daily Fatalities"
+          }
         />
       </Box>
 
@@ -227,16 +233,18 @@ const NyMessedUp = ({ data }: PageProps) => {
         dataKeys={sortedStatesByUnemployment}
         yAxisLabel="Unemployment Rate"
       />
-      <h5>Average Unemployment Rates ({
-        unemploymentData[0].date} - {unemploymentData[unemploymentData.length - 1].date
-        })
+      <h5>
+        Average Unemployment Rates ({unemploymentData[0].date} -{" "}
+        {unemploymentData[unemploymentData.length - 1].date})
       </h5>
       <TotalComparisonBarChart
         comparisonData={Object.keys(averageUnemploymentRates).map(code => ({
           location: code,
+          abbreviation: code,
           value: averageUnemploymentRates[code],
         }))}
         sorted
+        yAxisLabel="Average unemployment rate (%)"
       />
 
       <Box my={5}>
@@ -258,16 +266,17 @@ const NyMessedUp = ({ data }: PageProps) => {
           of 10,000 (.1%).
         </p>
         <p>
-          This data set uses the Johns Hopkins University (JHU) value for totals as
-          there are some discrepencies from state level reporting. In particular,
-          JHU counts over 7k more reported fatalities for totals than what is captured
-          by the COVID Tracking Project.
+          This data set uses the Johns Hopkins University (JHU) value for totals
+          as there are some discrepencies from state level reporting. In
+          particular, JHU counts over 7k more reported fatalities for totals
+          than what is captured by the COVID Tracking Project.
         </p>
         <p>Data last updated: {readableDate(stateData[0].date)}</p>
       </AboutThisGraph>
       <TotalComparisonBarChart
         comparisonData={totalFatalityComparison}
         sorted
+        yAxisLabel="Total fatalities (per 100k)"
       />
 
       <Box my={5}>
@@ -324,6 +333,9 @@ const NyMessedUp = ({ data }: PageProps) => {
         comparitor="estimatedCases"
         perM={casesPer100k}
         slice={-15}
+        yAxisLabel={
+          casesPer100k ? "Estimated cases (per 100k)" : "Estimated cases"
+        }
       />
       <Link to="/">Go back to the homepage</Link>
     </Layout>
