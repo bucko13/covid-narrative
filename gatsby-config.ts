@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `Choose Your COVID19 Narrative`,
-    description: `To show how true data can be selectively shared to "prove" a given narrative.`,
+    title: `Three Kinds of Lies - Choose Your COVID Narrative`,
+    description: `Data visualizations exploring different Coronavirus narratives. Show how data can be selectively shared to "prove" a given narrative.`,
     author: `bucko`,
     menu: [
       { name: "About", path: "/#" },

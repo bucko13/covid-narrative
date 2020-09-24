@@ -38,23 +38,26 @@ const Header = ({ siteTitle, menu }: HeaderProps) => {
     <header>
       <AppBar position="fixed" color="primary">
         <Toolbar>
-          <Link
-            to="/"
-            style={{
-              color: `white`,
-              textDecoration: `none`,
-              marginRight: "1rem",
-            }}
-          >
-            <Grid container alignItems="center">
-              <Grid item style={{ marginRight: '1rem' }}>
-                <Home fontSize="large" />
+          <Grid container>
+            <Link
+              to="/"
+              style={{
+                color: `white`,
+                textDecoration: `none`,
+                marginRight: "1rem",
+                minWidth: "90%",
+              }}
+            >
+              <Grid container alignItems="center">
+                <Grid item style={{ marginRight: '1rem' }}>
+                  <Home fontSize="large" />
+                </Grid>
+                <Grid item xs={10}>
+                  <h1>{siteTitle}{pageTitle.length > 1 ? ` - ${pageTitle}` : ''}</h1>
+                </Grid>
               </Grid>
-              <Grid item>
-                <h1>{siteTitle}{pageTitle.length > 1 ? ` - ${pageTitle}` : ''}</h1>
-              </Grid>
-            </Grid>
-          </Link>
+            </Link>
+          </Grid>
           <IconButton
             edge="end"
             aria-label="menu"

@@ -62,8 +62,11 @@ dfn {
   font-style: italic;
 }
 header h1 {
-  font-size: 2em;
+  font-size: 1.6em;
   margin: 0.67em 0;
+  @media only screen and (max-width: 800px) {
+    font-size: 1.2em;    
+  }
 }
 mark {
   background-color: #ff0;
