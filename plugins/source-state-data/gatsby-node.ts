@@ -4,7 +4,12 @@ import moment from 'moment';
 
 import codeToState_ from '../../src/states/codeToState.json';
 import populations_ from '../../src/states/populations.json';
-import { getStateHistoricData, getCurrentStateData, getStateUnemploymentData, getJHUStateDataSingleDay } from './api';
+import {
+  getStateHistoricData,
+  getCurrentStateData,
+  getStateUnemploymentData,
+  getJHUStateDataSingleDay
+} from './api';
 import { StateData, StateNodeData, PopulationData } from '.';
 import { getPerMPop, getPerMillionPop } from '../../src/utils/utils';
 import { states } from './constants';
@@ -45,7 +50,6 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
 
     const population = populations[name].Population
     const { death, hospitalized, positive, fips, date } = currentTotals
-
     // need to order data by date
     let sortedData = data.sort((a, b) => {
       if (a.date > b.date) return 1
@@ -110,7 +114,7 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
     })
 
     const latestTotals = (await getJHUStateDataSingleDay(date.toString()))
-                          .find(state => state.Province_State === codeToState[code.toUpperCase()]);
+      .find(state => state.Province_State === codeToState[code.toUpperCase()]);
 
     const node: StateData = {
       population,
