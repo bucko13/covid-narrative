@@ -1,534 +1,2662 @@
 {
+  "2020-10-10": {
+    "alabama": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US01",
+      "state_name": "Alabama",
+      "initial_claims": 6474,
+      "continued_claims": 22596,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "alaska": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US02",
+      "state_name": "Alaska",
+      "initial_claims": 6166,
+      "continued_claims": 19885,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "arizona": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US04",
+      "state_name": "Arizona",
+      "initial_claims": 10004,
+      "continued_claims": 147979,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "arkansas": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US05",
+      "state_name": "Arkansas",
+      "initial_claims": 5065,
+      "continued_claims": 27383,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "california": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US06",
+      "state_name": "California",
+      "initial_claims": 226179,
+      "continued_claims": 2802145,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "colorado": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US08",
+      "state_name": "Colorado",
+      "initial_claims": 6216,
+      "continued_claims": 125369,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "connecticut": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US09",
+      "state_name": "Connecticut",
+      "initial_claims": 4740,
+      "continued_claims": 119622,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "delaware": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US10",
+      "state_name": "Delaware",
+      "initial_claims": 1907,
+      "continued_claims": 22889,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "district-of-columbia": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US11",
+      "state_name": "District of Columbia",
+      "initial_claims": 1804,
+      "continued_claims": 47575,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "florida": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US12",
+      "state_name": "Florida",
+      "initial_claims": 44795,
+      "continued_claims": 250710,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "georgia": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US13",
+      "state_name": "Georgia",
+      "initial_claims": 53400,
+      "continued_claims": 410739,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "hawaii": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US15",
+      "state_name": "Hawaii",
+      "initial_claims": 5128,
+      "continued_claims": 93251,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "idaho": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US16",
+      "state_name": "Idaho",
+      "initial_claims": 3288,
+      "continued_claims": 7466,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "illinois": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US17",
+      "state_name": "Illinois",
+      "initial_claims": 46072,
+      "continued_claims": 428991,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "indiana": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US18",
+      "state_name": "Indiana",
+      "initial_claims": 28864,
+      "continued_claims": 115108,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "iowa": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US19",
+      "state_name": "Iowa",
+      "initial_claims": 4644,
+      "continued_claims": 46577,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "kansas": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US20",
+      "state_name": "Kansas",
+      "initial_claims": 15083,
+      "continued_claims": 52033,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "kentucky": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US21",
+      "state_name": "Kentucky",
+      "initial_claims": 5769,
+      "continued_claims": 79459,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "louisiana": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US22",
+      "state_name": "Louisiana",
+      "initial_claims": 12630,
+      "continued_claims": 155586,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "maine": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US23",
+      "state_name": "Maine",
+      "initial_claims": 1444,
+      "continued_claims": 18732,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "maryland": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US24",
+      "state_name": "Maryland",
+      "initial_claims": 11634,
+      "continued_claims": 103990,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "massachusetts": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US25",
+      "state_name": "Massachusetts",
+      "initial_claims": 39063,
+      "continued_claims": 261763,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "michigan": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US26",
+      "state_name": "Michigan",
+      "initial_claims": 12906,
+      "continued_claims": 270553,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "minnesota": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US27",
+      "state_name": "Minnesota",
+      "initial_claims": 9408,
+      "continued_claims": 140236,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "mississippi": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US28",
+      "state_name": "Mississippi",
+      "initial_claims": 3197,
+      "continued_claims": 51805,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "missouri": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US29",
+      "state_name": "Missouri",
+      "initial_claims": 9542,
+      "continued_claims": 57544,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "montana": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US30",
+      "state_name": "Montana",
+      "initial_claims": 2721,
+      "continued_claims": 16982,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "nebraska": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US31",
+      "state_name": "Nebraska",
+      "initial_claims": 3134,
+      "continued_claims": 15272,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "nevada": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US32",
+      "state_name": "Nevada",
+      "initial_claims": 10886,
+      "continued_claims": 147266,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "new-hampshire": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US33",
+      "state_name": "New Hampshire",
+      "initial_claims": 2136,
+      "continued_claims": 29901,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "new-jersey": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US34",
+      "state_name": "New Jersey",
+      "initial_claims": 28055,
+      "continued_claims": 247071,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "new-mexico": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US35",
+      "state_name": "New Mexico",
+      "initial_claims": 6394,
+      "continued_claims": 62826,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "new-york": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US36",
+      "state_name": "New York",
+      "initial_claims": 68670,
+      "continued_claims": 724499,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "north-carolina": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US37",
+      "state_name": "North Carolina",
+      "initial_claims": 19080,
+      "continued_claims": 101302,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "north-dakota": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US38",
+      "state_name": "North Dakota",
+      "initial_claims": 1139,
+      "continued_claims": 10727,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "ohio": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US39",
+      "state_name": "Ohio",
+      "initial_claims": 19211,
+      "continued_claims": 198797,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "oklahoma": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US40",
+      "state_name": "Oklahoma",
+      "initial_claims": 4840,
+      "continued_claims": 70832,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "oregon": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US41",
+      "state_name": "Oregon",
+      "initial_claims": 4152,
+      "continued_claims": 125601,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "pennsylvania": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US42",
+      "state_name": "Pennsylvania",
+      "initial_claims": 19515,
+      "continued_claims": 401195,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "rhode-island": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US44",
+      "state_name": "Rhode Island",
+      "initial_claims": 2944,
+      "continued_claims": 22234,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "south-carolina": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US45",
+      "state_name": "South Carolina",
+      "initial_claims": 4884,
+      "continued_claims": 66104,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "south-dakota": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US46",
+      "state_name": "South Dakota",
+      "initial_claims": 382,
+      "continued_claims": 5389,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "tennessee": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US47",
+      "state_name": "Tennessee",
+      "initial_claims": 10145,
+      "continued_claims": 95188,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "texas": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US48",
+      "state_name": "Texas",
+      "initial_claims": 43435,
+      "continued_claims": 721223,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "utah": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US49",
+      "state_name": "Utah",
+      "initial_claims": 2744,
+      "continued_claims": 21235,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "vermont": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US50",
+      "state_name": "Vermont",
+      "initial_claims": 505,
+      "continued_claims": 16011,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "virginia": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US51",
+      "state_name": "Virginia",
+      "initial_claims": 12005,
+      "continued_claims": 180478,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "washington": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US53",
+      "state_name": "Washington",
+      "initial_claims": 24611,
+      "continued_claims": 239346,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "west-virginia": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US54",
+      "state_name": "West Virginia",
+      "initial_claims": 1971,
+      "continued_claims": 33452,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "wisconsin": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US55",
+      "state_name": "Wisconsin",
+      "initial_claims": 14830,
+      "continued_claims": 109792,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "wyoming": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US56",
+      "state_name": "Wyoming",
+      "initial_claims": 843,
+      "continued_claims": 6763,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "puerto-rico": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US72",
+      "state_name": "Puerto Rico",
+      "initial_claims": 1226,
+      "continued_claims": 79676,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "virgin-islands": {
+      "week_ended": "2020-10-10",
+      "reflecting_week_end": "2020-10-03",
+      "fips_code": "04000US78",
+      "state_name": "Virgin Islands",
+      "initial_claims": 5,
+      "continued_claims": 2440,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    }
+  },
+  "2020-10-03": {
+    "alabama": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US01",
+      "state_name": "Alabama",
+      "initial_claims": 7732,
+      "continued_claims": 30716,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "alaska": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US02",
+      "state_name": "Alaska",
+      "initial_claims": 3719,
+      "continued_claims": 21131,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "arizona": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US04",
+      "state_name": "Arizona",
+      "initial_claims": 7966,
+      "continued_claims": 168948,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "arkansas": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US05",
+      "state_name": "Arkansas",
+      "initial_claims": 5484,
+      "continued_claims": 36883,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "california": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US06",
+      "state_name": "California",
+      "initial_claims": 226179,
+      "continued_claims": 2802145,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "colorado": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US08",
+      "state_name": "Colorado",
+      "initial_claims": 5919,
+      "continued_claims": 127012,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "connecticut": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US09",
+      "state_name": "Connecticut",
+      "initial_claims": 4617,
+      "continued_claims": 137325,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "delaware": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US10",
+      "state_name": "Delaware",
+      "initial_claims": 1776,
+      "continued_claims": 24183,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "district-of-columbia": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US11",
+      "state_name": "District of Columbia",
+      "initial_claims": 1649,
+      "continued_claims": 53110,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "florida": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US12",
+      "state_name": "Florida",
+      "initial_claims": 42306,
+      "continued_claims": 337344,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "georgia": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US13",
+      "state_name": "Georgia",
+      "initial_claims": 44874,
+      "continued_claims": 445039,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "hawaii": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US15",
+      "state_name": "Hawaii",
+      "initial_claims": 5083,
+      "continued_claims": 111228,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "idaho": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US16",
+      "state_name": "Idaho",
+      "initial_claims": 2955,
+      "continued_claims": 9144,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "illinois": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US17",
+      "state_name": "Illinois",
+      "initial_claims": 36267,
+      "continued_claims": 483981,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "indiana": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US18",
+      "state_name": "Indiana",
+      "initial_claims": 10076,
+      "continued_claims": 129538,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "iowa": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US19",
+      "state_name": "Iowa",
+      "initial_claims": 4288,
+      "continued_claims": 51560,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "kansas": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US20",
+      "state_name": "Kansas",
+      "initial_claims": 14219,
+      "continued_claims": 47744,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "kentucky": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US21",
+      "state_name": "Kentucky",
+      "initial_claims": 5687,
+      "continued_claims": 94463,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "louisiana": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US22",
+      "state_name": "Louisiana",
+      "initial_claims": 13461,
+      "continued_claims": 195223,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "maine": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US23",
+      "state_name": "Maine",
+      "initial_claims": 1702,
+      "continued_claims": 22893,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "maryland": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US24",
+      "state_name": "Maryland",
+      "initial_claims": 10994,
+      "continued_claims": 149522,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "massachusetts": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US25",
+      "state_name": "Massachusetts",
+      "initial_claims": 29481,
+      "continued_claims": 306247,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "michigan": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US26",
+      "state_name": "Michigan",
+      "initial_claims": 17699,
+      "continued_claims": 387844,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "minnesota": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US27",
+      "state_name": "Minnesota",
+      "initial_claims": 9697,
+      "continued_claims": 152536,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "mississippi": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US28",
+      "state_name": "Mississippi",
+      "initial_claims": 4032,
+      "continued_claims": 68735,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "missouri": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US29",
+      "state_name": "Missouri",
+      "initial_claims": 8945,
+      "continued_claims": 70470,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "montana": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US30",
+      "state_name": "Montana",
+      "initial_claims": 3472,
+      "continued_claims": 19354,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "nebraska": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US31",
+      "state_name": "Nebraska",
+      "initial_claims": 3259,
+      "continued_claims": 19027,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "nevada": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US32",
+      "state_name": "Nevada",
+      "initial_claims": 7941,
+      "continued_claims": 173629,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "new-hampshire": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US33",
+      "state_name": "New Hampshire",
+      "initial_claims": 2083,
+      "continued_claims": 32751,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "new-jersey": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US34",
+      "state_name": "New Jersey",
+      "initial_claims": 23680,
+      "continued_claims": 282981,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "new-mexico": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US35",
+      "state_name": "New Mexico",
+      "initial_claims": 3484,
+      "continued_claims": 70964,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "new-york": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US36",
+      "state_name": "New York",
+      "initial_claims": 64156,
+      "continued_claims": 944007,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "north-carolina": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US37",
+      "state_name": "North Carolina",
+      "initial_claims": 15534,
+      "continued_claims": 127447,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "north-dakota": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US38",
+      "state_name": "North Dakota",
+      "initial_claims": 841,
+      "continued_claims": 10275,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "ohio": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US39",
+      "state_name": "Ohio",
+      "initial_claims": 18653,
+      "continued_claims": 301349,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "oklahoma": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US40",
+      "state_name": "Oklahoma",
+      "initial_claims": 5780,
+      "continued_claims": 88127,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "oregon": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US41",
+      "state_name": "Oregon",
+      "initial_claims": 4408,
+      "continued_claims": 127675,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "pennsylvania": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US42",
+      "state_name": "Pennsylvania",
+      "initial_claims": 19844,
+      "continued_claims": 447940,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "rhode-island": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US44",
+      "state_name": "Rhode Island",
+      "initial_claims": 2801,
+      "continued_claims": 26879,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "south-carolina": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US45",
+      "state_name": "South Carolina",
+      "initial_claims": 4908,
+      "continued_claims": 75968,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "south-dakota": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US46",
+      "state_name": "South Dakota",
+      "initial_claims": 444,
+      "continued_claims": 5078,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "tennessee": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US47",
+      "state_name": "Tennessee",
+      "initial_claims": 10077,
+      "continued_claims": 139780,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "texas": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US48",
+      "state_name": "Texas",
+      "initial_claims": 42338,
+      "continued_claims": 803025,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "utah": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US49",
+      "state_name": "Utah",
+      "initial_claims": 2575,
+      "continued_claims": 23562,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "vermont": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US50",
+      "state_name": "Vermont",
+      "initial_claims": 606,
+      "continued_claims": 17676,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "virginia": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US51",
+      "state_name": "Virginia",
+      "initial_claims": 10843,
+      "continued_claims": 160764,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "washington": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US53",
+      "state_name": "Washington",
+      "initial_claims": 18528,
+      "continued_claims": 208017,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "west-virginia": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US54",
+      "state_name": "West Virginia",
+      "initial_claims": 1958,
+      "continued_claims": 35220,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "wisconsin": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US55",
+      "state_name": "Wisconsin",
+      "initial_claims": 11916,
+      "continued_claims": 112613,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "wyoming": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US56",
+      "state_name": "Wyoming",
+      "initial_claims": 759,
+      "continued_claims": 6823,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "puerto-rico": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US72",
+      "state_name": "Puerto Rico",
+      "initial_claims": 1265,
+      "continued_claims": 90705,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    },
+    "virgin-islands": {
+      "week_ended": "2020-10-03",
+      "reflecting_week_end": "2020-09-26",
+      "fips_code": "04000US78",
+      "state_name": "Virgin Islands",
+      "initial_claims": 255,
+      "continued_claims": 3190,
+      "covered_employment": 0,
+      "insured_unemployment_rate": 0
+    }
+  },
+  "2020-09-26": {
+    "alabama": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US01",
+      "state_name": "Alabama",
+      "initial_claims": 8805,
+      "continued_claims": 34997,
+      "covered_employment": 1935262,
+      "insured_unemployment_rate": 1.81
+    },
+    "alaska": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US02",
+      "state_name": "Alaska",
+      "initial_claims": 3600,
+      "continued_claims": 22532,
+      "covered_employment": 308691,
+      "insured_unemployment_rate": 7.3
+    },
+    "arizona": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US04",
+      "state_name": "Arizona",
+      "initial_claims": 8208,
+      "continued_claims": 175837,
+      "covered_employment": 2905807,
+      "insured_unemployment_rate": 6.05
+    },
+    "arkansas": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US05",
+      "state_name": "Arkansas",
+      "initial_claims": 6137,
+      "continued_claims": 37975,
+      "covered_employment": 1197760,
+      "insured_unemployment_rate": 3.17
+    },
+    "california": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US06",
+      "state_name": "California",
+      "initial_claims": 226179,
+      "continued_claims": 2802145,
+      "covered_employment": 17396834,
+      "insured_unemployment_rate": 16.11
+    },
+    "colorado": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US08",
+      "state_name": "Colorado",
+      "initial_claims": 4862,
+      "continued_claims": 143856,
+      "covered_employment": 2681376,
+      "insured_unemployment_rate": 5.37
+    },
+    "connecticut": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US09",
+      "state_name": "Connecticut",
+      "initial_claims": 5015,
+      "continued_claims": 161782,
+      "covered_employment": 1652033,
+      "insured_unemployment_rate": 9.79
+    },
+    "delaware": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US10",
+      "state_name": "Delaware",
+      "initial_claims": 1815,
+      "continued_claims": 26824,
+      "covered_employment": 446976,
+      "insured_unemployment_rate": 6
+    },
+    "district-of-columbia": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US11",
+      "state_name": "District of Columbia",
+      "initial_claims": 1889,
+      "continued_claims": 60168,
+      "covered_employment": 580956,
+      "insured_unemployment_rate": 10.36
+    },
+    "florida": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US12",
+      "state_name": "Florida",
+      "initial_claims": 32373,
+      "continued_claims": 373194,
+      "covered_employment": 8732627,
+      "insured_unemployment_rate": 4.27
+    },
+    "georgia": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US13",
+      "state_name": "Georgia",
+      "initial_claims": 43526,
+      "continued_claims": 478732,
+      "covered_employment": 4406223,
+      "insured_unemployment_rate": 10.86
+    },
+    "hawaii": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US15",
+      "state_name": "Hawaii",
+      "initial_claims": 5682,
+      "continued_claims": 124595,
+      "covered_employment": 620739,
+      "insured_unemployment_rate": 20.07
+    },
+    "idaho": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US16",
+      "state_name": "Idaho",
+      "initial_claims": 2995,
+      "continued_claims": 9895,
+      "covered_employment": 744799,
+      "insured_unemployment_rate": 1.33
+    },
+    "illinois": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US17",
+      "state_name": "Illinois",
+      "initial_claims": 29390,
+      "continued_claims": 502314,
+      "covered_employment": 5917347,
+      "insured_unemployment_rate": 8.49
+    },
+    "indiana": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US18",
+      "state_name": "Indiana",
+      "initial_claims": 10209,
+      "continued_claims": 150463,
+      "covered_employment": 3046268,
+      "insured_unemployment_rate": 4.94
+    },
+    "iowa": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US19",
+      "state_name": "Iowa",
+      "initial_claims": 4616,
+      "continued_claims": 58419,
+      "covered_employment": 1532562,
+      "insured_unemployment_rate": 3.81
+    },
+    "kansas": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US20",
+      "state_name": "Kansas",
+      "initial_claims": 17531,
+      "continued_claims": 52779,
+      "covered_employment": 1367656,
+      "insured_unemployment_rate": 3.86
+    },
+    "kentucky": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US21",
+      "state_name": "Kentucky",
+      "initial_claims": 7520,
+      "continued_claims": 101233,
+      "covered_employment": 1896673,
+      "insured_unemployment_rate": 5.34
+    },
+    "louisiana": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US22",
+      "state_name": "Louisiana",
+      "initial_claims": 16296,
+      "continued_claims": 214860,
+      "covered_employment": 1889866,
+      "insured_unemployment_rate": 11.37
+    },
+    "maine": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US23",
+      "state_name": "Maine",
+      "initial_claims": 1584,
+      "continued_claims": 24701,
+      "covered_employment": 607641,
+      "insured_unemployment_rate": 4.07
+    },
+    "maryland": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US24",
+      "state_name": "Maryland",
+      "initial_claims": 9280,
+      "continued_claims": 169032,
+      "covered_employment": 2551522,
+      "insured_unemployment_rate": 6.62
+    },
+    "massachusetts": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US25",
+      "state_name": "Massachusetts",
+      "initial_claims": 25460,
+      "continued_claims": 327621,
+      "covered_employment": 3578753,
+      "insured_unemployment_rate": 9.15
+    },
+    "michigan": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US26",
+      "state_name": "Michigan",
+      "initial_claims": 19760,
+      "continued_claims": 440645,
+      "covered_employment": 4305848,
+      "insured_unemployment_rate": 10.23
+    },
+    "minnesota": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US27",
+      "state_name": "Minnesota",
+      "initial_claims": 9339,
+      "continued_claims": 174779,
+      "covered_employment": 2868184,
+      "insured_unemployment_rate": 6.09
+    },
+    "mississippi": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US28",
+      "state_name": "Mississippi",
+      "initial_claims": 4653,
+      "continued_claims": 75175,
+      "covered_employment": 1110126,
+      "insured_unemployment_rate": 6.77
+    },
+    "missouri": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US29",
+      "state_name": "Missouri",
+      "initial_claims": 7353,
+      "continued_claims": 71313,
+      "covered_employment": 2744087,
+      "insured_unemployment_rate": 2.6
+    },
+    "montana": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US30",
+      "state_name": "Montana",
+      "initial_claims": 3253,
+      "continued_claims": 20195,
+      "covered_employment": 457148,
+      "insured_unemployment_rate": 4.42
+    },
+    "nebraska": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US31",
+      "state_name": "Nebraska",
+      "initial_claims": 3001,
+      "continued_claims": 19895,
+      "covered_employment": 964840,
+      "insured_unemployment_rate": 2.06
+    },
+    "nevada": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US32",
+      "state_name": "Nevada",
+      "initial_claims": 7525,
+      "continued_claims": 190613,
+      "covered_employment": 1388109,
+      "insured_unemployment_rate": 13.73
+    },
+    "new-hampshire": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US33",
+      "state_name": "New Hampshire",
+      "initial_claims": 2193,
+      "continued_claims": 35128,
+      "covered_employment": 657391,
+      "insured_unemployment_rate": 5.34
+    },
+    "new-jersey": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US34",
+      "state_name": "New Jersey",
+      "initial_claims": 27184,
+      "continued_claims": 322414,
+      "covered_employment": 4034480,
+      "insured_unemployment_rate": 7.99
+    },
+    "new-mexico": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US35",
+      "state_name": "New Mexico",
+      "initial_claims": 3279,
+      "continued_claims": 77556,
+      "covered_employment": 806473,
+      "insured_unemployment_rate": 9.62
+    },
+    "new-york": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US36",
+      "state_name": "New York",
+      "initial_claims": 64678,
+      "continued_claims": 1046997,
+      "covered_employment": 9429101,
+      "insured_unemployment_rate": 11.1
+    },
+    "north-carolina": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US37",
+      "state_name": "North Carolina",
+      "initial_claims": 12627,
+      "continued_claims": 134154,
+      "covered_employment": 4423164,
+      "insured_unemployment_rate": 3.03
+    },
+    "north-dakota": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US38",
+      "state_name": "North Dakota",
+      "initial_claims": 856,
+      "continued_claims": 11388,
+      "covered_employment": 413529,
+      "insured_unemployment_rate": 2.75
+    },
+    "ohio": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US39",
+      "state_name": "Ohio",
+      "initial_claims": 18002,
+      "continued_claims": 303935,
+      "covered_employment": 5352988,
+      "insured_unemployment_rate": 5.68
+    },
+    "oklahoma": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US40",
+      "state_name": "Oklahoma",
+      "initial_claims": 5258,
+      "continued_claims": 97912,
+      "covered_employment": 1570740,
+      "insured_unemployment_rate": 6.23
+    },
+    "oregon": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US41",
+      "state_name": "Oregon",
+      "initial_claims": 5738,
+      "continued_claims": 152643,
+      "covered_employment": 1921964,
+      "insured_unemployment_rate": 7.94
+    },
+    "pennsylvania": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US42",
+      "state_name": "Pennsylvania",
+      "initial_claims": 22955,
+      "continued_claims": 482699,
+      "covered_employment": 5827122,
+      "insured_unemployment_rate": 8.28
+    },
+    "rhode-island": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US44",
+      "state_name": "Rhode Island",
+      "initial_claims": 3098,
+      "continued_claims": 31964,
+      "covered_employment": 474428,
+      "insured_unemployment_rate": 6.74
+    },
+    "south-carolina": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US45",
+      "state_name": "South Carolina",
+      "initial_claims": 4905,
+      "continued_claims": 85052,
+      "covered_employment": 2093284,
+      "insured_unemployment_rate": 4.06
+    },
+    "south-dakota": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US46",
+      "state_name": "South Dakota",
+      "initial_claims": 267,
+      "continued_claims": 6167,
+      "covered_employment": 418749,
+      "insured_unemployment_rate": 1.47
+    },
+    "tennessee": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US47",
+      "state_name": "Tennessee",
+      "initial_claims": 10311,
+      "continued_claims": 151690,
+      "covered_employment": 3310827,
+      "insured_unemployment_rate": 4.58
+    },
+    "texas": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US48",
+      "state_name": "Texas",
+      "initial_claims": 41351,
+      "continued_claims": 902269,
+      "covered_employment": 12372188,
+      "insured_unemployment_rate": 7.29
+    },
+    "utah": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US49",
+      "state_name": "Utah",
+      "initial_claims": 2460,
+      "continued_claims": 25803,
+      "covered_employment": 1483888,
+      "insured_unemployment_rate": 1.74
+    },
+    "vermont": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US50",
+      "state_name": "Vermont",
+      "initial_claims": 601,
+      "continued_claims": 20616,
+      "covered_employment": 303295,
+      "insured_unemployment_rate": 6.8
+    },
+    "virginia": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US51",
+      "state_name": "Virginia",
+      "initial_claims": 9377,
+      "continued_claims": 173717,
+      "covered_employment": 3751738,
+      "insured_unemployment_rate": 4.63
+    },
+    "washington": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US53",
+      "state_name": "Washington",
+      "initial_claims": 21002,
+      "continued_claims": 236928,
+      "covered_employment": 3383128,
+      "insured_unemployment_rate": 7
+    },
+    "west-virginia": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US54",
+      "state_name": "West Virginia",
+      "initial_claims": 1903,
+      "continued_claims": 40892,
+      "covered_employment": 664212,
+      "insured_unemployment_rate": 6.16
+    },
+    "wisconsin": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US55",
+      "state_name": "Wisconsin",
+      "initial_claims": 11185,
+      "continued_claims": 119104,
+      "covered_employment": 2855007,
+      "insured_unemployment_rate": 4.17
+    },
+    "wyoming": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US56",
+      "state_name": "Wyoming",
+      "initial_claims": 801,
+      "continued_claims": 7329,
+      "covered_employment": 269604,
+      "insured_unemployment_rate": 2.72
+    },
+    "puerto-rico": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US72",
+      "state_name": "Puerto Rico",
+      "initial_claims": 763,
+      "continued_claims": 105030,
+      "covered_employment": 859886,
+      "insured_unemployment_rate": 12.21
+    },
+    "virgin-islands": {
+      "week_ended": "2020-09-26",
+      "reflecting_week_end": "2020-09-19",
+      "fips_code": "04000US78",
+      "state_name": "Virgin Islands",
+      "initial_claims": 346,
+      "continued_claims": 4440,
+      "covered_employment": 36677,
+      "insured_unemployment_rate": 12.11
+    }
+  },
+  "2020-09-19": {
+    "alabama": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US01",
+      "state_name": "Alabama",
+      "initial_claims": 8679,
+      "continued_claims": 37431,
+      "covered_employment": 1935262,
+      "insured_unemployment_rate": 1.93
+    },
+    "alaska": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US02",
+      "state_name": "Alaska",
+      "initial_claims": 3631,
+      "continued_claims": 24089,
+      "covered_employment": 308691,
+      "insured_unemployment_rate": 7.8
+    },
+    "arizona": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US04",
+      "state_name": "Arizona",
+      "initial_claims": 9065,
+      "continued_claims": 190507,
+      "covered_employment": 2905807,
+      "insured_unemployment_rate": 6.56
+    },
+    "arkansas": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US05",
+      "state_name": "Arkansas",
+      "initial_claims": 5778,
+      "continued_claims": 40856,
+      "covered_employment": 1197760,
+      "insured_unemployment_rate": 3.41
+    },
+    "california": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US06",
+      "state_name": "California",
+      "initial_claims": 226179,
+      "continued_claims": 2802145,
+      "covered_employment": 17396834,
+      "insured_unemployment_rate": 16.11
+    },
+    "colorado": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US08",
+      "state_name": "Colorado",
+      "initial_claims": 5115,
+      "continued_claims": 151250,
+      "covered_employment": 2681376,
+      "insured_unemployment_rate": 5.64
+    },
+    "connecticut": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US09",
+      "state_name": "Connecticut",
+      "initial_claims": 5141,
+      "continued_claims": 175902,
+      "covered_employment": 1652033,
+      "insured_unemployment_rate": 10.65
+    },
+    "delaware": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US10",
+      "state_name": "Delaware",
+      "initial_claims": 1775,
+      "continued_claims": 28983,
+      "covered_employment": 446976,
+      "insured_unemployment_rate": 6.48
+    },
+    "district-of-columbia": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US11",
+      "state_name": "District of Columbia",
+      "initial_claims": 1549,
+      "continued_claims": 64903,
+      "covered_employment": 580956,
+      "insured_unemployment_rate": 11.17
+    },
+    "florida": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US12",
+      "state_name": "Florida",
+      "initial_claims": 39028,
+      "continued_claims": 374181,
+      "covered_employment": 8732627,
+      "insured_unemployment_rate": 4.28
+    },
+    "georgia": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US13",
+      "state_name": "Georgia",
+      "initial_claims": 49421,
+      "continued_claims": 536886,
+      "covered_employment": 4406223,
+      "insured_unemployment_rate": 12.18
+    },
+    "hawaii": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US15",
+      "state_name": "Hawaii",
+      "initial_claims": 6757,
+      "continued_claims": 132612,
+      "covered_employment": 620739,
+      "insured_unemployment_rate": 21.36
+    },
+    "idaho": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US16",
+      "state_name": "Idaho",
+      "initial_claims": 3437,
+      "continued_claims": 10708,
+      "covered_employment": 744799,
+      "insured_unemployment_rate": 1.44
+    },
+    "illinois": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US17",
+      "state_name": "Illinois",
+      "initial_claims": 25976,
+      "continued_claims": 536818,
+      "covered_employment": 5917347,
+      "insured_unemployment_rate": 9.07
+    },
+    "indiana": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US18",
+      "state_name": "Indiana",
+      "initial_claims": 11702,
+      "continued_claims": 161143,
+      "covered_employment": 3046268,
+      "insured_unemployment_rate": 5.29
+    },
+    "iowa": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US19",
+      "state_name": "Iowa",
+      "initial_claims": 6117,
+      "continued_claims": 62938,
+      "covered_employment": 1532562,
+      "insured_unemployment_rate": 4.11
+    },
+    "kansas": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US20",
+      "state_name": "Kansas",
+      "initial_claims": 17474,
+      "continued_claims": 52959,
+      "covered_employment": 1367656,
+      "insured_unemployment_rate": 3.87
+    },
+    "kentucky": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US21",
+      "state_name": "Kentucky",
+      "initial_claims": 8413,
+      "continued_claims": 113140,
+      "covered_employment": 1896673,
+      "insured_unemployment_rate": 5.97
+    },
+    "louisiana": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US22",
+      "state_name": "Louisiana",
+      "initial_claims": 14842,
+      "continued_claims": 238724,
+      "covered_employment": 1889866,
+      "insured_unemployment_rate": 12.63
+    },
+    "maine": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US23",
+      "state_name": "Maine",
+      "initial_claims": 1431,
+      "continued_claims": 28071,
+      "covered_employment": 607641,
+      "insured_unemployment_rate": 4.62
+    },
+    "maryland": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US24",
+      "state_name": "Maryland",
+      "initial_claims": 5661,
+      "continued_claims": 161421,
+      "covered_employment": 2551522,
+      "insured_unemployment_rate": 6.33
+    },
+    "massachusetts": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US25",
+      "state_name": "Massachusetts",
+      "initial_claims": 23574,
+      "continued_claims": 361495,
+      "covered_employment": 3578753,
+      "insured_unemployment_rate": 10.1
+    },
+    "michigan": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US26",
+      "state_name": "Michigan",
+      "initial_claims": 17402,
+      "continued_claims": 441816,
+      "covered_employment": 4305848,
+      "insured_unemployment_rate": 10.26
+    },
+    "minnesota": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US27",
+      "state_name": "Minnesota",
+      "initial_claims": 10901,
+      "continued_claims": 192217,
+      "covered_employment": 2868184,
+      "insured_unemployment_rate": 6.7
+    },
+    "mississippi": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US28",
+      "state_name": "Mississippi",
+      "initial_claims": 5180,
+      "continued_claims": 84253,
+      "covered_employment": 1110126,
+      "insured_unemployment_rate": 7.59
+    },
+    "missouri": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US29",
+      "state_name": "Missouri",
+      "initial_claims": 8153,
+      "continued_claims": 77725,
+      "covered_employment": 2744087,
+      "insured_unemployment_rate": 2.83
+    },
+    "montana": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US30",
+      "state_name": "Montana",
+      "initial_claims": 3221,
+      "continued_claims": 22380,
+      "covered_employment": 457148,
+      "insured_unemployment_rate": 4.9
+    },
+    "nebraska": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US31",
+      "state_name": "Nebraska",
+      "initial_claims": 3132,
+      "continued_claims": 21588,
+      "covered_employment": 964840,
+      "insured_unemployment_rate": 2.24
+    },
+    "nevada": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US32",
+      "state_name": "Nevada",
+      "initial_claims": 8198,
+      "continued_claims": 203408,
+      "covered_employment": 1388109,
+      "insured_unemployment_rate": 14.65
+    },
+    "new-hampshire": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US33",
+      "state_name": "New Hampshire",
+      "initial_claims": 2118,
+      "continued_claims": 37241,
+      "covered_employment": 657391,
+      "insured_unemployment_rate": 5.66
+    },
+    "new-jersey": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US34",
+      "state_name": "New Jersey",
+      "initial_claims": 24680,
+      "continued_claims": 353590,
+      "covered_employment": 4034480,
+      "insured_unemployment_rate": 8.76
+    },
+    "new-mexico": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US35",
+      "state_name": "New Mexico",
+      "initial_claims": 3637,
+      "continued_claims": 82386,
+      "covered_employment": 806473,
+      "insured_unemployment_rate": 10.22
+    },
+    "new-york": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US36",
+      "state_name": "New York",
+      "initial_claims": 69790,
+      "continued_claims": 1294494,
+      "covered_employment": 9429101,
+      "insured_unemployment_rate": 13.73
+    },
+    "north-carolina": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US37",
+      "state_name": "North Carolina",
+      "initial_claims": 13406,
+      "continued_claims": 145078,
+      "covered_employment": 4423164,
+      "insured_unemployment_rate": 3.28
+    },
+    "north-dakota": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US38",
+      "state_name": "North Dakota",
+      "initial_claims": 792,
+      "continued_claims": 12120,
+      "covered_employment": 413529,
+      "insured_unemployment_rate": 2.93
+    },
+    "ohio": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US39",
+      "state_name": "Ohio",
+      "initial_claims": 17618,
+      "continued_claims": 323572,
+      "covered_employment": 5352988,
+      "insured_unemployment_rate": 6.04
+    },
+    "oklahoma": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US40",
+      "state_name": "Oklahoma",
+      "initial_claims": 5434,
+      "continued_claims": 104908,
+      "covered_employment": 1570740,
+      "insured_unemployment_rate": 6.68
+    },
+    "oregon": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US41",
+      "state_name": "Oregon",
+      "initial_claims": 8055,
+      "continued_claims": 154948,
+      "covered_employment": 1921964,
+      "insured_unemployment_rate": 8.06
+    },
+    "pennsylvania": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US42",
+      "state_name": "Pennsylvania",
+      "initial_claims": 22762,
+      "continued_claims": 541280,
+      "covered_employment": 5827122,
+      "insured_unemployment_rate": 9.29
+    },
+    "rhode-island": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US44",
+      "state_name": "Rhode Island",
+      "initial_claims": 2830,
+      "continued_claims": 38774,
+      "covered_employment": 474428,
+      "insured_unemployment_rate": 8.17
+    },
+    "south-carolina": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US45",
+      "state_name": "South Carolina",
+      "initial_claims": 4906,
+      "continued_claims": 94304,
+      "covered_employment": 2093284,
+      "insured_unemployment_rate": 4.51
+    },
+    "south-dakota": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US46",
+      "state_name": "South Dakota",
+      "initial_claims": 551,
+      "continued_claims": 6950,
+      "covered_employment": 418749,
+      "insured_unemployment_rate": 1.66
+    },
+    "tennessee": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US47",
+      "state_name": "Tennessee",
+      "initial_claims": 11793,
+      "continued_claims": 167778,
+      "covered_employment": 3310827,
+      "insured_unemployment_rate": 5.07
+    },
+    "texas": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US48",
+      "state_name": "Texas",
+      "initial_claims": 48426,
+      "continued_claims": 953168,
+      "covered_employment": 12372188,
+      "insured_unemployment_rate": 7.7
+    },
+    "utah": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US49",
+      "state_name": "Utah",
+      "initial_claims": 2545,
+      "continued_claims": 28362,
+      "covered_employment": 1483888,
+      "insured_unemployment_rate": 1.91
+    },
+    "vermont": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US50",
+      "state_name": "Vermont",
+      "initial_claims": 644,
+      "continued_claims": 22541,
+      "covered_employment": 303295,
+      "insured_unemployment_rate": 7.43
+    },
+    "virginia": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US51",
+      "state_name": "Virginia",
+      "initial_claims": 10582,
+      "continued_claims": 188195,
+      "covered_employment": 3751738,
+      "insured_unemployment_rate": 5.02
+    },
+    "washington": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US53",
+      "state_name": "Washington",
+      "initial_claims": 23105,
+      "continued_claims": 254002,
+      "covered_employment": 3383128,
+      "insured_unemployment_rate": 7.51
+    },
+    "west-virginia": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US54",
+      "state_name": "West Virginia",
+      "initial_claims": 2224,
+      "continued_claims": 45429,
+      "covered_employment": 664212,
+      "insured_unemployment_rate": 6.84
+    },
+    "wisconsin": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US55",
+      "state_name": "Wisconsin",
+      "initial_claims": 12178,
+      "continued_claims": 128663,
+      "covered_employment": 2855007,
+      "insured_unemployment_rate": 4.51
+    },
+    "wyoming": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US56",
+      "state_name": "Wyoming",
+      "initial_claims": 746,
+      "continued_claims": 7860,
+      "covered_employment": 269604,
+      "insured_unemployment_rate": 2.92
+    },
+    "puerto-rico": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US72",
+      "state_name": "Puerto Rico",
+      "initial_claims": 1149,
+      "continued_claims": 110490,
+      "covered_employment": 859886,
+      "insured_unemployment_rate": 12.85
+    },
+    "virgin-islands": {
+      "week_ended": "2020-09-19",
+      "reflecting_week_end": "2020-09-12",
+      "fips_code": "04000US78",
+      "state_name": "Virgin Islands",
+      "initial_claims": 309,
+      "continued_claims": 4358,
+      "covered_employment": 36677,
+      "insured_unemployment_rate": 11.88
+    }
+  },
   "2020-09-12": {
     "alabama": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US01",
       "state_name": "Alabama",
-      "initial_claims": 8351,
-      "continued_claims": 33489,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 8848,
+      "continued_claims": 40198,
+      "covered_employment": 1935262,
+      "insured_unemployment_rate": 2.08
     },
     "alaska": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US02",
       "state_name": "Alaska",
-      "initial_claims": 3889,
-      "continued_claims": 25281,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 3593,
+      "continued_claims": 25762,
+      "covered_employment": 308691,
+      "insured_unemployment_rate": 8.35
     },
     "arizona": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US04",
       "state_name": "Arizona",
-      "initial_claims": 12756,
-      "continued_claims": 188343,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 9979,
+      "continued_claims": 194164,
+      "covered_employment": 2905807,
+      "insured_unemployment_rate": 6.68
     },
     "arkansas": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US05",
       "state_name": "Arkansas",
-      "initial_claims": 4090,
-      "continued_claims": 33523,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 4585,
+      "continued_claims": 38926,
+      "covered_employment": 1197760,
+      "insured_unemployment_rate": 3.25
     },
     "california": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US06",
       "state_name": "California",
-      "initial_claims": 230225,
-      "continued_claims": 2756188,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 226004,
+      "continued_claims": 2724331,
+      "covered_employment": 17396834,
+      "insured_unemployment_rate": 15.66
     },
     "colorado": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US08",
       "state_name": "Colorado",
-      "initial_claims": 4901,
-      "continued_claims": 158252,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 5171,
+      "continued_claims": 157091,
+      "covered_employment": 2681376,
+      "insured_unemployment_rate": 5.86
     },
     "connecticut": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US09",
       "state_name": "Connecticut",
-      "initial_claims": 5234,
-      "continued_claims": 167283,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 5175,
+      "continued_claims": 167339,
+      "covered_employment": 1652033,
+      "insured_unemployment_rate": 10.13
     },
     "delaware": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US10",
       "state_name": "Delaware",
-      "initial_claims": 1489,
-      "continued_claims": 32286,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 1598,
+      "continued_claims": 29534,
+      "covered_employment": 446976,
+      "insured_unemployment_rate": 6.61
     },
     "district-of-columbia": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US11",
       "state_name": "District of Columbia",
-      "initial_claims": 1282,
-      "continued_claims": 63911,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 1460,
+      "continued_claims": 65671,
+      "covered_employment": 580956,
+      "insured_unemployment_rate": 11.3
     },
     "florida": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US12",
       "state_name": "Florida",
-      "initial_claims": 33821,
-      "continued_claims": 354720,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 37265,
+      "continued_claims": 414174,
+      "covered_employment": 8732627,
+      "insured_unemployment_rate": 4.74
     },
     "georgia": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US13",
       "state_name": "Georgia",
-      "initial_claims": 42080,
-      "continued_claims": 504058,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 42085,
+      "continued_claims": 498813,
+      "covered_employment": 4406223,
+      "insured_unemployment_rate": 11.32
     },
     "hawaii": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US15",
       "state_name": "Hawaii",
-      "initial_claims": 7466,
-      "continued_claims": 124043,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 7307,
+      "continued_claims": 123117,
+      "covered_employment": 620739,
+      "insured_unemployment_rate": 19.83
     },
     "idaho": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US16",
       "state_name": "Idaho",
-      "initial_claims": 3496,
-      "continued_claims": 10413,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 3672,
+      "continued_claims": 11510,
+      "covered_employment": 744799,
+      "insured_unemployment_rate": 1.55
     },
     "illinois": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US17",
       "state_name": "Illinois",
-      "initial_claims": 23339,
-      "continued_claims": 496644,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 27384,
+      "continued_claims": 507880,
+      "covered_employment": 5917347,
+      "insured_unemployment_rate": 8.58
     },
     "indiana": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US18",
       "state_name": "Indiana",
-      "initial_claims": 13851,
-      "continued_claims": 162009,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 13245,
+      "continued_claims": 164615,
+      "covered_employment": 3046268,
+      "insured_unemployment_rate": 5.4
     },
     "iowa": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US19",
       "state_name": "Iowa",
-      "initial_claims": 4962,
-      "continued_claims": 65653,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 4652,
+      "continued_claims": 65422,
+      "covered_employment": 1532562,
+      "insured_unemployment_rate": 4.27
     },
     "kansas": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US20",
       "state_name": "Kansas",
-      "initial_claims": 15365,
-      "continued_claims": 68056,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 15022,
+      "continued_claims": 55405,
+      "covered_employment": 1367656,
+      "insured_unemployment_rate": 4.05
     },
     "kentucky": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US21",
       "state_name": "Kentucky",
-      "initial_claims": 8445,
-      "continued_claims": 105794,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 8672,
+      "continued_claims": 107150,
+      "covered_employment": 1896673,
+      "insured_unemployment_rate": 5.65
     },
     "louisiana": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US22",
       "state_name": "Louisiana",
-      "initial_claims": 15309,
-      "continued_claims": 231912,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 16182,
+      "continued_claims": 250244,
+      "covered_employment": 1889866,
+      "insured_unemployment_rate": 13.24
     },
     "maine": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US23",
       "state_name": "Maine",
-      "initial_claims": 1383,
-      "continued_claims": 29378,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 1435,
+      "continued_claims": 30612,
+      "covered_employment": 607641,
+      "insured_unemployment_rate": 5.04
     },
     "maryland": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US24",
       "state_name": "Maryland",
-      "initial_claims": 7155,
-      "continued_claims": 158386,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 7858,
+      "continued_claims": 164868,
+      "covered_employment": 2551522,
+      "insured_unemployment_rate": 6.46
     },
     "massachusetts": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US25",
       "state_name": "Massachusetts",
-      "initial_claims": 17857,
-      "continued_claims": 369437,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 18388,
+      "continued_claims": 375192,
+      "covered_employment": 3578753,
+      "insured_unemployment_rate": 10.48
     },
     "michigan": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US26",
       "state_name": "Michigan",
-      "initial_claims": 17392,
-      "continued_claims": 362697,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 19571,
+      "continued_claims": 393705,
+      "covered_employment": 4305848,
+      "insured_unemployment_rate": 9.14
     },
     "minnesota": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US27",
       "state_name": "Minnesota",
-      "initial_claims": 11546,
-      "continued_claims": 210906,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 11181,
+      "continued_claims": 207645,
+      "covered_employment": 2868184,
+      "insured_unemployment_rate": 7.24
     },
     "mississippi": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US28",
       "state_name": "Mississippi",
-      "initial_claims": 4108,
-      "continued_claims": 80846,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 4535,
+      "continued_claims": 87107,
+      "covered_employment": 1110126,
+      "insured_unemployment_rate": 7.85
     },
     "missouri": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US29",
       "state_name": "Missouri",
-      "initial_claims": 7892,
-      "continued_claims": 83355,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 8936,
+      "continued_claims": 86832,
+      "covered_employment": 2744087,
+      "insured_unemployment_rate": 3.16
     },
     "montana": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US30",
       "state_name": "Montana",
-      "initial_claims": 2848,
-      "continued_claims": 22008,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 2985,
+      "continued_claims": 22976,
+      "covered_employment": 457148,
+      "insured_unemployment_rate": 5.03
     },
     "nebraska": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US31",
       "state_name": "Nebraska",
-      "initial_claims": 2622,
-      "continued_claims": 21404,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 2727,
+      "continued_claims": 22344,
+      "covered_employment": 964840,
+      "insured_unemployment_rate": 2.32
     },
     "nevada": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US32",
       "state_name": "Nevada",
-      "initial_claims": 10534,
-      "continued_claims": 192928,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 8332,
+      "continued_claims": 206166,
+      "covered_employment": 1388109,
+      "insured_unemployment_rate": 14.85
     },
     "new-hampshire": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US33",
       "state_name": "New Hampshire",
-      "initial_claims": 2072,
-      "continued_claims": 39497,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 2276,
+      "continued_claims": 39938,
+      "covered_employment": 657391,
+      "insured_unemployment_rate": 6.08
     },
     "new-jersey": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US34",
       "state_name": "New Jersey",
-      "initial_claims": 18845,
-      "continued_claims": 364386,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 19642,
+      "continued_claims": 366673,
+      "covered_employment": 4034480,
+      "insured_unemployment_rate": 9.09
     },
     "new-mexico": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US35",
       "state_name": "New Mexico",
-      "initial_claims": 3651,
-      "continued_claims": 84893,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 3437,
+      "continued_claims": 84543,
+      "covered_employment": 806473,
+      "insured_unemployment_rate": 10.48
     },
     "new-york": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US36",
       "state_name": "New York",
-      "initial_claims": 62950,
-      "continued_claims": 1296142,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 61897,
+      "continued_claims": 1291952,
+      "covered_employment": 9429101,
+      "insured_unemployment_rate": 13.7
     },
     "north-carolina": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US37",
       "state_name": "North Carolina",
-      "initial_claims": 12606,
-      "continued_claims": 142063,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 13437,
+      "continued_claims": 151318,
+      "covered_employment": 4423164,
+      "insured_unemployment_rate": 3.42
     },
     "north-dakota": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US38",
       "state_name": "North Dakota",
-      "initial_claims": 813,
-      "continued_claims": 15164,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 719,
+      "continued_claims": 12798,
+      "covered_employment": 413529,
+      "insured_unemployment_rate": 3.09
     },
     "ohio": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US39",
       "state_name": "Ohio",
-      "initial_claims": 15330,
-      "continued_claims": 280209,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 16385,
+      "continued_claims": 323325,
+      "covered_employment": 5352988,
+      "insured_unemployment_rate": 6.04
     },
     "oklahoma": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US40",
       "state_name": "Oklahoma",
-      "initial_claims": 4735,
-      "continued_claims": 98380,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 5596,
+      "continued_claims": 110907,
+      "covered_employment": 1570740,
+      "insured_unemployment_rate": 7.06
     },
     "oregon": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US41",
       "state_name": "Oregon",
-      "initial_claims": 4386,
-      "continued_claims": 148933,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 4804,
+      "continued_claims": 139312,
+      "covered_employment": 1921964,
+      "insured_unemployment_rate": 7.25
     },
     "pennsylvania": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US42",
       "state_name": "Pennsylvania",
-      "initial_claims": 20951,
-      "continued_claims": 544260,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 21747,
+      "continued_claims": 542128,
+      "covered_employment": 5827122,
+      "insured_unemployment_rate": 9.3
     },
     "rhode-island": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US44",
       "state_name": "Rhode Island",
-      "initial_claims": 2981,
-      "continued_claims": 46302,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 3026,
+      "continued_claims": 45841,
+      "covered_employment": 474428,
+      "insured_unemployment_rate": 9.66
     },
     "south-carolina": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US45",
       "state_name": "South Carolina",
-      "initial_claims": 4283,
-      "continued_claims": 95996,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 4261,
+      "continued_claims": 101456,
+      "covered_employment": 2093284,
+      "insured_unemployment_rate": 4.85
     },
     "south-dakota": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US46",
       "state_name": "South Dakota",
-      "initial_claims": 346,
-      "continued_claims": 6511,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 376,
+      "continued_claims": 6673,
+      "covered_employment": 418749,
+      "insured_unemployment_rate": 1.59
     },
     "tennessee": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US47",
       "state_name": "Tennessee",
-      "initial_claims": 10771,
-      "continued_claims": 171486,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 11316,
+      "continued_claims": 178952,
+      "covered_employment": 3310827,
+      "insured_unemployment_rate": 5.41
     },
     "texas": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US48",
       "state_name": "Texas",
-      "initial_claims": 49644,
-      "continued_claims": 985958,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 49386,
+      "continued_claims": 976588,
+      "covered_employment": 12372188,
+      "insured_unemployment_rate": 7.89
     },
     "utah": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US49",
       "state_name": "Utah",
-      "initial_claims": 2298,
-      "continued_claims": 30828,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 2283,
+      "continued_claims": 30858,
+      "covered_employment": 1483888,
+      "insured_unemployment_rate": 2.08
     },
     "vermont": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US50",
       "state_name": "Vermont",
-      "initial_claims": 575,
-      "continued_claims": 24872,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 612,
+      "continued_claims": 23961,
+      "covered_employment": 303295,
+      "insured_unemployment_rate": 7.9
     },
     "virginia": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US51",
       "state_name": "Virginia",
-      "initial_claims": 11621,
-      "continued_claims": 200017,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 10100,
+      "continued_claims": 201616,
+      "covered_employment": 3751738,
+      "insured_unemployment_rate": 5.37
     },
     "washington": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US53",
       "state_name": "Washington",
-      "initial_claims": 22580,
-      "continued_claims": 319030,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 21168,
+      "continued_claims": 263245,
+      "covered_employment": 3383128,
+      "insured_unemployment_rate": 7.78
     },
     "west-virginia": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US54",
       "state_name": "West Virginia",
-      "initial_claims": 1741,
-      "continued_claims": 49662,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 1881,
+      "continued_claims": 45891,
+      "covered_employment": 664212,
+      "insured_unemployment_rate": 6.91
     },
     "wisconsin": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US55",
       "state_name": "Wisconsin",
-      "initial_claims": 11412,
-      "continued_claims": 130617,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 11709,
+      "continued_claims": 130672,
+      "covered_employment": 2855007,
+      "insured_unemployment_rate": 4.58
     },
     "wyoming": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US56",
       "state_name": "Wyoming",
-      "initial_claims": 610,
-      "continued_claims": 8495,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 697,
+      "continued_claims": 7920,
+      "covered_employment": 269604,
+      "insured_unemployment_rate": 2.94
     },
     "puerto-rico": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US72",
       "state_name": "Puerto Rico",
-      "initial_claims": 1121,
-      "continued_claims": 120341,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 1185,
+      "continued_claims": 121202,
+      "covered_employment": 859886,
+      "insured_unemployment_rate": 14.1
     },
     "virgin-islands": {
       "week_ended": "2020-09-12",
       "reflecting_week_end": "2020-09-05",
       "fips_code": "04000US78",
       "state_name": "Virgin Islands",
-      "initial_claims": 11,
-      "continued_claims": 4150,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "initial_claims": 192,
+      "continued_claims": 4130,
+      "covered_employment": 36677,
+      "insured_unemployment_rate": 11.26
     }
   },
   "2020-09-05": {
@@ -539,8 +2667,8 @@
       "state_name": "Alabama",
       "initial_claims": 8901,
       "continued_claims": 44546,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1935262,
+      "insured_unemployment_rate": 2.3
     },
     "alaska": {
       "week_ended": "2020-09-05",
@@ -549,8 +2677,8 @@
       "state_name": "Alaska",
       "initial_claims": 3817,
       "continued_claims": 27536,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 308691,
+      "insured_unemployment_rate": 8.92
     },
     "arizona": {
       "week_ended": "2020-09-05",
@@ -559,8 +2687,8 @@
       "state_name": "Arizona",
       "initial_claims": 11343,
       "continued_claims": 200184,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 2905807,
+      "insured_unemployment_rate": 6.89
     },
     "arkansas": {
       "week_ended": "2020-09-05",
@@ -569,8 +2697,8 @@
       "state_name": "Arkansas",
       "initial_claims": 5624,
       "continued_claims": 42795,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1197760,
+      "insured_unemployment_rate": 3.57
     },
     "california": {
       "week_ended": "2020-09-05",
@@ -579,8 +2707,8 @@
       "state_name": "California",
       "initial_claims": 243404,
       "continued_claims": 3012587,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 17396834,
+      "insured_unemployment_rate": 17.32
     },
     "colorado": {
       "week_ended": "2020-09-05",
@@ -589,8 +2717,8 @@
       "state_name": "Colorado",
       "initial_claims": 6031,
       "continued_claims": 162261,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 2681376,
+      "insured_unemployment_rate": 6.05
     },
     "connecticut": {
       "week_ended": "2020-09-05",
@@ -599,8 +2727,8 @@
       "state_name": "Connecticut",
       "initial_claims": 4741,
       "continued_claims": 196677,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1652033,
+      "insured_unemployment_rate": 11.91
     },
     "delaware": {
       "week_ended": "2020-09-05",
@@ -609,8 +2737,8 @@
       "state_name": "Delaware",
       "initial_claims": 1629,
       "continued_claims": 32327,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 446976,
+      "insured_unemployment_rate": 7.23
     },
     "district-of-columbia": {
       "week_ended": "2020-09-05",
@@ -619,8 +2747,8 @@
       "state_name": "District of Columbia",
       "initial_claims": 1493,
       "continued_claims": 65456,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 580956,
+      "insured_unemployment_rate": 11.27
     },
     "florida": {
       "week_ended": "2020-09-05",
@@ -629,8 +2757,8 @@
       "state_name": "Florida",
       "initial_claims": 40256,
       "continued_claims": 410406,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 8732627,
+      "insured_unemployment_rate": 4.7
     },
     "georgia": {
       "week_ended": "2020-09-05",
@@ -639,8 +2767,8 @@
       "state_name": "Georgia",
       "initial_claims": 50320,
       "continued_claims": 523143,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 4406223,
+      "insured_unemployment_rate": 11.87
     },
     "hawaii": {
       "week_ended": "2020-09-05",
@@ -648,9 +2776,9 @@
       "fips_code": "04000US15",
       "state_name": "Hawaii",
       "initial_claims": 7464,
-      "continued_claims": 126256,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "continued_claims": 126406,
+      "covered_employment": 620739,
+      "insured_unemployment_rate": 20.36
     },
     "idaho": {
       "week_ended": "2020-09-05",
@@ -659,8 +2787,8 @@
       "state_name": "Idaho",
       "initial_claims": 3804,
       "continued_claims": 13021,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 744799,
+      "insured_unemployment_rate": 1.75
     },
     "illinois": {
       "week_ended": "2020-09-05",
@@ -669,8 +2797,8 @@
       "state_name": "Illinois",
       "initial_claims": 25478,
       "continued_claims": 552436,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 5917347,
+      "insured_unemployment_rate": 9.34
     },
     "indiana": {
       "week_ended": "2020-09-05",
@@ -679,8 +2807,8 @@
       "state_name": "Indiana",
       "initial_claims": 11255,
       "continued_claims": 158742,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 3046268,
+      "insured_unemployment_rate": 5.21
     },
     "iowa": {
       "week_ended": "2020-09-05",
@@ -689,8 +2817,8 @@
       "state_name": "Iowa",
       "initial_claims": 5252,
       "continued_claims": 70953,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1532562,
+      "insured_unemployment_rate": 4.63
     },
     "kansas": {
       "week_ended": "2020-09-05",
@@ -699,8 +2827,8 @@
       "state_name": "Kansas",
       "initial_claims": 13094,
       "continued_claims": 56819,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1367656,
+      "insured_unemployment_rate": 4.15
     },
     "kentucky": {
       "week_ended": "2020-09-05",
@@ -709,8 +2837,8 @@
       "state_name": "Kentucky",
       "initial_claims": 9285,
       "continued_claims": 119899,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1896673,
+      "insured_unemployment_rate": 6.32
     },
     "louisiana": {
       "week_ended": "2020-09-05",
@@ -719,8 +2847,8 @@
       "state_name": "Louisiana",
       "initial_claims": 24566,
       "continued_claims": 256184,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1889866,
+      "insured_unemployment_rate": 13.56
     },
     "maine": {
       "week_ended": "2020-09-05",
@@ -729,8 +2857,8 @@
       "state_name": "Maine",
       "initial_claims": 1150,
       "continued_claims": 36200,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 607641,
+      "insured_unemployment_rate": 5.96
     },
     "maryland": {
       "week_ended": "2020-09-05",
@@ -739,8 +2867,8 @@
       "state_name": "Maryland",
       "initial_claims": 7190,
       "continued_claims": 165604,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 2551522,
+      "insured_unemployment_rate": 6.49
     },
     "massachusetts": {
       "week_ended": "2020-09-05",
@@ -749,8 +2877,8 @@
       "state_name": "Massachusetts",
       "initial_claims": 18656,
       "continued_claims": 394848,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 3578753,
+      "insured_unemployment_rate": 11.03
     },
     "michigan": {
       "week_ended": "2020-09-05",
@@ -759,8 +2887,8 @@
       "state_name": "Michigan",
       "initial_claims": 17844,
       "continued_claims": 439244,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 4305848,
+      "insured_unemployment_rate": 10.2
     },
     "minnesota": {
       "week_ended": "2020-09-05",
@@ -769,8 +2897,8 @@
       "state_name": "Minnesota",
       "initial_claims": 11038,
       "continued_claims": 212993,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 2868184,
+      "insured_unemployment_rate": 7.43
     },
     "mississippi": {
       "week_ended": "2020-09-05",
@@ -779,8 +2907,8 @@
       "state_name": "Mississippi",
       "initial_claims": 4363,
       "continued_claims": 95012,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1110126,
+      "insured_unemployment_rate": 8.56
     },
     "missouri": {
       "week_ended": "2020-09-05",
@@ -789,8 +2917,8 @@
       "state_name": "Missouri",
       "initial_claims": 10891,
       "continued_claims": 97082,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 2744087,
+      "insured_unemployment_rate": 3.54
     },
     "montana": {
       "week_ended": "2020-09-05",
@@ -799,8 +2927,8 @@
       "state_name": "Montana",
       "initial_claims": 2911,
       "continued_claims": 24177,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 457148,
+      "insured_unemployment_rate": 5.29
     },
     "nebraska": {
       "week_ended": "2020-09-05",
@@ -809,8 +2937,8 @@
       "state_name": "Nebraska",
       "initial_claims": 2552,
       "continued_claims": 26145,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 964840,
+      "insured_unemployment_rate": 2.71
     },
     "nevada": {
       "week_ended": "2020-09-05",
@@ -819,8 +2947,8 @@
       "state_name": "Nevada",
       "initial_claims": 7951,
       "continued_claims": 216187,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1388109,
+      "insured_unemployment_rate": 15.57
     },
     "new-hampshire": {
       "week_ended": "2020-09-05",
@@ -829,8 +2957,8 @@
       "state_name": "New Hampshire",
       "initial_claims": 2482,
       "continued_claims": 42956,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 657391,
+      "insured_unemployment_rate": 6.53
     },
     "new-jersey": {
       "week_ended": "2020-09-05",
@@ -839,8 +2967,8 @@
       "state_name": "New Jersey",
       "initial_claims": 22750,
       "continued_claims": 388233,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 4034480,
+      "insured_unemployment_rate": 9.62
     },
     "new-mexico": {
       "week_ended": "2020-09-05",
@@ -849,8 +2977,8 @@
       "state_name": "New Mexico",
       "initial_claims": 3800,
       "continued_claims": 87129,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 806473,
+      "insured_unemployment_rate": 10.8
     },
     "new-york": {
       "week_ended": "2020-09-05",
@@ -859,8 +2987,8 @@
       "state_name": "New York",
       "initial_claims": 64734,
       "continued_claims": 1411187,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 9429101,
+      "insured_unemployment_rate": 14.97
     },
     "north-carolina": {
       "week_ended": "2020-09-05",
@@ -869,8 +2997,8 @@
       "state_name": "North Carolina",
       "initial_claims": 14147,
       "continued_claims": 169754,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 4423164,
+      "insured_unemployment_rate": 3.84
     },
     "north-dakota": {
       "week_ended": "2020-09-05",
@@ -879,8 +3007,8 @@
       "state_name": "North Dakota",
       "initial_claims": 947,
       "continued_claims": 13723,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 413529,
+      "insured_unemployment_rate": 3.32
     },
     "ohio": {
       "week_ended": "2020-09-05",
@@ -889,8 +3017,8 @@
       "state_name": "Ohio",
       "initial_claims": 18091,
       "continued_claims": 331317,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 5352988,
+      "insured_unemployment_rate": 6.19
     },
     "oklahoma": {
       "week_ended": "2020-09-05",
@@ -899,8 +3027,8 @@
       "state_name": "Oklahoma",
       "initial_claims": 6602,
       "continued_claims": 118719,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1570740,
+      "insured_unemployment_rate": 7.56
     },
     "oregon": {
       "week_ended": "2020-09-05",
@@ -909,8 +3037,8 @@
       "state_name": "Oregon",
       "initial_claims": 5228,
       "continued_claims": 154413,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1921964,
+      "insured_unemployment_rate": 8.03
     },
     "pennsylvania": {
       "week_ended": "2020-09-05",
@@ -919,8 +3047,8 @@
       "state_name": "Pennsylvania",
       "initial_claims": 22626,
       "continued_claims": 582821,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 5827122,
+      "insured_unemployment_rate": 10
     },
     "rhode-island": {
       "week_ended": "2020-09-05",
@@ -929,8 +3057,8 @@
       "state_name": "Rhode Island",
       "initial_claims": 3251,
       "continued_claims": 44829,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 474428,
+      "insured_unemployment_rate": 9.45
     },
     "south-carolina": {
       "week_ended": "2020-09-05",
@@ -939,8 +3067,8 @@
       "state_name": "South Carolina",
       "initial_claims": 5085,
       "continued_claims": 115428,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 2093284,
+      "insured_unemployment_rate": 5.51
     },
     "south-dakota": {
       "week_ended": "2020-09-05",
@@ -949,8 +3077,8 @@
       "state_name": "South Dakota",
       "initial_claims": 585,
       "continued_claims": 9165,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 418749,
+      "insured_unemployment_rate": 2.19
     },
     "tennessee": {
       "week_ended": "2020-09-05",
@@ -959,8 +3087,8 @@
       "state_name": "Tennessee",
       "initial_claims": 12310,
       "continued_claims": 192911,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 3310827,
+      "insured_unemployment_rate": 5.83
     },
     "texas": {
       "week_ended": "2020-09-05",
@@ -969,8 +3097,8 @@
       "state_name": "Texas",
       "initial_claims": 65291,
       "continued_claims": 1043117,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 12372188,
+      "insured_unemployment_rate": 8.43
     },
     "utah": {
       "week_ended": "2020-09-05",
@@ -979,8 +3107,8 @@
       "state_name": "Utah",
       "initial_claims": 2593,
       "continued_claims": 34778,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 1483888,
+      "insured_unemployment_rate": 2.34
     },
     "vermont": {
       "week_ended": "2020-09-05",
@@ -989,8 +3117,8 @@
       "state_name": "Vermont",
       "initial_claims": 731,
       "continued_claims": 25575,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 303295,
+      "insured_unemployment_rate": 8.43
     },
     "virginia": {
       "week_ended": "2020-09-05",
@@ -999,8 +3127,8 @@
       "state_name": "Virginia",
       "initial_claims": 11135,
       "continued_claims": 217485,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 3751738,
+      "insured_unemployment_rate": 5.8
     },
     "washington": {
       "week_ended": "2020-09-05",
@@ -1009,8 +3137,8 @@
       "state_name": "Washington",
       "initial_claims": 24459,
       "continued_claims": 271917,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 3383128,
+      "insured_unemployment_rate": 8.04
     },
     "west-virginia": {
       "week_ended": "2020-09-05",
@@ -1019,8 +3147,8 @@
       "state_name": "West Virginia",
       "initial_claims": 2113,
       "continued_claims": 47742,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 664212,
+      "insured_unemployment_rate": 7.19
     },
     "wisconsin": {
       "week_ended": "2020-09-05",
@@ -1029,8 +3157,8 @@
       "state_name": "Wisconsin",
       "initial_claims": 12238,
       "continued_claims": 138621,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 2855007,
+      "insured_unemployment_rate": 4.86
     },
     "wyoming": {
       "week_ended": "2020-09-05",
@@ -1039,8 +3167,8 @@
       "state_name": "Wyoming",
       "initial_claims": 793,
       "continued_claims": 8880,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 269604,
+      "insured_unemployment_rate": 3.29
     },
     "puerto-rico": {
       "week_ended": "2020-09-05",
@@ -1049,8 +3177,8 @@
       "state_name": "Puerto Rico",
       "initial_claims": 1374,
       "continued_claims": 121281,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 859886,
+      "insured_unemployment_rate": 14.1
     },
     "virgin-islands": {
       "week_ended": "2020-09-05",
@@ -1059,8 +3187,8 @@
       "state_name": "Virgin Islands",
       "initial_claims": 327,
       "continued_claims": 3746,
-      "covered_employment": 0,
-      "insured_unemployment_rate": 0
+      "covered_employment": 36677,
+      "insured_unemployment_rate": 10.21
     }
   },
   "2020-08-29": {
@@ -1180,9 +3308,9 @@
       "fips_code": "04000US15",
       "state_name": "Hawaii",
       "initial_claims": 6748,
-      "continued_claims": 126100,
+      "continued_claims": 126112,
       "covered_employment": 620739,
-      "insured_unemployment_rate": 20.31
+      "insured_unemployment_rate": 20.32
     },
     "idaho": {
       "week_ended": "2020-08-29",
@@ -1712,9 +3840,9 @@
       "fips_code": "04000US15",
       "state_name": "Hawaii",
       "initial_claims": 5775,
-      "continued_claims": 115426,
+      "continued_claims": 115430,
       "covered_employment": 620739,
-      "insured_unemployment_rate": 18.59
+      "insured_unemployment_rate": 18.6
     },
     "idaho": {
       "week_ended": "2020-08-22",

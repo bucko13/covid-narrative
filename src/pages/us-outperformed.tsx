@@ -25,7 +25,7 @@ import ComposedHistoricalComparison from "../components/charts/ComposedHistorica
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart";
 import { LocationData, OwidNodes } from "../types/owid";
 import AboutThisGraph from "../components/AboutThisGraph";
-import { MeasurementSwitch } from "../components/ui";
+import { ChartDisplay, MeasurementSwitch } from "../components/ui";
 
 const useStyles = makeStyles({
   select: {
@@ -62,6 +62,7 @@ const getStateTotalDeaths = (d: StateData) => d.jhu_deaths || d.total_deaths
 
 // states and countries for comparison (must be queried on this page and passed to component)
 const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
+const testOnlyCountries = ["deu", "che", "fin", "nld"]
 const states = ["ny", "nj"]
 
 const USOutperformed = ({ data }: PageProps) => {
@@ -69,6 +70,7 @@ const USOutperformed = ({ data }: PageProps) => {
   const [totalFalitiesPer100k, setTotalFatalitiesPer100k] = useState(true);
   const [newCasesPerMil, setNewCasesPerMil] = useState(true)
   const [comparisonChartCountry, setComparisonChartCountry] = useState('us');
+  const [testsPerThousand, setTestsPerThousand] = useState(true)
 
   const getStateData = (code: string): StateData | undefined =>
     data.states.nodes.find((state: StateData) => state.code === code)
@@ -185,7 +187,8 @@ const USOutperformed = ({ data }: PageProps) => {
 
   // get the country data and arrange in a format that the line chart
   // data can work with
-  const lineChartData = convertOwidPageDataToLineChart({ data: countryData })
+  const lineChartData = convertOwidPageDataToLineChart({ data: countryData, filter: testOnlyCountries })
+  const allChartData = convertOwidPageDataToLineChart({ data: countryData })
 
   const classes = useStyles();
   return (
@@ -362,6 +365,28 @@ const USOutperformed = ({ data }: PageProps) => {
           }
         />
       </Box>
+
+      <ChartDisplay
+        title="New Tests"
+        aboutText={() => (
+          <p>
+            Tests give us a limited view into government response. This gives us the opportunity
+            to see if a sufficient infrastructure was put into place to run systems such as a test and
+            tace regime.
+          </p>
+        )}
+      >
+        <MeasurementSwitch
+          isChecked={testsPerThousand}
+          onSwitch={setTestsPerThousand}
+          label="Show per thousand"
+        />
+        <HistoricComparisonLineChart
+          comparisonData={allChartData}
+          comparitor={testsPerThousand ? "new_tests_smoothed_per_thousand" : "new_tests_smoothed"}
+          yAxisLabel={testsPerThousand ? "New tests per thousand people" : "New total tests"}
+        />
+      </ChartDisplay>
     </Layout>
   )
 }
@@ -431,6 +456,82 @@ export const query = graphql`
         ...europe2Fields
       }
     }
+    deu: allEurope1Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Germany" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          new_deaths_smoothed_per_million
+          new_cases_smoothed
+          new_tests_smoothed
+          new_tests_smoothed_per_thousand
+          new_cases_smoothed_per_million
+          total_deaths_per_million
+        }
+      }
+    }
+    che: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Switzerland" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          new_deaths_smoothed_per_million
+          new_cases_smoothed
+          new_tests_smoothed
+          new_tests_smoothed_per_thousand
+          new_cases_smoothed_per_million
+          total_deaths_per_million
+        }
+      }
+    }
+    fin: allEurope1Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Finland" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          new_deaths_smoothed_per_million
+          new_cases_smoothed
+          new_tests_smoothed
+          new_tests_smoothed_per_thousand
+          new_cases_smoothed_per_million
+          total_deaths_per_million
+        }
+      }
+    }
+    nld: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Netherlands" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          date
+          new_deaths_smoothed_per_million
+          new_cases_smoothed
+          new_tests_smoothed
+          new_tests_smoothed_per_thousand
+          new_cases_smoothed_per_million
+          total_deaths_per_million
+        }
+      }
+    }
     us: allNorthAmerica2Json(
       sort: { order: ASC, fields: data___date }
       filter: { location: { eq: "United States" } }
@@ -443,6 +544,8 @@ export const query = graphql`
           date
           new_deaths_smoothed_per_million
           new_cases_smoothed
+          new_tests_smoothed
+          new_tests_smoothed_per_thousand
           new_cases_smoothed_per_million
           total_deaths_per_million
         }

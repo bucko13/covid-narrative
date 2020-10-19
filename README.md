@@ -8,6 +8,21 @@ in case there are any requests for new narratives or graphs
 or a bug or mistake is found in the data visualizations or 
 calculations. 
 
+## How to Use
+To build or refresh data for states 
+
+```
+$> RELOAD_DATA=true gatsby develop
+```
+
+Reloading all data in one build currently doesn't always scale unfortunately
+so to rebuild the national data from OWID, you need a different 
+env variable:
+
+```
+$> RELOAD_OWID_DATA=true gatsby develop
+```
+
 ### Data Sources
 #### State
 https://covidtracking.com/data/api

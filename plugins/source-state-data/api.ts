@@ -2,7 +2,7 @@
 
 import get from 'axios';
 import fs from 'fs';
-import path, { format } from 'path';
+import path from 'path';
 import moment from 'moment';
 import csv from 'csvtojson';
 
@@ -16,18 +16,21 @@ export const getStateHistoricData = async (state: string): Promise<any> => {
 }
 
 export const getCurrentStateData = async (state: string): Promise<any> => {
-  const DATA_FILE = path.resolve(__dirname, `./data/${state}_historic_data.json`)
+  const DATA_FILE = path.resolve(__dirname, `./data/${state}_current_data.json`)
   let data
 
   if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
-    console.log(`Reloading ${state}'s historic data...`)
-
-    const response = await get(
-      `https://api.covidtracking.com/v1/states/${state}/current.json`
-    )
-    data = response.data
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
-    console.log(`Finished loading ${state}'s data`)
+    try {
+      console.log(`Re-fetching ${state}'s historic data...`)
+      const response = await get(
+        `https://api.covidtracking.com/v1/states/${state}/current.json`
+      )
+      data = response.data
+      fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
+    } catch (e) {
+      console.error(e);
+      process.exit();
+    }
   } else {
     data = JSON.parse(fs.readFileSync(DATA_FILE, { encoding: "utf-8" }))
   }
@@ -35,13 +38,25 @@ export const getCurrentStateData = async (state: string): Promise<any> => {
   return data;
 }
 
-export const getJHUStateDataSingleDay = async (date: string): Promise<JHUStateData[]> => {
-  const formattedDate = moment(date).format('MM-DD-YYYY');
-  const CCSE_API =
-    `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/${formattedDate}.csv`
-  const { data: csvString } = await get(CCSE_API);
-  const data: JHUStateData[] = await csv().fromString(csvString);
-  return data;
+export const getJHUStateDataSingleDay = async (date: string, retry=false): Promise<JHUStateData[]> => {
+  let data: JHUStateData[];
+  try {
+    const formattedDate = moment(date).format('MM-DD-YYYY');
+    const CCSE_API =
+      `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/${formattedDate}.csv`
+    const { data: csvString } = await get(CCSE_API);
+    data = await csv().fromString(csvString);
+    return data;
+  } catch (e) {
+    if (retry) {
+      console.log('There was a problem:', e.message);
+      process.exit();
+    } else {
+      console.log(`Missing data for date ${date}, trying with previous day...`)
+      const prevDay = (Number(date) - 1).toString()
+      return await getJHUStateDataSingleDay(prevDay, true)
+    }
+  }
 }
 
 export const getStateUnemploymentData = async (): Promise<any> => {
