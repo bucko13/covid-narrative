@@ -65,8 +65,8 @@ const NyMessedUp = ({ data }: PageProps) => {
     const composed = { date: readableChartDate(date) }
     stateData.reduce((prev: any, state): any => {
       const node = state.data.find(stateNode => stateNode.date === date);
-      if (node && node.insuredUnemploymentRate) {
-        prev[state.code] = node.insuredUnemploymentRate
+      if (node && node.unemploymentRate) {
+        prev[state.code] = node.unemploymentRate
       } else {
         allHaveUnemployment = false
       }
@@ -358,7 +358,7 @@ export const query = graphql`
             hospitalizedCurrently
             date
             deathsIncreaseRollingAverage
-            insuredUnemploymentRate
+            unemploymentRate
             estimatedCases
           }
       }

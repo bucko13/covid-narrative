@@ -1,25 +1,19 @@
-
-export interface StateNodeData {
+export interface ThreeLiesNodeData {
   date: number
   death: number
-  state: string
   positive: number
   deathIncrease: number
   positiveIncrease: number
-  hospitalized: number
-  hospitalizedIncrease: number
-  hospitalizedCurrently: number
-  fips: string
   deathsIncreaseRollingAverage: number
-  insuredUnemploymentRate?: number
   positiveIncreaseRollingAverage: number
-  [comparitor: string]: number | string 
+  deathsIncreaseRollingAveragePerMillion?: number
+  positiveIncreaseRollingAveragePerMillion?: number
+  // [comparitor: string]: number | string
 }
 
-export interface StateData {
-  state: string
+export interface ThreeLiesData {
+  name?: string
   code: string
-  fips: string
   population: number
   date: number
   total_deaths: number
@@ -28,6 +22,22 @@ export interface StateData {
   total_positives: number
   positives_per_million: number
   positives_per_100k: number
+  data: ThreeLiesNodeData[]
+  stringency_index?: number
+}
+
+export interface StateNodeData extends ThreeLiesNodeData {
+  fips: string
+  hospitalized: number
+  hospitalizedIncrease: number
+  hospitalizedCurrently: number
+  unemploymentRate?: number
+  positiveIncreaseRollingAverage: number
+}
+
+export interface StateData extends ThreeLiesData {
+  state: string
+  fips: string
   total_hospitalized: number
   hospitalized_per_million: number
   hospitalized_per_100k: number
@@ -70,4 +80,46 @@ export interface JHUStateData {
   Mortality_Rate: string
   Testing_Rate: string
   Province_State: string
+}
+
+export interface OWIDDataNode {
+  date: string
+  new_cases: number
+  new_cases_smoothed: number,
+  new_deaths: number
+  new_cases_per_million: number
+  new_deaths_per_million: number
+  stringency_index: number
+  new_tests_per_thousand: number
+  total_cases: number
+  total_deaths: number
+  new_deaths_smoothed: number
+  total_cases_per_million: number
+  new_cases_per_million: number
+  new_cases_smoothed_per_million: number
+  new_deaths_per_million: number
+  new_deaths_smoothed_per_million: number
+  total_tests: number
+  total_deaths_per_million: number
+  new_tests: number
+  total_tests_per_thousand: number
+}
+
+export interface OWIDData {
+  location: string
+  population: number
+  population_density: number
+  median_age: number
+  cardiovasc_death_rate: number
+  hospital_beds_per_thousand: number
+  data: OWIDDataNode[]
+}
+
+export interface EUUnemploymentData {
+  [code: string]: {
+    name: string,
+    data: {
+      [month:string]: number
+    }
+  }
 }
