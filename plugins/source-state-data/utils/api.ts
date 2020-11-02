@@ -7,7 +7,7 @@ import moment from 'moment';
 import csv from 'csvtojson';
 
 import { StateEmploymentDataNode, StateEmploymentData, JHUStateData } from '..';
-import { EU_UNEMPLOYMENT_API, OWID_DATA_API, HISTORICAL_POLICY_DATA_API, stateCurrentAPI, stateHistoricAPI, STRINGENCY_INDEX_API } from '../constants'
+import { EU_UNEMPLOYMENT_API, OWID_DATA_API, HISTORICAL_POLICY_DATA_API, stateCurrentAPI, stateHistoricAPI, STRINGENCY_INDEX_API, getCountrySurveyAPI } from '../constants'
 import { getDataWrapper } from './utils';
 
 export const getStateHistoricData = (state: string): Promise<any> => getDataWrapper(
@@ -37,7 +37,13 @@ export const getAllStringencyData = (): Promise<any> => getDataWrapper(
 export const getHistoricalPolicyData = (): Promise<any> => getDataWrapper(
   HISTORICAL_POLICY_DATA_API,
   'historical_policy_data',
-  'Historical Policy Data',
+  'Historical Policy',
+)
+
+export const getCountrySurveyData = (country:string): Promise<any> => getDataWrapper(
+  getCountrySurveyAPI(country),
+  `${country}_mask_survey_data`,
+  `${country} Mask Survey`
 )
 
 export const getAllOwidCountryData = (): Promise<any> =>
