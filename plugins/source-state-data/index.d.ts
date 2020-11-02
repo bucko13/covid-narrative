@@ -8,7 +8,10 @@ export interface ThreeLiesNodeData {
   positiveIncreaseRollingAverage: number
   deathsIncreaseRollingAveragePerMillion?: number
   positiveIncreaseRollingAveragePerMillion?: number
-  // [comparitor: string]: number | string
+  stringencyIndex?: number
+  percentWearWasks?: number
+  unemploymentRate?: number
+  policyUpdates?: PolicyUpdateNode[]
 }
 
 export interface ThreeLiesData {
@@ -24,6 +27,7 @@ export interface ThreeLiesData {
   positives_per_100k: number
   data: ThreeLiesNodeData[]
   stringency_index?: number
+  averageUnemploymentRate?: number
 }
 
 export interface StateNodeData extends ThreeLiesNodeData {
@@ -31,7 +35,6 @@ export interface StateNodeData extends ThreeLiesNodeData {
   hospitalized: number
   hospitalizedIncrease: number
   hospitalizedCurrently: number
-  unemploymentRate?: number
   positiveIncreaseRollingAverage: number
 }
 
@@ -103,6 +106,7 @@ export interface OWIDDataNode {
   total_deaths_per_million: number
   new_tests: number
   total_tests_per_thousand: number
+  [key: string]: number | string
 }
 
 export interface OWIDData {
@@ -122,4 +126,27 @@ export interface EUUnemploymentData {
       [month:string]: number
     }
   }
+}
+
+export interface StringencyData {
+  RegionName: string
+  Date: string
+  StringencyIndex: string
+}
+
+export interface OxCGRTPolicyDataNode {
+  CountryName: string
+  CountryCode: string
+  Date: string
+  PolicyType: string
+  PolicyValue: string
+  Flag: string
+  Notes: string
+}
+
+export interface PolicyUpdateNode {
+  code: string
+  type: string
+  flag: number
+  value: number
 }

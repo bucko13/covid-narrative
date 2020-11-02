@@ -7,14 +7,28 @@ import {
   getStateHistoricData,
   getCurrentStateData,
   getStateUnemploymentData,
-  getJHUStateDataSingleDay, getAllOwidCountryData, getEUUnemploymentData
+  getJHUStateDataSingleDay,
+  getAllOwidCountryData,
+  getEUUnemploymentData,
+  getAllStringencyData,
+  getHistoricalPolicyData,
 } from './utils/api';
-import { getPerMPop, getPerMillionPop, isClosestWeekend, transformCountryData } from "./utils/utils"
-import { StateData, StateNodeData, PopulationData } from '.';
-import { states, countries } from './constants';
+import {
+  getPerMPop,
+  getPerMillionPop,
+  isClosestWeekend,
+  transformCountryData,
+  transformEuroStatUnemploymentData,
+  getAverageOfDataPoint
+} from "./utils/utils"
+import { StateData, StateNodeData, PopulationData, StringencyData } from '.';
+import { states, countries, codeToCountry as codeToCountry_, ISO2ToISO3 as ISO2ToISO3_ } from './constants';
 import dotenv from 'dotenv';
 
 const codeToState: { [key: string]: string } = codeToState_
+const ISO2ToISO3: { [key: string]: string } = ISO2ToISO3_
+const codeToCountry: { [key: string]: string } = codeToCountry_
+
 const populations: PopulationData = populations_
 
 dotenv.config({
@@ -22,137 +36,172 @@ dotenv.config({
 })
 
 export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: SourceNodesArgs) => {
+  const { createNode } = actions
   const allCountryData = await getAllOwidCountryData();
-  const transformedCountryData = [];
+  const euUnemloymentData = transformEuroStatUnemploymentData(await getEUUnemploymentData());
 
+  // make sure we have latest stringency data
+  const stringencyData: StringencyData[] = await getAllStringencyData();
+
+  const policyData = await getHistoricalPolicyData()
   for (const code of countries) {
-    const country = allCountryData[code.toUpperCase()];
-    transformedCountryData.push(
-      transformCountryData(code, country)
+    // tslint:disable-next-line: no-console
+    console.log(`Preparing data for ${codeToCountry[code.toUpperCase()]}...`)
+
+    // country data indexed to ISO3
+    const iso3Code = ISO2ToISO3[code.toUpperCase()];
+    const transformed = transformCountryData(
+      code,
+      allCountryData[iso3Code],
+      euUnemloymentData[code.toUpperCase()].data,
+      policyData,
     )
+
+    createNode({
+      ...transformed,
+      id: transformed.code,
+      children: [],
+      internal: {
+        type: `CountryHistoricalData`,
+        contentDigest: crypto
+          .createHash(`md5`)
+          .update(JSON.stringify(transformed))
+          .digest(`hex`),
+        description: `Country historical data and summaries`, // optional
+      },
+    })
   }
 
-  await getEUUnemploymentData();
-  process.exit();
-  // const { createNode } = actions;
-  // const employmentData = await getStateUnemploymentData()
-  // const employmentDataWeekends: string[] = Object.keys(employmentData);
+  const employmentData = await getStateUnemploymentData()
+  const employmentDataWeekends: string[] = Object.keys(employmentData);
 
-  // // for each state:
-  // // 1. source the historic data
-  // // 2. get population
-  // // 3. collect and calculate totals
-  // // 4. sort historical data from earliest to most recent
-  // // 5. add unemployment data
-  // for (const code of states) {
-  //   const data: StateNodeData[] = await getStateHistoricData(code);
-  //   const currentTotals: StateNodeData = await getCurrentStateData(code);
-  //   const name:string = codeToState[code.toUpperCase()].split(' ').map(state => state.toLowerCase()).join('-')
+  // for each state:
+  // 1. source the historic data
+  // 2. get population
+  // 3. collect and calculate totals
+  // 4. sort historical data from earliest to most recent
+  // 5. add unemployment data
+  // 6. add stringency data
+  for (const code of states) {
+    const data: StateNodeData[] = await getStateHistoricData(code);
+    const currentTotals: StateNodeData = await getCurrentStateData(code);
+    const name:string = codeToState[code.toUpperCase()].split(' ').map(state => state.toLowerCase()).join('-')
 
-  //   const population = populations[name].Population
-  //   const { death, hospitalized, positive, fips, date } = currentTotals
-  //   // need to order data by date
-  //   let sortedData = data.sort((a, b) => {
-  //     if (a.date > b.date) return 1
-  //     else return -1
-  //   }).map((stateNode, index) => {
-  //     /*
-  //      * in this map function we calculate custom
-  //      * data points for each date based on available data
-  //      * 1. rolling 7-day averages
-  //      * 2. insured unemployment for a given week
-  //      * 3. estimated cases based on IFR
-  //      */
+    // tslint:disable-next-line: no-console
+    console.log(`Preparing data for ${name}...`);
 
-  //     // calcuate rolling 7-day averages.
-  //     // start with deaths since this is the bumpiest data
-  //     let totalDeathIncrease = 0;
-  //     let totalPositiveIncrease = 0;
-  //     let counter = 0;
-  //     while (counter < 7 && counter <= index) {
-  //       totalDeathIncrease += data[index - counter].deathIncrease
-  //       totalPositiveIncrease += data[index-counter].positiveIncrease
-  //       counter++
-  //     }
+    const population = populations[name].Population
+    const { death, hospitalized, positive, fips, date } = currentTotals
+    // need to order data by date
+    let sortedData = data.sort((a, b) => {
+      if (a.date > b.date) return 1
+      else return -1
+    }).map((stateNode, index) => {
+      /*
+       * in this map function we calculate custom
+       * data points for each date based on available data
+       * 1. rolling 7-day averages
+       * 2. insured unemployment for a given week
+       * 3. estimated cases based on IFR
+       */
 
-  //     const deathsIncreaseRollingAverage = totalDeathIncrease / counter
-  //     const positiveIncreaseRollingAverage = totalPositiveIncrease / counter
+      // calcuate rolling 7-day averages.
+      // start with deaths since this is the bumpiest data
+      let totalDeathIncrease = 0;
+      let totalPositiveIncrease = 0;
+      let counter = 0;
+      while (counter < 7 && counter <= index) {
+        totalDeathIncrease += data[index - counter].deathIncrease
+        totalPositiveIncrease += data[index-counter].positiveIncrease
+        counter++
+      }
 
-  //     // next we need to find the insured unemployment rate for this week
-  //     const closestWeekend = employmentDataWeekends.find((dateString) => {
-  //       return isClosestWeekend(dateString, stateNode.date.toString())
-  //     })
+      const deathsIncreaseRollingAverage = totalDeathIncrease / counter
+      const positiveIncreaseRollingAverage = totalPositiveIncrease / counter
 
-  //     const unemploymentRate =
-  //       closestWeekend && employmentData[closestWeekend][name]
-  //         ? employmentData[closestWeekend][name].insured_unemployment_rate
-  //         : null
+      // next we need to find the insured unemployment rate for this week
+      const closestWeekend = employmentDataWeekends.find((dateString) => {
+        return isClosestWeekend(dateString, stateNode.date.toString())
+      })
 
-  //     return {
-  //       ...stateNode,
-  //       unemploymentRate,
-  //       deathsIncreaseRollingAverage,
-  //       positiveIncreaseRollingAverage,
-  //     }
-  //   })
+      const unemploymentRate =
+        closestWeekend && employmentData[closestWeekend][name]
+          ? employmentData[closestWeekend][name].insured_unemployment_rate
+          : null
 
-  //   sortedData = sortedData.map((stateNode, index) => {
-  //     // finally calculate estimated cases based on IFR assuming 15 days to death
-  //     let estimatedCases: number | void;
-  //     const IFR = 0.0065;
-  //     const DAYS_TO_DEATH = 15;
-  //     if (index < data.length - DAYS_TO_DEATH) {
-  //       // estimated cases for day x equals the fatalities from DAYS_TO_DEATH in the future
-  //       // divided by the IFR, which represents the number of infected individuals that will
-  //       // likely result in a fatality
-  //       estimatedCases = sortedData[index + DAYS_TO_DEATH].deathsIncreaseRollingAverage / IFR;
-  //     }
+      const stringencyIndex = (stringencyData
+        .find(({ RegionName, Date: stringencyDate }) =>
+          RegionName.toLowerCase().split(' ').join('-') === name.toLowerCase() &&
+          stringencyDate === stateNode.date.toString()
+        ))?.StringencyIndex
 
-  //     return {
-  //       ...stateNode,
-  //       estimatedCases
-  //     }
-  //   })
+      return {
+        ...stateNode,
+        unemploymentRate,
+        deathsIncreaseRollingAverage,
+        positiveIncreaseRollingAverage,
+        stringencyIndex: stringencyIndex ? +stringencyIndex : undefined,
+      }
+    })
 
-  //   const latestTotals = (await getJHUStateDataSingleDay(date.toString()))
-  //     .find(state => state.Province_State === codeToState[code.toUpperCase()]);
+    sortedData = sortedData.map((stateNode, index) => {
+      // finally calculate estimated cases based on IFR assuming 15 days to death
+      let estimatedCases: number | void;
+      const IFR = 0.0065;
+      const DAYS_TO_DEATH = 15;
+      if (index < data.length - DAYS_TO_DEATH) {
+        // estimated cases for day x equals the fatalities from DAYS_TO_DEATH in the future
+        // divided by the IFR, which represents the number of infected individuals that will
+        // likely result in a fatality
+        estimatedCases = sortedData[index + DAYS_TO_DEATH].deathsIncreaseRollingAverage / IFR;
+      }
 
-  //   const node: StateData = {
-  //     population,
-  //     state: codeToState[code.toUpperCase()],
-  //     code,
-  //     fips,
-  //     date,
-  //     total_deaths: death,
-  //     total_positives: positive,
-  //     total_hospitalized: hospitalized,
-  //     deaths_per_100k: getPerMPop(population, death),
-  //     deaths_per_million: getPerMillionPop(population, death),
-  //     positives_per_100k: getPerMPop(population, positive),
-  //     positives_per_million: getPerMillionPop(population, positive),
-  //     hospitalized_per_100k: getPerMillionPop(population, hospitalized),
-  //     hospitalized_per_million: getPerMPop(population, hospitalized),
-  //     jhu_deaths: latestTotals && parseFloat(latestTotals?.Deaths),
-  //     jhu_cases: latestTotals && parseFloat(latestTotals.Cases),
-  //     jhu_tested: latestTotals && parseFloat(latestTotals.People_Tested),
-  //     jhu_mortality: latestTotals && parseFloat(latestTotals.Mortality_Rate),
-  //     jhu_testing_rate: latestTotals && parseFloat(latestTotals.Testing_Rate),
-  //     data: sortedData,
-  //   }
+      return {
+        ...stateNode,
+        estimatedCases
+      }
+    })
 
-  //   createNode({
-  //     ...node,
-  //     id: node.fips,
-  //     children: [],
-  //     internal: {
-  //       type: `StateHistoricalData`,
-  //       contentDigest: crypto
-  //         .createHash(`md5`)
-  //         .update(JSON.stringify(node))
-  //         .digest(`hex`),
-  //       description: `State historical data and summaries`, // optional
-  //     },
-  //   })
-  // }
-  // return;
+    const latestTotals = (await getJHUStateDataSingleDay(date.toString()))
+      .find(state => state.Province_State === codeToState[code.toUpperCase()]);
+
+    const node: StateData = {
+      population,
+      state: codeToState[code.toUpperCase()],
+      code,
+      fips,
+      date,
+      total_deaths: death,
+      total_positives: positive,
+      total_hospitalized: hospitalized,
+      deaths_per_100k: getPerMPop(population, death),
+      deaths_per_million: getPerMillionPop(population, death),
+      positives_per_100k: getPerMPop(population, positive),
+      positives_per_million: getPerMillionPop(population, positive),
+      hospitalized_per_100k: getPerMillionPop(population, hospitalized),
+      hospitalized_per_million: getPerMPop(population, hospitalized),
+      jhu_deaths: latestTotals && parseFloat(latestTotals?.Deaths),
+      jhu_cases: latestTotals && parseFloat(latestTotals.Cases),
+      jhu_tested: latestTotals && parseFloat(latestTotals.People_Tested),
+      jhu_mortality: latestTotals && parseFloat(latestTotals.Mortality_Rate),
+      jhu_testing_rate: latestTotals && parseFloat(latestTotals.Testing_Rate),
+      stringency_index: getAverageOfDataPoint('stringency_index', sortedData),
+      data: sortedData,
+    }
+
+    createNode({
+      ...node,
+      id: node.fips,
+      children: [],
+      internal: {
+        type: `StateHistoricalData`,
+        contentDigest: crypto
+          .createHash(`md5`)
+          .update(JSON.stringify(node))
+          .digest(`hex`),
+        description: `State historical data and summaries`, // optional
+      },
+    })
+  }
+  return;
 }
