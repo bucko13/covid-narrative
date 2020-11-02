@@ -27,6 +27,9 @@ export const STRINGENCY_INDEX_API =
 export const HISTORICAL_POLICY_DATA_API =
   "https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest_allchanges.csv";
 
+export const getCountrySurveyAPI = (country: string) =>
+  `https://github.com/YouGov-Data/covid-19-tracker/blob/master/data/${country}.csv?raw=true`
+
 export {
   codeToCountry,
   codeToState,

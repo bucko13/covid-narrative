@@ -239,3 +239,13 @@ export function getPolicyUpdatesForDay(
       }
     })
 }
+
+// e.g. "04/02/2020" => "20200204"
+export const reverseDateString = (date: string): string => {
+  const [day, month, year] = date.split('/');
+  return new Date(+year, +month - 1, +day)
+    .toISOString()
+    .slice(0, 10)
+    .split('-')
+    .join('')
+}

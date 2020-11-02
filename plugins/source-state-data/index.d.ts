@@ -150,3 +150,21 @@ export interface PolicyUpdateNode {
   flag: number
   value: number
 }
+
+export interface SurveyResultsForWeek {
+  always: number
+  frequently: number
+  sometimes: number
+  rarely: number
+  not_at_all: number
+  [key: string]: number
+}
+
+export interface TotalSurveyResults {
+  [endDate: string]: SurveyResultsForWeek
+}
+
+export interface SurveyResultAPIResponse {
+  endtime: string
+  i12_health_1: string
+}

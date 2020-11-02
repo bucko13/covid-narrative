@@ -12,6 +12,7 @@ import {
   getEUUnemploymentData,
   getAllStringencyData,
   getHistoricalPolicyData,
+  getCountrySurveyData,
 } from './utils/api';
 import {
   getPerMPop,
@@ -24,6 +25,7 @@ import {
 import { StateData, StateNodeData, PopulationData, StringencyData } from '.';
 import { states, countries, codeToCountry as codeToCountry_, ISO2ToISO3 as ISO2ToISO3_ } from './constants';
 import dotenv from 'dotenv';
+import { collateSurveyDataForCode } from './utils/getMaskData';
 
 const codeToState: { [key: string]: string } = codeToState_
 const ISO2ToISO3: { [key: string]: string } = ISO2ToISO3_
@@ -37,6 +39,7 @@ dotenv.config({
 
 export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: SourceNodesArgs) => {
   const { createNode } = actions
+
   const allCountryData = await getAllOwidCountryData();
   const euUnemloymentData = transformEuroStatUnemploymentData(await getEUUnemploymentData());
 
@@ -45,9 +48,12 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
 
   const policyData = await getHistoricalPolicyData()
   for (const code of countries) {
+    const countryName = codeToCountry[code.toUpperCase()]
     // tslint:disable-next-line: no-console
-    console.log(`Preparing data for ${codeToCountry[code.toUpperCase()]}...`)
-
+    console.log(`Preparing data for ${countryName}...`)
+    const surveyData = await collateSurveyDataForCode(countryName);
+    console.log(surveyData)
+    if (surveyData) process.exit();
     // country data indexed to ISO3
     const iso3Code = ISO2ToISO3[code.toUpperCase()];
     const transformed = transformCountryData(
