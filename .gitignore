@@ -69,3 +69,5 @@ yarn-error.log
 .yarn-integrity
 
 test.js
+
+plugins/source-state-data/data
