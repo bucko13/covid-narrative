@@ -20,6 +20,7 @@ import {
   getAverageOfDataPoint,
   addSurveyData,
   addUnemploymentData,
+  addExcessDeathData,
 } from "./utils/utils"
 import { StateData, StateNodeData, PopulationData, StringencyData } from "."
 import {
@@ -49,7 +50,9 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 
   const policyData = await getHistoricalPolicyData()
   for (const code of countries) {
-    const countryName = codeToCountry[code.toUpperCase()]
+    let countryName = codeToCountry[code.toUpperCase()]
+    if (countryName.toLowerCase() === "us") countryName = "United States"
+
     // tslint:disable-next-line: no-console
     console.log(`Preparing data for ${countryName}...`)
 
@@ -61,6 +64,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       policyData
     )
 
+    await addExcessDeathData(countryName, transformed)
     await addUnemploymentData(code, transformed)
     await addSurveyData(countryName, transformed)
 
