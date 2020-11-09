@@ -1,10 +1,11 @@
-import codeToCountry from './codeToCountry.json';
-import codeToState from './codeToState.json';
-import countryToCode from './countryToCode.json';
-import ISO2ToISO3 from './ISO2ToISO3.json';
+import codeToCountry from "./codeToCountry.json"
+import codeToState from "./codeToState.json"
+import countryToCode from "./countryToCode.json"
+import ISO2ToISO3 from "./ISO2ToISO3.json"
 
 export const states = ["az", "ny", "nj", "fl", "tx", "ga", "ca"]
-export const countries = ["fr", "gb", "it", "be", "us", 'se', 'de', 'jp']
+export const countries = ["fr", "gb", "it", "be", "us", "se", "de", "jp"]
+export const surveyCodes = ["i12_health_1"]
 
 // APIs
 export const OWID_DATA_API =
@@ -21,18 +22,19 @@ export const EU_UNEMPLOYMENT_API =
 
 // includes state data
 export const STRINGENCY_INDEX_API =
-  "https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest.csv";
+  "https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest.csv"
 
 // date of all policy update at national level
 export const HISTORICAL_POLICY_DATA_API =
-  "https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest_allchanges.csv";
+  "https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest_allchanges.csv"
 
 export const getCountrySurveyAPI = (country: string) =>
   `https://github.com/YouGov-Data/covid-19-tracker/blob/master/data/${country}.csv?raw=true`
 
-export {
-  codeToCountry,
-  codeToState,
-  countryToCode,
-  ISO2ToISO3,
-}
+export { codeToCountry, codeToState, countryToCode, ISO2ToISO3 }
+
+export const SURVEY_COUNTRIES_API =
+  "https://raw.githubusercontent.com/YouGov-Data/covid-19-tracker/master/countries.csv"
+
+export const EXCESS_MORTALITY_API =
+  "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/excess_mortality/excess_mortality.csv"
