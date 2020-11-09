@@ -6,6 +6,7 @@ import fs from "fs"
 import path from "path"
 import {
   EUUnemploymentData,
+  ExcessMortalityDataNode,
   OWIDData,
   OxCGRTPolicyDataNode,
   PolicyUpdateNode,
@@ -14,7 +15,7 @@ import {
 import csv from "csvtojson"
 import { surveyCodes } from "../constants"
 import { collateSurveyDataForCode } from "./getMaskData"
-import { getEUUnemploymentData } from "./api"
+import { getEUUnemploymentData, getExcessMortalityData } from "./api"
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
@@ -34,8 +35,8 @@ export function isClosestWeekend(
 ): boolean {
   const dateA = moment(dateStringA)
   const dateB = moment(dateStringB)
-  const diff = dateA.diff(dateB, "days")
-  return diff <= 7 && diff > 0
+  const diff = Math.abs(dateA.diff(dateB, "days"))
+  return diff <= 7
 }
 
 export async function getJsonFromApi(api: string) {
@@ -78,6 +79,16 @@ export const getDataWrapper = async (
   }
 
   return data
+}
+
+const getMedianValue = (data: number[]) => {
+  data.sort()
+  if (data.length % 2 === 0) {
+    const middlePt = data.length / 2
+    return (data[middlePt - 1] + data[middlePt]) / 2
+  } else {
+    return data[Math.floor(data.length / 2)]
+  }
 }
 
 export function getAverageOfDataPoint(
@@ -309,4 +320,44 @@ export const addUnemploymentData = async (
     const date = getDateNumber(day.date.toString())
     day.unemploymentRate = unemploymentData[date.toString().slice(0, 6)]
   }
+}
+
+// goes through each day and add the excess death data from the week corresponding to that day
+export const addExcessDeathData = async (
+  countryName: string,
+  data: ThreeLiesData
+): Promise<void> => {
+  console.log(`Adding excess death data for ${countryName}`)
+  const allMortalityData: ExcessMortalityDataNode[] = await getExcessMortalityData()
+
+  // for calculating average
+  let count = 0
+  let total = 0
+  // for calculating median
+  const allExcessMortality = []
+
+  for (const day of data.data) {
+    const weeksMortalityData = allMortalityData.find(
+      week =>
+        week.location.toLowerCase() === countryName.toLowerCase() &&
+        isClosestWeekend(day.date.toString(), week.date)
+    )
+    if (weeksMortalityData) {
+      day.p_scores_0_14 = +weeksMortalityData.p_scores_0_14
+      day.p_scores_15_64 = +weeksMortalityData.p_scores_15_64
+      day.p_scores_65_74 = +weeksMortalityData.p_scores_65_74
+      day.p_scores_75_84 = +weeksMortalityData.p_scores_75_84
+      day.p_scores_85plus = +weeksMortalityData.p_scores_85plus
+      day.p_scores_all_ages = +weeksMortalityData.p_scores_all_ages
+
+      if (day.p_scores_all_ages) {
+        total += day.p_scores_all_ages
+        count++
+        allExcessMortality.push(day.p_scores_all_ages)
+      }
+    }
+  }
+
+  data.medianExcessMortality = getMedianValue(allExcessMortality)
+  data.averageExcessMortality = total / count
 }

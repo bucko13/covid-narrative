@@ -25,8 +25,10 @@ function calculateSurveyPercentage(
   weekResults: SurveyResultsForWeek
 ): SurveyResultsForWeek {
   return Object.keys(weekResults).reduce((results, key) => {
-    if (key !== "total") {
+    if (key !== "total" && results.total) {
       results[key] = +(results[key] / results.total).toFixed(4)
+    } else {
+      results[key] = results[key]
     }
     return results
   }, weekResults)

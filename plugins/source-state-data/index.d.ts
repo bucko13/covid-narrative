@@ -12,6 +12,12 @@ export interface ThreeLiesNodeData {
   percentWearWasks?: number
   unemploymentRate?: number
   policyUpdates?: PolicyUpdateNode[]
+  p_scores_all_ages?: number
+  p_scores_0_14?: number
+  p_scores_15_64?: number
+  p_scores_65_74?: number
+  p_scores_75_84?: number
+  p_scores_85plus?: number
 }
 
 export interface ThreeLiesData {
@@ -28,6 +34,8 @@ export interface ThreeLiesData {
   data: ThreeLiesNodeData[]
   stringency_index?: number
   averageUnemploymentRate?: number
+  averageExcessMortality?: number
+  medianExcessMortality?: number
   surveyData?: {
     [label: string]: {
       dateLabels: SurveyDateLabels
@@ -163,7 +171,7 @@ export interface SurveyResultsForWeek {
   sometimes: number
   rarely: number
   not_at_all: number
-  total?: number
+  total: number
   [key: string]: number
 }
 
@@ -178,4 +186,15 @@ export interface SurveyDateLabels {
     startDate: string
     endDate: string
   }
+}
+
+export interface ExcessMortalityDataNode {
+  location: string
+  date: string
+  p_scores_all_ages: string
+  p_scores_0_14: string
+  p_scores_15_64: string
+  p_scores_65_74: string
+  p_scores_75_84: string
+  p_scores_85plus: string
 }
