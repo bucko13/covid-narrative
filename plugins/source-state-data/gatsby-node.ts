@@ -1,31 +1,34 @@
-import crypto from 'crypto';
-import { SourceNodesArgs, GatsbyNode } from 'gatsby';
+import crypto from "crypto"
+import { SourceNodesArgs, GatsbyNode } from "gatsby"
 
-import codeToState_ from './constants/codeToState.json';
-import populations_ from './constants/statePopulations.json';
+import codeToState_ from "./constants/codeToState.json"
+import populations_ from "./constants/statePopulations.json"
 import {
   getStateHistoricData,
   getCurrentStateData,
   getStateUnemploymentData,
   getJHUStateDataSingleDay,
   getAllOwidCountryData,
-  getEUUnemploymentData,
   getAllStringencyData,
   getHistoricalPolicyData,
-  getCountrySurveyData,
-} from './utils/api';
+} from "./utils/api"
 import {
   getPerMPop,
   getPerMillionPop,
   isClosestWeekend,
   transformCountryData,
-  transformEuroStatUnemploymentData,
-  getAverageOfDataPoint
+  getAverageOfDataPoint,
+  addSurveyData,
+  addUnemploymentData,
 } from "./utils/utils"
-import { StateData, StateNodeData, PopulationData, StringencyData } from '.';
-import { states, countries, codeToCountry as codeToCountry_, ISO2ToISO3 as ISO2ToISO3_ } from './constants';
-import dotenv from 'dotenv';
-import { collateSurveyDataForCode } from './utils/getMaskData';
+import { StateData, StateNodeData, PopulationData, StringencyData } from "."
+import {
+  states,
+  countries,
+  codeToCountry as codeToCountry_,
+  ISO2ToISO3 as ISO2ToISO3_,
+} from "./constants"
+import dotenv from "dotenv"
 
 const codeToState: { [key: string]: string } = codeToState_
 const ISO2ToISO3: { [key: string]: string } = ISO2ToISO3_
@@ -37,31 +40,29 @@ dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
-export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: SourceNodesArgs) => {
+export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
+  actions,
+}: SourceNodesArgs) => {
   const { createNode } = actions
 
-  const allCountryData = await getAllOwidCountryData();
-  const euUnemloymentData = transformEuroStatUnemploymentData(await getEUUnemploymentData());
-
-  // make sure we have latest stringency data
-  const stringencyData: StringencyData[] = await getAllStringencyData();
+  const allCountryData = await getAllOwidCountryData()
 
   const policyData = await getHistoricalPolicyData()
   for (const code of countries) {
     const countryName = codeToCountry[code.toUpperCase()]
     // tslint:disable-next-line: no-console
     console.log(`Preparing data for ${countryName}...`)
-    const surveyData = await collateSurveyDataForCode(countryName);
-    console.log(surveyData)
-    if (surveyData) process.exit();
+
     // country data indexed to ISO3
-    const iso3Code = ISO2ToISO3[code.toUpperCase()];
+    const iso3Code = ISO2ToISO3[code.toUpperCase()]
     const transformed = transformCountryData(
       code,
       allCountryData[iso3Code],
-      euUnemloymentData[code.toUpperCase()].data,
-      policyData,
+      policyData
     )
+
+    await addUnemploymentData(code, transformed)
+    await addSurveyData(countryName, transformed)
 
     createNode({
       ...transformed,
@@ -79,7 +80,9 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
   }
 
   const employmentData = await getStateUnemploymentData()
-  const employmentDataWeekends: string[] = Object.keys(employmentData);
+  const employmentDataWeekends: string[] = Object.keys(employmentData)
+  // make sure we have latest stringency data
+  const stringencyData: StringencyData[] = await getAllStringencyData()
 
   // for each state:
   // 1. source the historic data
@@ -89,87 +92,94 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
   // 5. add unemployment data
   // 6. add stringency data
   for (const code of states) {
-    const data: StateNodeData[] = await getStateHistoricData(code);
-    const currentTotals: StateNodeData = await getCurrentStateData(code);
-    const name:string = codeToState[code.toUpperCase()].split(' ').map(state => state.toLowerCase()).join('-')
+    const data: StateNodeData[] = await getStateHistoricData(code)
+    const currentTotals: StateNodeData = await getCurrentStateData(code)
+    const name: string = codeToState[code.toUpperCase()]
+      .split(" ")
+      .map(state => state.toLowerCase())
+      .join("-")
 
     // tslint:disable-next-line: no-console
-    console.log(`Preparing data for ${name}...`);
+    console.log(`Preparing data for ${name}...`)
 
     const population = populations[name].Population
     const { death, hospitalized, positive, fips, date } = currentTotals
     // need to order data by date
-    let sortedData = data.sort((a, b) => {
-      if (a.date > b.date) return 1
-      else return -1
-    }).map((stateNode, index) => {
-      /*
-       * in this map function we calculate custom
-       * data points for each date based on available data
-       * 1. rolling 7-day averages
-       * 2. insured unemployment for a given week
-       * 3. estimated cases based on IFR
-       */
-
-      // calcuate rolling 7-day averages.
-      // start with deaths since this is the bumpiest data
-      let totalDeathIncrease = 0;
-      let totalPositiveIncrease = 0;
-      let counter = 0;
-      while (counter < 7 && counter <= index) {
-        totalDeathIncrease += data[index - counter].deathIncrease
-        totalPositiveIncrease += data[index-counter].positiveIncrease
-        counter++
-      }
-
-      const deathsIncreaseRollingAverage = totalDeathIncrease / counter
-      const positiveIncreaseRollingAverage = totalPositiveIncrease / counter
-
-      // next we need to find the insured unemployment rate for this week
-      const closestWeekend = employmentDataWeekends.find((dateString) => {
-        return isClosestWeekend(dateString, stateNode.date.toString())
+    let sortedData = data
+      .sort((a, b) => {
+        if (a.date > b.date) return 1
+        else return -1
       })
+      .map((stateNode, index) => {
+        /*
+         * in this map function we calculate custom
+         * data points for each date based on available data
+         * 1. rolling 7-day averages
+         * 2. insured unemployment for a given week
+         * 3. estimated cases based on IFR
+         */
 
-      const unemploymentRate =
-        closestWeekend && employmentData[closestWeekend][name]
-          ? employmentData[closestWeekend][name].insured_unemployment_rate
-          : null
+        // calcuate rolling 7-day averages.
+        // start with deaths since this is the bumpiest data
+        let totalDeathIncrease = 0
+        let totalPositiveIncrease = 0
+        let counter = 0
+        while (counter < 7 && counter <= index) {
+          totalDeathIncrease += data[index - counter].deathIncrease
+          totalPositiveIncrease += data[index - counter].positiveIncrease
+          counter++
+        }
 
-      const stringencyIndex = (stringencyData
-        .find(({ RegionName, Date: stringencyDate }) =>
-          RegionName.toLowerCase().split(' ').join('-') === name.toLowerCase() &&
-          stringencyDate === stateNode.date.toString()
-        ))?.StringencyIndex
+        const deathsIncreaseRollingAverage = totalDeathIncrease / counter
+        const positiveIncreaseRollingAverage = totalPositiveIncrease / counter
 
-      return {
-        ...stateNode,
-        unemploymentRate,
-        deathsIncreaseRollingAverage,
-        positiveIncreaseRollingAverage,
-        stringencyIndex: stringencyIndex ? +stringencyIndex : undefined,
-      }
-    })
+        // next we need to find the insured unemployment rate for this week
+        const closestWeekend = employmentDataWeekends.find(dateString => {
+          return isClosestWeekend(dateString, stateNode.date.toString())
+        })
+
+        const unemploymentRate =
+          closestWeekend && employmentData[closestWeekend][name]
+            ? employmentData[closestWeekend][name].insured_unemployment_rate
+            : null
+
+        const stringencyIndex = stringencyData.find(
+          ({ RegionName, Date: stringencyDate }) =>
+            RegionName.toLowerCase().split(" ").join("-") ===
+              name.toLowerCase() && stringencyDate === stateNode.date.toString()
+        )?.StringencyIndex
+
+        return {
+          ...stateNode,
+          unemploymentRate,
+          deathsIncreaseRollingAverage,
+          positiveIncreaseRollingAverage,
+          stringencyIndex: stringencyIndex ? +stringencyIndex : undefined,
+        }
+      })
 
     sortedData = sortedData.map((stateNode, index) => {
       // finally calculate estimated cases based on IFR assuming 15 days to death
-      let estimatedCases: number | void;
-      const IFR = 0.0065;
-      const DAYS_TO_DEATH = 15;
+      let estimatedCases: number | void
+      const IFR = 0.0065
+      const DAYS_TO_DEATH = 15
       if (index < data.length - DAYS_TO_DEATH) {
         // estimated cases for day x equals the fatalities from DAYS_TO_DEATH in the future
         // divided by the IFR, which represents the number of infected individuals that will
         // likely result in a fatality
-        estimatedCases = sortedData[index + DAYS_TO_DEATH].deathsIncreaseRollingAverage / IFR;
+        estimatedCases =
+          sortedData[index + DAYS_TO_DEATH].deathsIncreaseRollingAverage / IFR
       }
 
       return {
         ...stateNode,
-        estimatedCases
+        estimatedCases,
       }
     })
 
-    const latestTotals = (await getJHUStateDataSingleDay(date.toString()))
-      .find(state => state.Province_State === codeToState[code.toUpperCase()]);
+    const latestTotals = (await getJHUStateDataSingleDay(date.toString())).find(
+      state => state.Province_State === codeToState[code.toUpperCase()]
+    )
 
     const node: StateData = {
       population,
@@ -191,7 +201,7 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
       jhu_tested: latestTotals && parseFloat(latestTotals.People_Tested),
       jhu_mortality: latestTotals && parseFloat(latestTotals.Mortality_Rate),
       jhu_testing_rate: latestTotals && parseFloat(latestTotals.Testing_Rate),
-      stringency_index: getAverageOfDataPoint('stringency_index', sortedData),
+      stringency_index: getAverageOfDataPoint("stringency_index", sortedData),
       data: sortedData,
     }
 
@@ -209,5 +219,5 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions }: Source
       },
     })
   }
-  return;
+  return
 }

@@ -28,6 +28,12 @@ export interface ThreeLiesData {
   data: ThreeLiesNodeData[]
   stringency_index?: number
   averageUnemploymentRate?: number
+  surveyData?: {
+    [label: string]: {
+      dateLabels: SurveyDateLabels
+      results: SurveyResultsForWeek[]
+    }
+  }
 }
 
 export interface StateNodeData extends ThreeLiesNodeData {
@@ -44,7 +50,7 @@ export interface StateData extends ThreeLiesData {
   total_hospitalized: number
   hospitalized_per_million: number
   hospitalized_per_100k: number
-  jhu_deaths?: number 
+  jhu_deaths?: number
   jhu_cases?: number
   jhu_tested?: number
   jhu_mortality?: number
@@ -53,10 +59,10 @@ export interface StateData extends ThreeLiesData {
 }
 
 export interface PopulationData {
-  [key: string]: { 
-    [key: string]: string | number,
+  [key: string]: {
+    [key: string]: string | number
     Population: number
-  } 
+  }
 }
 
 export interface StateEmploymentDataNode {
@@ -88,7 +94,7 @@ export interface JHUStateData {
 export interface OWIDDataNode {
   date: string
   new_cases: number
-  new_cases_smoothed: number,
+  new_cases_smoothed: number
   new_deaths: number
   new_cases_per_million: number
   new_deaths_per_million: number
@@ -121,9 +127,9 @@ export interface OWIDData {
 
 export interface EUUnemploymentData {
   [code: string]: {
-    name: string,
+    name: string
     data: {
-      [month:string]: number
+      [month: string]: number
     }
   }
 }
@@ -157,14 +163,19 @@ export interface SurveyResultsForWeek {
   sometimes: number
   rarely: number
   not_at_all: number
+  total?: number
   [key: string]: number
-}
-
-export interface TotalSurveyResults {
-  [endDate: string]: SurveyResultsForWeek
 }
 
 export interface SurveyResultAPIResponse {
   endtime: string
+  qweek: string
   i12_health_1: string
+}
+
+export interface SurveyDateLabels {
+  [label: string]: {
+    startDate: string
+    endDate: string
+  }
 }
