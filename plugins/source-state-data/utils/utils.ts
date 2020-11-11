@@ -15,7 +15,11 @@ import {
 import csv from "csvtojson"
 import { surveyCodes } from "../constants"
 import { collateSurveyDataForCode } from "./getMaskData"
-import { getEUUnemploymentData, getExcessMortalityData } from "./api"
+import {
+  getEUGDPData,
+  getEUUnemploymentData,
+  getExcessMortalityData,
+} from "./api"
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
@@ -159,8 +163,9 @@ export const transformCountryData = (
   return transformed
 }
 
-export const transformEuroStatUnemploymentData = (
-  raw: any
+export const transformEuroStatData = (
+  raw: any,
+  timeType?: string
 ): EUUnemploymentData => {
   const { time, geo } = raw.dimension
   const value = raw.value
@@ -199,12 +204,16 @@ export const transformEuroStatUnemploymentData = (
     Object.keys(timeColumns).reduce((curr, timePeriod) => {
       const timeIndex = timeColumns[timePeriod]
 
-      // key the values by a string formatted as `yyyymm`
-      const [year, month] = timePeriod.split("M")
+      let key = timePeriod
+      if (timeType === "monthly") {
+        // key the values by a string formatted as `yyyymm`
+        const [year, month] = timePeriod.split("M")
+        key = `${year}${month}`
+      }
 
       // to get the data point for the given time period, lookup the value
       // for the given index, which is the startIndex plus timePeriod index
-      curr[`${year}${month}`] = value[timeIndex + startIndex]
+      curr[key] = value[timeIndex + startIndex]
       return curr
     }, unemploymentData)
 
@@ -305,9 +314,11 @@ export const addUnemploymentData = async (
   countryCode: string,
   data: ThreeLiesData
 ): Promise<void> => {
-  const euUnemloymentData = transformEuroStatUnemploymentData(
-    await getEUUnemploymentData()
+  const euUnemloymentData = transformEuroStatData(
+    await getEUUnemploymentData(),
+    "monthly"
   )
+
   const unemploymentData = euUnemloymentData[countryCode.toUpperCase()].data
   const firstMonth = data.data[0].date.toString().slice(0, 6)
   const averageUnemployment = getAverageUnemployment(
@@ -319,6 +330,20 @@ export const addUnemploymentData = async (
   for (const day of data.data) {
     const date = getDateNumber(day.date.toString())
     day.unemploymentRate = unemploymentData[date.toString().slice(0, 6)]
+  }
+}
+
+export const addGDPData = async (
+  countryCode: string,
+  data: ThreeLiesData
+): Promise<void> => {
+  const gdpData = transformEuroStatData(await getEUGDPData())
+  const countryGDP = gdpData[countryCode.toUpperCase()]?.data
+  if (countryGDP) {
+    data.gdp = Object.keys(countryGDP).map(quarter => ({
+      quarter,
+      change: countryGDP[quarter],
+    }))
   }
 }
 
