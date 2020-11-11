@@ -1,6 +1,7 @@
 export interface ThreeLiesNodeData {
   date: number
   death: number
+  deathPerMillion: number
   positive: number
   deathIncrease: number
   positiveIncrease: number
@@ -13,15 +14,20 @@ export interface ThreeLiesNodeData {
   unemploymentRate?: number
   policyUpdates?: PolicyUpdateNode[]
   p_scores_all_ages?: number
+  newTestsSmoothed?: number
+  newTestsSmoothedPerThousand?: number
+  totalTestsPerThousand?: number
+  hospitalizedCurrently?: number
   p_scores_0_14?: number
   p_scores_15_64?: number
   p_scores_65_74?: number
   p_scores_75_84?: number
   p_scores_85plus?: number
+  [key: string]: any
 }
 
 export interface ThreeLiesData {
-  name?: string
+  name: string
   code: string
   population: number
   date: number
@@ -36,6 +42,7 @@ export interface ThreeLiesData {
   averageUnemploymentRate?: number
   averageExcessMortality?: number
   medianExcessMortality?: number
+  totalTests?: number
   gdp?: { quarter: string; change: number }[]
   surveyData?: {
     [label: string]: {
@@ -43,13 +50,13 @@ export interface ThreeLiesData {
       results: SurveyResultsForWeek[]
     }
   }
+  [key: string]: any
 }
 
 export interface StateNodeData extends ThreeLiesNodeData {
   fips: string
   hospitalized: number
   hospitalizedIncrease: number
-  hospitalizedCurrently: number
   positiveIncreaseRollingAverage: number
 }
 
@@ -108,7 +115,6 @@ export interface OWIDDataNode {
   new_cases_per_million: number
   new_deaths_per_million: number
   stringency_index: number
-  new_tests_per_thousand: number
   total_cases: number
   total_deaths: number
   new_deaths_smoothed: number
@@ -120,7 +126,12 @@ export interface OWIDDataNode {
   total_tests: number
   total_deaths_per_million: number
   new_tests: number
+  new_tests_smoothed: number
+  new_tests_smoothed_per_thousand: number
+  new_tests_per_thousand: number
   total_tests_per_thousand: number
+  hosp_patients?: number
+  hosp_patients_per_million?: number
   [key: string]: number | string
 }
 

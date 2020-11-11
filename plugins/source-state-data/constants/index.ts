@@ -4,7 +4,19 @@ import countryToCode from "./countryToCode.json"
 import ISO2ToISO3 from "./ISO2ToISO3.json"
 
 export const states = ["az", "ny", "nj", "fl", "tx", "ga", "ca"]
-export const countries = ["fr", "gb", "it", "be", "us", "se", "de", "jp"]
+export const countries = [
+  "de",
+  "ch",
+  "fi",
+  "nl",
+  "fr",
+  "gb",
+  "se",
+  "be",
+  "it",
+  "es",
+  "us",
+]
 export const surveyCodes = ["i12_health_1"]
 
 // APIs
