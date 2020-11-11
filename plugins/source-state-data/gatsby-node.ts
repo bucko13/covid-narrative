@@ -51,38 +51,48 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 
   const policyData = await getHistoricalPolicyData()
   for (const code of countries) {
-    let countryName = codeToCountry[code.toUpperCase()]
-    if (countryName.toLowerCase() === "us") countryName = "United States"
+    try {
+      let countryName = codeToCountry[code.toUpperCase()]
+      if (!countryName) {
+        throw new Error(`could not find country ${code}`)
+      }
 
-    // tslint:disable-next-line: no-console
-    console.log(`Preparing data for ${countryName}...`)
+      if (countryName.toLowerCase() === "us") countryName = "United States"
 
-    // country data indexed to ISO3
-    const iso3Code = ISO2ToISO3[code.toUpperCase()]
-    const transformed = transformCountryData(
-      code,
-      allCountryData[iso3Code],
-      policyData
-    )
+      // tslint:disable-next-line: no-console
+      console.log(`Preparing data for ${countryName}...`)
 
-    await addExcessDeathData(countryName, transformed)
-    await addUnemploymentData(code, transformed)
-    await addSurveyData(countryName, transformed)
-    await addGDPData(code, transformed)
+      // country data indexed to ISO3
+      const iso3Code = ISO2ToISO3[code.toUpperCase()]
+      const transformed = transformCountryData(
+        code,
+        allCountryData[iso3Code],
+        policyData
+      )
 
-    createNode({
-      ...transformed,
-      id: transformed.code,
-      children: [],
-      internal: {
-        type: `CountryHistoricalData`,
-        contentDigest: crypto
-          .createHash(`md5`)
-          .update(JSON.stringify(transformed))
-          .digest(`hex`),
-        description: `Country historical data and summaries`, // optional
-      },
-    })
+      await addExcessDeathData(countryName, transformed)
+      await addUnemploymentData(code, transformed)
+      await addSurveyData(countryName, transformed)
+      await addGDPData(code, transformed)
+
+      createNode({
+        ...transformed,
+        id: transformed.code,
+        children: [],
+        internal: {
+          type: `CountryHistoricalData`,
+          contentDigest: crypto
+            .createHash(`md5`)
+            .update(JSON.stringify(transformed))
+            .digest(`hex`),
+          description: `Country historical data and summaries`, // optional
+        },
+      })
+    } catch (e) {
+      // tslint:disable-next-line: no-console
+      console.error(e.message)
+      process.exit()
+    }
   }
 
   const employmentData = await getStateUnemploymentData()
@@ -157,6 +167,8 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 
         return {
           ...stateNode,
+          totalDeathsPerMillion: getPerMillionPop(population, stateNode.death),
+          deathPerMillion: getPerMillionPop(population, stateNode.death),
           unemploymentRate,
           deathsIncreaseRollingAverage,
           positiveIncreaseRollingAverage,
@@ -188,6 +200,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     )
 
     const node: StateData = {
+      name: codeToState[code],
       population,
       state: codeToState[code.toUpperCase()],
       code,

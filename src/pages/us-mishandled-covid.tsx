@@ -6,7 +6,12 @@ import Layout from "../components/layout"
 import TotalComparisonBarChart, {
   ComparisonData,
 } from "../components/charts/TotalComparisonBarChart"
-import { convertOwidPageDataToLineChart, getLastDate, getPerMPop, readableDate } from "../utils/utils"
+import {
+  convertOwidPageDataToLineChart,
+  getLastDate,
+  getPerMPop,
+  readableDate,
+} from "../utils/utils"
 import codeToCountry_ from "../data/codeToCountry.json"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
 import { LocationData, OwidData, OwidNodes } from "../types/owid"
@@ -39,18 +44,18 @@ const getFatalities = (data: any, key: string, perM = false) => {
 }
 
 // states and countries for comparison (must be queried on this page and passed to component)
-const countries = ["fr", "gb", "se", "be", "it", "es", "us"];
-const outlierComparisonCountries = ["us", "deu", "che", "fin", "nld"];
+const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
+const outlierComparisonCountries = ["us", "deu", "che", "fin", "nld"]
 
 const UsMishandled = ({ data }: PageProps) => {
   // get data for bar chart that compares total fatalities (not per 100k)
   const totalFatalities: ComparisonData[] = countries.map(code => ({
-    location: codeToCountry[code.toUpperCase()],
-    abbreviation: code,
+    name: codeToCountry[code.toUpperCase()],
+    code,
     value: getFatalities(data, code),
   }))
 
-  const [outliersCasesPerMil, setOutliersCasesPerMil] = useState(true);
+  const [outliersCasesPerMil, setOutliersCasesPerMil] = useState(true)
 
   const lineChartData: LocationData[] = Object.keys(data)
     .filter(key => data[key]?.nodes[0])
@@ -68,8 +73,7 @@ const UsMishandled = ({ data }: PageProps) => {
   const outlierComparisonData: OwidNodes = {}
 
   for (const code of outlierComparisonCountries) {
-    if (data[code]?.nodes.length)
-      outlierComparisonData[code] = data[code];
+    if (data[code]?.nodes.length) outlierComparisonData[code] = data[code]
   }
 
   return (
@@ -165,191 +169,191 @@ const UsMishandled = ({ data }: PageProps) => {
 export default UsMishandled
 
 export const query = graphql`
-         query {
-           fr: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "France" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           gb: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "United Kingdom" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           es: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Spain" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           be: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Belgium" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           it: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Italy" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           se: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Sweden" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           deu: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Germany" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-           che: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Switzerland" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-           fin: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Finland" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-           nld: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Netherlands" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-           us: allNorthAmerica2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "United States" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-         }
-       `
+  query {
+    fr: allEurope1Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "France" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    gb: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "United Kingdom" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    es: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Spain" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    be: allEurope1Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Belgium" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    it: allEurope1Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Italy" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    se: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Sweden" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+        }
+      }
+    }
+    deu: allEurope1Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Germany" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+          new_deaths_smoothed
+          new_deaths_smoothed_per_million
+          new_cases_smoothed_per_million
+          new_cases_smoothed
+        }
+      }
+    }
+    che: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Switzerland" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+          new_deaths_smoothed
+          new_deaths_smoothed_per_million
+          new_cases_smoothed_per_million
+          new_cases_smoothed
+        }
+      }
+    }
+    fin: allEurope1Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Finland" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+          new_deaths_smoothed
+          new_deaths_smoothed_per_million
+          new_cases_smoothed_per_million
+          new_cases_smoothed
+        }
+      }
+    }
+    nld: allEurope2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "Netherlands" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+          new_deaths_smoothed
+          new_deaths_smoothed_per_million
+          new_cases_smoothed_per_million
+          new_cases_smoothed
+        }
+      }
+    }
+    us: allNorthAmerica2Json(
+      sort: { order: ASC, fields: data___date }
+      filter: { location: { eq: "United States" } }
+    ) {
+      nodes {
+        location
+        population
+        data {
+          total_deaths
+          total_deaths_per_million
+          date
+          total_cases_per_million
+          new_deaths_smoothed
+          new_deaths_smoothed_per_million
+          new_cases_smoothed_per_million
+          new_cases_smoothed
+        }
+      }
+    }
+  }
+`

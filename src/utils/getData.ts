@@ -1,9 +1,9 @@
 /* tslint:disable no-console */
 
-import get from 'axios';
-import fs from 'fs';
-import path from 'path'
-import csv from 'csvtojson'
+import get from "axios"
+import fs from "fs"
+import path from "path"
+import csv from "csvtojson"
 
 // UNUSED APIs
 // const MATHDROID_API_BASE = "https://covid19.mathdro.id/api";
@@ -19,7 +19,8 @@ import csv from 'csvtojson'
 
 const CSSE_API_BASE =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data"
-const OWID_DATA_API = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json"
+const OWID_DATA_API =
+  "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json"
 
 const ECDC_DATA_API =
   "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/ecdc/COVID-2019%20-%20ECDC%20(2020).csv"
@@ -27,23 +28,24 @@ const ECDC_DATA_API =
 const GOV_RESPONSE_OWID_DATA =
   "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/bsg/COVID%20Government%20Response%20(OxBSG).csv"
 
-async function getJsonFromCsvApi(api:string) {
-  const { data: csvString } = await get(api);
-  return await csv().fromString(csvString);
+async function getJsonFromCsvApi(api: string) {
+  const { data: csvString } = await get(api)
+  return await csv().fromString(csvString)
 }
 
-function getCountryCode(country:string) {
-  const countryToCode = require('../data/countryToCode.json');
-  if (!countryToCode) throw new Error('Please generate country to code json first');
-  const code = countryToCode[country];
-  if (!code) throw new Error('Country not found');
+function getCountryCode(country: string) {
+  const countryToCode = require("../data/countryToCode.json")
+  if (!countryToCode)
+    throw new Error("Please generate country to code json first")
+  const code = countryToCode[country]
+  if (!code) throw new Error("Country not found")
 
-  return code;
+  return code
 }
 
 export async function fromCodeLookupTable() {
   const api = `${CSSE_API_BASE}/UID_ISO_FIPS_LookUp_Table.csv`
-  const json = await getJsonFromCsvApi(api);
+  const json = await getJsonFromCsvApi(api)
 
   const formattedMap = {
     codeToCountry: {},
@@ -53,87 +55,95 @@ export async function fromCodeLookupTable() {
   }
 
   const sorted = json.reduce((prev, current) => {
-    const { Country_Region: country, Province_State: state, iso2, FIPS } = current;
-    const { codeToCountry, countryToCode, stateToFIPS, FIPSToState} = prev;
+    const {
+      Country_Region: country,
+      Province_State: state,
+      iso2,
+      FIPS,
+    } = current
+    const { codeToCountry, countryToCode, stateToFIPS, FIPSToState } = prev
 
-    if (!iso2) return prev;
+    if (!iso2) return prev
 
-    if (!codeToCountry[iso2]) codeToCountry[iso2] = country;
-    if (!countryToCode[country]) countryToCode[country] = iso2;
+    if (!codeToCountry[iso2]) codeToCountry[iso2] = country
+    if (!countryToCode[country]) countryToCode[country] = iso2
 
-    if (iso2 === 'US' && !stateToFIPS[state]) {
-      stateToFIPS[state] = FIPS;
+    if (iso2 === "US" && !stateToFIPS[state]) {
+      stateToFIPS[state] = FIPS
       FIPSToState[FIPS] = state
     }
 
-    return prev;
+    return prev
   }, formattedMap)
 
-  const keys = Object.keys(sorted);
+  const keys = Object.keys(sorted)
 
-  keys.forEach((type) => {
+  keys.forEach(type => {
     fs.writeFileSync(
       path.resolve(__dirname, `../data/${type}.json`),
       JSON.stringify(sorted[type], null, 2)
     )
-  });
+  })
 }
 
-export async function getCountryTimeSeries(country:string) {
-  const code = getCountryCode(country);
+export async function getCountryTimeSeries(country: string) {
+  const code = getCountryCode(country)
 
   const deathsAPI = `${CSSE_API_BASE}/csse_covid_19_time_series/time_series_covid19_deaths_global.csv`
   const confirmedAPI = `${CSSE_API_BASE}/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`
-  const confirmedJson = await getJsonFromCsvApi(confirmedAPI);
-  const deathsJson = await getJsonFromCsvApi(deathsAPI);
-  const skip = ['Province/State', 'Country/Region', 'Lat', 'Long'];
+  const confirmedJson = await getJsonFromCsvApi(confirmedAPI)
+  const deathsJson = await getJsonFromCsvApi(deathsAPI)
+  const skip = ["Province/State", "Country/Region", "Lat", "Long"]
 
   let countryData = confirmedJson.reduce((data, current) => {
     // could be multiple entries for same country if counting by county/region
-    if (current['Country/Region'] === country) {
-      Object.keys(current).filter(key => !skip.includes(key)).forEach(date => {
-        const formattedDate = date.split("/").join("-");
-        const confirmed = parseInt(current[date], 10);
-        if (data[formattedDate] && data[formattedDate].confirmed)
-          data[formattedDate].confirmed = data[formattedDate].confirmed + confirmed;
-        else
-          data[formattedDate] = { confirmed }
-      })
+    if (current["Country/Region"] === country) {
+      Object.keys(current)
+        .filter(key => !skip.includes(key))
+        .forEach(date => {
+          const formattedDate = date.split("/").join("-")
+          const confirmed = parseInt(current[date], 10)
+          if (data[formattedDate] && data[formattedDate].confirmed)
+            data[formattedDate].confirmed =
+              data[formattedDate].confirmed + confirmed
+          else data[formattedDate] = { confirmed }
+        })
     }
-    return data;
+    return data
   }, {})
 
-  if (!countryData) throw new Error(`Could not find ${country}`);
+  if (!countryData) throw new Error(`Could not find ${country}`)
 
-  countryData = deathsJson.reduce((data:any, current:any) => {
-   // could be multiple entries for same country if counting by county/region
-    if (current['Country/Region'] === country) {
-      Object.keys(current).filter(key => !skip.includes(key)).forEach(date => {
-        const formattedDate = date.split("/").join("-");
-        const deaths = parseInt(current[date], 10)
+  countryData = deathsJson.reduce((data: any, current: any) => {
+    // could be multiple entries for same country if counting by county/region
+    if (current["Country/Region"] === country) {
+      Object.keys(current)
+        .filter(key => !skip.includes(key))
+        .forEach(date => {
+          const formattedDate = date.split("/").join("-")
+          const deaths = parseInt(current[date], 10)
 
-        if (data[formattedDate] && data[formattedDate].deaths) {
-          data[formattedDate].deaths = data[formattedDate].deaths + deaths;
-        } else {
-          data[formattedDate].deaths = deaths
-        }
-      })
+          if (data[formattedDate] && data[formattedDate].deaths) {
+            data[formattedDate].deaths = data[formattedDate].deaths + deaths
+          } else {
+            data[formattedDate].deaths = deaths
+          }
+        })
     }
-    return data;
-  }, countryData);
+    return data
+  }, countryData)
 
-  const raw = Object.keys(countryData).reduce((prev:any, date) => {
+  const raw = Object.keys(countryData).reduce((prev: any, date) => {
+    const [_month, day, year] = date.split("-")
+    let month = _month
+    if (_month.length === 1) month = "0" + month
 
-    const [_month, day, year] = date.split('-');
-    let month = _month;
-    if (_month.length === 1) month = '0' + month;
-
-    let positiveIncrease = 0;
-    let positive = 0;
+    let positiveIncrease = 0
+    let positive = 0
     if (prev.length) {
-      const previousPositive = prev[prev.length - 1].positive;
-      positive = countryData[date].confirmed;
-      positiveIncrease = positive - previousPositive;
+      const previousPositive = prev[prev.length - 1].positive
+      positive = countryData[date].confirmed
+      positiveIncrease = positive - previousPositive
       if (positiveIncrease < 0) {
         positiveIncrease = 0
       }
@@ -145,7 +155,7 @@ export async function getCountryTimeSeries(country:string) {
       deaths: countryData[date].deaths,
       positiveIncrease,
     })
-    return prev;
+    return prev
   }, [])
 
   // convert country name to code for filename
@@ -156,41 +166,39 @@ export async function getCountryTimeSeries(country:string) {
 }
 
 async function getOwidData() {
-  const DATA_FILE = path.resolve(__dirname, '../data/owid-covid-data.json');
+  const DATA_FILE = path.resolve(__dirname, "../data/owid-covid-data.json")
   let data
 
   if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
-    console.log('Reloading OWID country time series data');
+    console.log("Reloading OWID country time series data")
     const response = await get(OWID_DATA_API)
-    data = response.data;
+    data = response.data
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
-    console.log('Done reloading OWID data from GitHub')
+    console.log("Done reloading OWID data from GitHub")
   } else {
-    data = require(DATA_FILE);
+    data = require(DATA_FILE)
   }
-  return data;
+  return data
 }
 
 async function convertOwid() {
-  const owid = await getOwidData();
-  const byContinent: { [key:string]: any} = {}
-  Object.keys(owid).reduce((prev:any, curr) => {
+  const owid = await getOwidData()
+  const byContinent: { [key: string]: any } = {}
+  Object.keys(owid).reduce((prev: any, curr) => {
     const country = {
       code: curr,
-      ...owid[curr]
+      ...owid[curr],
     }
 
     if (!country.continent) {
-      if (!prev[country.location])
-        prev[country.location] = []
+      if (!prev[country.location]) prev[country.location] = []
       prev[country.location].push(country)
     } else {
-      if (!prev[country.continent])
-        prev[country.continent] = []
+      if (!prev[country.continent]) prev[country.continent] = []
       prev[country.continent].push(country)
     }
 
-    return prev;
+    return prev
   }, byContinent)
 
   // need to split into separate json files
@@ -203,34 +211,36 @@ async function convertOwid() {
     while (count <= segments) {
       const start = (count - 1) * countriesPerFile
       const end = count * countriesPerFile
-      const data = byContinent[continent].slice(start, end);
+      const data = byContinent[continent].slice(start, end)
 
       fs.writeFileSync(
-        path.resolve(__dirname, `../owid/${continent.split(' ').join('_')}_${count}.json`),
-        JSON.stringify(data, null , 2)
+        path.resolve(
+          __dirname,
+          `../owid/${continent.split(" ").join("_")}_${count}.json`
+        ),
+        JSON.stringify(data, null, 2)
       )
-      count++;
+      count++
     }
   }
 }
 
-export const updateOwidData = () => convertOwid();
+export const updateOwidData = () => convertOwid()
 
 export const getEcdcData = async () => {
-  const DATA_FILE = path.resolve(__dirname, "../owid/ecdc-covid-data.json");
-  let data;
+  const DATA_FILE = path.resolve(__dirname, "../owid/ecdc-covid-data.json")
+  let data
 
   if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
     console.log("Reloading ECDC data")
     data = await getJsonFromCsvApi(ECDC_DATA_API)
-    console.log('data:', data);
+    console.log("data:", data)
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
     console.log("Done reloading ECDC data from GitHub")
   } else {
     data = require(DATA_FILE)
   }
 }
-
 
 export const getGovResponseData = async () => {
   const DATA_FILE = path.resolve(__dirname, "../owid/gov-response-data.json")
@@ -260,7 +270,6 @@ export const getGovResponseData = async () => {
 //     JSON.stringify(populations, null, 2)
 //   )
 // }
-
 
 // function getHistoricStatesCovidData() {
 //   const states = require('../states/codeToState.json');

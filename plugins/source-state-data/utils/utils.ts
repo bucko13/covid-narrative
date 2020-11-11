@@ -8,9 +8,11 @@ import {
   EUUnemploymentData,
   ExcessMortalityDataNode,
   OWIDData,
+  OWIDDataNode,
   OxCGRTPolicyDataNode,
   PolicyUpdateNode,
   ThreeLiesData,
+  ThreeLiesNodeData,
 } from ".."
 import csv from "csvtojson"
 import { surveyCodes } from "../constants"
@@ -55,6 +57,23 @@ export async function getJsonFromApi(api: string) {
   } else {
     return data.data
   }
+}
+
+// given array of day data, find the last data point where a value exists
+export function getLastDataPoint(
+  data: OWIDDataNode[] | ThreeLiesNodeData[],
+  key: string
+): string | number {
+  let value = 0
+  let index = data.length - 1
+
+  while (!value && index >= 0) {
+    value = data[index][key]
+    index--
+  }
+
+  if (!value) console.error(`Could not find data point for ${key}`)
+  return value
 }
 
 export const getDataWrapper = async (
@@ -137,6 +156,7 @@ export const transformCountryData = (
     positives_per_million: lastDayData.total_cases_per_million,
     positives_per_100k: getPerMPop(data.population, lastDayData.total_cases),
     stringency_index: getAverageOfDataPoint("stringency_index", data.data),
+    totalTests: +getLastDataPoint(data.data, "total_tests"),
     data: [],
   }
 
@@ -145,9 +165,11 @@ export const transformCountryData = (
     const date = getDateNumber(day.date)
     transformed.data.push({
       date,
-      death: day.new_deaths,
-      positive: day.new_cases,
       deathIncrease: day.new_deaths,
+      death: day.total_deaths,
+      deathPerMillion: day.total_deaths_per_million,
+      totalDeathsPerMillion: day.total_deaths,
+      positive: day.new_cases,
       positiveIncrease: day.new_cases,
       deathsIncreaseRollingAverage: day.new_deaths_smoothed,
       positiveIncreaseRollingAverage: day.new_cases_smoothed,
@@ -155,8 +177,13 @@ export const transformCountryData = (
         day.new_deaths_smoothed_per_million,
       positiveIncreaseRollingAveragePerMillion:
         day.new_cases_smoothed_per_million,
+      newTestsSmoothed: day.new_tests_smoothed,
+      newTestsSmoothedPerThousand: day.new_tests_smoothed_per_thousand,
+      totalTestsPerThousand: day.total_tests_per_thousand,
+      totalTests: day.total_tests,
       stringencyIndex: day.stringency_index,
       policyUpdates: getPolicyUpdatesForDay(date, data.location, policyData),
+      hospitalizedCurrently: day.hosp_patients,
     })
   }
 
