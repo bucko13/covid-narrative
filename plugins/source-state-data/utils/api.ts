@@ -17,6 +17,7 @@ import {
   getCountrySurveyAPI,
   SURVEY_COUNTRIES_API,
   EXCESS_MORTALITY_API,
+  EU_GDP_API,
 } from "../constants"
 import { getDataWrapper } from "./utils"
 
@@ -36,6 +37,9 @@ export const getCurrentStateData = (state: string): Promise<any> =>
 
 export const getEUUnemploymentData = (): Promise<any> =>
   getDataWrapper(EU_UNEMPLOYMENT_API, "eu_unemployment_data", "EU Unemployment")
+
+export const getEUGDPData = (): Promise<any> =>
+  getDataWrapper(EU_GDP_API, "eu_gdp_data", "EU Unemployment")
 
 export const getAllStringencyData = (): Promise<any> =>
   getDataWrapper(STRINGENCY_INDEX_API, "all_stringency_data", "All Stringency")

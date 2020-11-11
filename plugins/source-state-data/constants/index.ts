@@ -20,6 +20,8 @@ export const stateCurrentAPI = (state: string) =>
 export const EU_UNEMPLOYMENT_API =
   "https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/une_rt_m?sinceTimePeriod=2019M12&precision=1&sex=T&unit=PC_ACT&s_adj=NSA&age=TOTAL"
 
+export const EU_GDP_API =
+  "https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/namq_10_gdp?na_item=B1GQ&precision=1&sinceTimePeriod=2019Q4&unit=CLV_PCH_PRE&s_adj=SCA"
 // includes state data
 export const STRINGENCY_INDEX_API =
   "https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest.csv"

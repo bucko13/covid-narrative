@@ -36,6 +36,7 @@ export interface ThreeLiesData {
   averageUnemploymentRate?: number
   averageExcessMortality?: number
   medianExcessMortality?: number
+  gdp?: { quarter: string; change: number }[]
   surveyData?: {
     [label: string]: {
       dateLabels: SurveyDateLabels

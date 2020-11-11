@@ -21,6 +21,7 @@ import {
   addSurveyData,
   addUnemploymentData,
   addExcessDeathData,
+  addGDPData,
 } from "./utils/utils"
 import { StateData, StateNodeData, PopulationData, StringencyData } from "."
 import {
@@ -67,6 +68,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     await addExcessDeathData(countryName, transformed)
     await addUnemploymentData(code, transformed)
     await addSurveyData(countryName, transformed)
+    await addGDPData(code, transformed)
 
     createNode({
       ...transformed,
