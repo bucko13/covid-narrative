@@ -6,71 +6,33 @@ import Layout from "../components/layout"
 import TotalComparisonBarChart, {
   ComparisonData,
 } from "../components/charts/TotalComparisonBarChart"
-import { convertOwidPageDataToLineChart, getLastDate, getPerMPop, readableDate } from "../utils/utils"
-import codeToCountry_ from "../data/codeToCountry.json"
+import { getDataValue, getLastDate, readableDate } from "../utils/helpers"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
-import { LocationData, OwidData, OwidNodes } from "../types/owid"
 import AboutThisGraph from "../components/AboutThisGraph"
 import { ChartDisplay, MeasurementSwitch } from "../components/ui"
-
-// get index signature for ts so we can key by variable
-const codeToCountry: { [code: string]: string } = codeToCountry_
+import { ThreeLiesData } from "../../plugins/source-covid-data"
 
 interface PageProps {
   data: {
-    [abbreviation: string]: {
-      nodes: {
-        location: string
-        population: number
-        data: OwidData[]
-      }[]
+    countries: {
+      nodes: ThreeLiesData[]
     }
   }
 }
 
-// extract fatalities from query data based on location/country code
-const getFatalities = (data: any, key: string, perM = false) => {
-  const length = data[key].nodes[0].data.length
-  const lastDate = data[key].nodes[0].data[length - 1]
-  const { population } = data[key].nodes[0]
-  return perM
-    ? getPerMPop(population, lastDate.total_deaths)
-    : lastDate.total_deaths
-}
-
 // states and countries for comparison (must be queried on this page and passed to component)
-const countries = ["fr", "gb", "se", "be", "it", "es", "us"];
-const outlierComparisonCountries = ["us", "deu", "che", "fin", "nld"];
+const countries = ["fr", "gb", "se", "be", "it", "es"]
+const outlierComparisonCountries = ["de", "ch", "fi", "nl"]
 
 const UsMishandled = ({ data }: PageProps) => {
+  const [outliersCasesPerMil, setOutliersCasesPerMil] = useState(true)
+
   // get data for bar chart that compares total fatalities (not per 100k)
   const totalFatalities: ComparisonData[] = countries.map(code => ({
-    location: codeToCountry[code.toUpperCase()],
-    abbreviation: code,
-    value: getFatalities(data, code),
+    name: getDataValue(data.countries, code, "name").toString(),
+    code,
+    value: +getDataValue(data.countries, code, "total_deaths"),
   }))
-
-  const [outliersCasesPerMil, setOutliersCasesPerMil] = useState(true);
-
-  const lineChartData: LocationData[] = Object.keys(data)
-    .filter(key => data[key]?.nodes[0])
-    .map(
-      (abbreviation: string): LocationData => {
-        return {
-          location: data[abbreviation].nodes[0].location.toLowerCase(),
-          population: data[abbreviation].nodes[0].population,
-          // the first 60 are from Jan/Feb and not relevant
-          data: data[abbreviation].nodes[0].data.slice(60),
-        }
-      }
-    )
-
-  const outlierComparisonData: OwidNodes = {}
-
-  for (const code of outlierComparisonCountries) {
-    if (data[code]?.nodes.length)
-      outlierComparisonData[code] = data[code];
-  }
 
   return (
     <Layout>
@@ -83,7 +45,9 @@ const UsMishandled = ({ data }: PageProps) => {
             it would give a distorted view, but more often than not this is how
             the data is shared regarding the "performance" of the U.S.
           </p>
-          <p>Data last updated: {readableDate(getLastDate(data))}</p>
+          <p>
+            Data last updated: {readableDate(getLastDate(data.countries.nodes))}
+          </p>
         </AboutThisGraph>
       </Box>
       <TotalComparisonBarChart
@@ -107,9 +71,11 @@ const UsMishandled = ({ data }: PageProps) => {
         </AboutThisGraph>
       </Box>
       <HistoricComparisonLineChart
-        comparisonData={lineChartData}
-        comparitor="total_cases_per_million"
+        comparisonData={data.countries.nodes}
+        excludeNodes={outlierComparisonCountries}
+        comparitor="positivesPerMillion"
         yAxisLabel="Total cases per million"
+        slice={60}
       />
 
       <ChartDisplay
@@ -126,14 +92,16 @@ const UsMishandled = ({ data }: PageProps) => {
         )}
       >
         <HistoricComparisonLineChart
-          comparisonData={lineChartData}
-          comparitor="total_deaths"
+          comparisonData={data.countries.nodes}
+          excludeNodes={outlierComparisonCountries}
+          comparitor="death"
           yAxisLabel="Fatalities"
+          slice={60}
         />
       </ChartDisplay>
 
       <ChartDisplay
-        title="Compared to European Outliers"
+        title="Case Count Compared to European Outliers"
         aboutText={() => (
           <p>
             Here we can compare US daily numbers against European countries that
@@ -147,13 +115,13 @@ const UsMishandled = ({ data }: PageProps) => {
           label="Show per million"
         />
         <HistoricComparisonLineChart
-          comparisonData={convertOwidPageDataToLineChart({
-            data: outlierComparisonData,
-          })}
+          comparisonData={data.countries.nodes}
+          excludeNodes={countries}
+          slice={60}
           comparitor={
             outliersCasesPerMil
-              ? "new_cases_smoothed_per_million"
-              : "new_cases_smoothed"
+              ? "positiveIncreaseRollingAveragePerMillion"
+              : "positiveIncreaseRollingAverage"
           }
           yAxisLabel="New Cases (per million)"
         />
@@ -165,191 +133,22 @@ const UsMishandled = ({ data }: PageProps) => {
 export default UsMishandled
 
 export const query = graphql`
-         query {
-           fr: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "France" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           gb: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "United Kingdom" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           es: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Spain" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           be: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Belgium" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           it: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Italy" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           se: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Sweden" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-               }
-             }
-           }
-           deu: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Germany" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-           che: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Switzerland" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-           fin: allEurope1Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Finland" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-           nld: allEurope2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "Netherlands" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-           us: allNorthAmerica2Json(
-             sort: { order: ASC, fields: data___date }
-             filter: { location: { eq: "United States" } }
-           ) {
-             nodes {
-               location
-               population
-               data {
-                 total_deaths
-                 total_deaths_per_million
-                 date
-                 total_cases_per_million
-                 new_deaths_smoothed
-                 new_deaths_smoothed_per_million
-                 new_cases_smoothed_per_million
-                 new_cases_smoothed
-               }
-             }
-           }
-         }
-       `
+  query {
+    countries: allCountryHistoricalData {
+      nodes {
+        name
+        code
+        population
+        total_deaths
+        data {
+          date
+          death
+          deathPerMillion
+          positivesPerMillion
+          positiveIncreaseRollingAverage
+          positiveIncreaseRollingAveragePerMillion
+        }
+      }
+    }
+  }
+`

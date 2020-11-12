@@ -8,74 +8,74 @@ import {
   makeStyles,
   MenuItem,
   Select,
-  Switch
+  Switch,
 } from "@material-ui/core"
 import Layout from "../components/layout"
 
-import TotalComparisonBarChart, { ComparisonData } from "../components/charts/TotalComparisonBarChart";
-import {
-  getPerMPop,
-  convertOwidPageDataToLineChart,
-  readableDate,
-  getLastDate
-} from '../utils/utils';
-import codeToCountry_ from '../data/codeToCountry.json';
-import { StateData } from "../../plugins/source-state-data";
+import TotalComparisonBarChart, {
+  ComparisonData,
+} from "../components/charts/TotalComparisonBarChart"
+import { getPerMPop, getLastDataPoint, readableDate } from "../utils/helpers"
+import { StateData, ThreeLiesData } from "../../plugins/source-covid-data"
 import ComposedHistoricalComparison from "../components/charts/ComposedHistoricalComparison"
-import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart";
-import { LocationData, OwidNodes } from "../types/owid";
-import AboutThisGraph from "../components/AboutThisGraph";
-import { ChartDisplay, MeasurementSwitch } from "../components/ui";
+import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
+import AboutThisGraph from "../components/AboutThisGraph"
+import { ChartDisplay, MeasurementSwitch } from "../components/ui"
+import { codeToCountry as codeToCountry_ } from "../../plugins/source-covid-data/constants"
 
 const useStyles = makeStyles({
   select: {
-    fontSize: '1.5rem',
-    marginTop: '5px',
-    paddingBottom: '0px',
+    fontSize: "1.5rem",
+    marginTop: "5px",
+    paddingBottom: "0px",
   },
 })
 
 // get index signature for ts so we can key by variable
-const codeToCountry: {[code: string]: string} = codeToCountry_
+const codeToCountry: { [code: string]: string } = codeToCountry_
 
 interface PageProps {
   data: {
-    [key: string]: {
-      nodes: LocationData[]
-    }
-  } & { // <- union type so that the above catchall for the countries doesn't catch the states
     states: {
       nodes: StateData[]
     }
+    countries: {
+      nodes: ThreeLiesData[]
+    }
   }
-}
-
-// extract fatalities from query data based on location/country code
-const getFatalities = (data: any, key: string, perM = false) => {
-  const length = data[key].nodes[0].data.length
-  const lastDate = data[key].nodes[0].data[length - 1]
-  const { population } = data[key].nodes[0]
-  return perM ? getPerMPop(population, lastDate.total_deaths) : lastDate.total_deaths
 }
 
 const getStateTotalDeaths = (d: StateData) => d.jhu_deaths || d.total_deaths
 
 // states and countries for comparison (must be queried on this page and passed to component)
 const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
-const testOnlyCountries = ["deu", "che", "fin", "nld"]
 const states = ["ny", "nj"]
 
 const USOutperformed = ({ data }: PageProps) => {
-  const [fatalitiesPerMil, setFatalitiesPerMil] = useState(true);
-  const [totalFalitiesPer100k, setTotalFatalitiesPer100k] = useState(true);
+  const classes = useStyles()
+  const [fatalitiesPerMil, setFatalitiesPerMil] = useState(true)
+  const [totalFalitiesPer100k, setTotalFatalitiesPer100k] = useState(true)
   const [newCasesPerMil, setNewCasesPerMil] = useState(true)
-  const [comparisonChartCountry, setComparisonChartCountry] = useState('us');
+  const [comparisonChartCountry, setComparisonChartCountry] = useState("us")
   const [testsPerThousand, setTestsPerThousand] = useState(true)
 
+  // find the requested country and extract a value from it
+  const getCountryValue = (code: string, key: string): number => {
+    const country = data.countries.nodes.find(node => node.code === code)
+    const value = country ? country[key] : 0
+    if (!value)
+      // tslint:disable-next-line: no-console
+      console.error(`Could not find ${key} for ${code}`)
+    return value
+  }
+
+  // find a state and extract a given value from it
   const getStateData = (code: string): StateData | undefined =>
     data.states.nodes.find((state: StateData) => state.code === code)
 
-  const getCountryNodes = (code: string) => data[code].nodes[0]
+  // return all data nodes for a country
+  const getCountryNodes = (code: string) =>
+    data.countries.nodes.find(country => country.code === code)
 
   // handle country change for comparison graph
   const onChangeCountry = (
@@ -94,21 +94,24 @@ const USOutperformed = ({ data }: PageProps) => {
   }, stateData)
 
   // get country populations based on countries we are comparing
-  const populations: { [key: string]: number } = countries.reduce((pops: {[key:string]: number}, code) => {
-    pops[code] = data[code].nodes[0].population;
-    return pops;
-  }, {})
+  const populations: { [key: string]: number } = countries.reduce(
+    (pops: { [key: string]: number }, code) => {
+      pops[code] = getCountryValue(code, "population")
+      return pops
+    },
+    {}
+  )
 
   // get state populations ased on countries we are comparing
   let adjPopulations: { [key: string]: number } = {
     // add special us adjusted case adjusted in reduce below
-    us: populations.us
+    us: populations.us,
   }
 
   // for each state we want to adjust for, subtract their population
   // from the US and add their population to the map.
   adjPopulations = states.reduce((prev, code) => {
-    if (!stateData[code]) return prev;
+    if (!stateData[code]) return prev
     prev.us -= stateData[code].population
     prev[code] = stateData[code].population
     return prev
@@ -121,76 +124,86 @@ const USOutperformed = ({ data }: PageProps) => {
 
   // get data for bar chart that compares total fatalities (not per 100k)
   const totalFatalities: ComparisonData[] = countries.map(code => ({
-    location: codeToCountry[code.toUpperCase()],
-    abbreviation: code,
-    value: getFatalities(data, code)
+    name: codeToCountry[code.toUpperCase()],
+    code,
+    value: getCountryValue(code, "total_deaths"),
   }))
 
   // get data for bar chart that compares total fatalities per 100k
   const fatalityPerM = totalFatalities.map(node => ({
     ...node,
-    value: getPerMPop(populations[node.abbreviation], node.value)
+    value: getPerMPop(populations[node.code], node.value),
   }))
 
   // add state data for comparison
   states.forEach(code => {
     const obj = {
-      location: code.toUpperCase(),
-      abbreviation: code,
+      name: code.toUpperCase(),
+      code,
     }
 
     totalFatalities.push({
       ...obj,
       value: getStateTotalDeaths(stateData[code]),
     })
+
     fatalityPerM.push({
       ...obj,
-      value: getPerMPop(stateData[code].population, getStateTotalDeaths(stateData[code]))
+      value: getPerMPop(
+        stateData[code].population,
+        getStateTotalDeaths(stateData[code])
+      ),
     })
   })
 
   // get total fatalities for all states being adjusted for
   const adjStatesTotalFatalities = states.reduce(
-    (prev, code) => stateData[code] ? prev += getStateTotalDeaths(stateData[code]) : prev
-  , 0)
+    (prev, code) =>
+      stateData[code] ? (prev += getStateTotalDeaths(stateData[code])) : prev,
+    0
+  )
 
   // then get us adjusted by subtracting from us total
   const adjUSTotalFatalities =
-    getFatalities(data, "us") - adjStatesTotalFatalities
+    getCountryValue("us", "total_deaths") - adjStatesTotalFatalities
 
   // add "US Adjusted" item to comparison lists
-  totalFatalities.push(
-    {
-      location: "US Adj",
-      abbreviation: "usAdj",
-      value: adjUSTotalFatalities
-    }
+  totalFatalities.push({
+    name: "US Adj",
+    code: "usAdj",
+    value: adjUSTotalFatalities,
+  })
+
+  fatalityPerM.push({
+    name: "US Adj",
+    code: "usAdj",
+    value: getPerMPop(adjPopulations.us, adjUSTotalFatalities),
+  })
+
+  const lineChartData = data.countries.nodes.filter(country =>
+    countries.includes(country.code)
   )
 
-  fatalityPerM.push(
-    {
-      location: "US Adj",
-      abbreviation: "usAdj",
-      value: getPerMPop(
-        adjPopulations.us,
-        adjUSTotalFatalities
-      ),
+  // separate this out so that typescript doesn't complain about the
+  // possibility that a country node isn't cfoun
+  function renderComparisonChartCountry() {
+    const nodes = getCountryNodes(comparisonChartCountry)
+    if (nodes) {
+      return (
+        <ComposedHistoricalComparison
+          comparisonData={nodes.data}
+          largerComparitor="positiveIncreaseRollingAverage"
+          smallerComparitor="deathsIncreaseRollingAveragePerMillion"
+          yAxisLabelLeft="New Cases (per mil.)"
+          yAxisLabelRight="New Fatalities (per mil.)"
+          slice={60}
+        />
+      )
+    } else {
+      return `Problem getting data for ${comparisonChartCountry}`
     }
-  )
+  }
 
-  let countryData: OwidNodes = {}
-  // filter out states from page data so we can get line chart data
-  countryData = Object.keys(data).reduce((prev, curr) => {
-    if (curr !== 'states') prev[curr] = data[curr]
-    return prev;
-  }, countryData)
-
-  // get the country data and arrange in a format that the line chart
-  // data can work with
-  const lineChartData = convertOwidPageDataToLineChart({ data: countryData, filter: testOnlyCountries })
-  const allChartData = convertOwidPageDataToLineChart({ data: countryData })
-
-  const classes = useStyles();
   return (
     <Layout>
       <Box my={5}>
@@ -230,7 +243,12 @@ const USOutperformed = ({ data }: PageProps) => {
             discounted NY and NJ populations) measures up favorably against the
             responses and outcomes of other countries.
           </p>
-          <p>Data last updated: {readableDate(getLastDate(data))}</p>
+          <p>
+            Data last updated:{" "}
+            {readableDate(
+              getLastDataPoint(data.countries.nodes[0].data, "date")
+            )}
+          </p>
         </AboutThisGraph>
         <FormControlLabel
           control={
@@ -245,7 +263,9 @@ const USOutperformed = ({ data }: PageProps) => {
         />
         <TotalComparisonBarChart
           comparisonData={totalFalitiesPer100k ? fatalityPerM : totalFatalities}
-          yAxisLabel={totalFalitiesPer100k ? 'Fatalities Per 100k' : "Total Fatalities"}
+          yAxisLabel={
+            totalFalitiesPer100k ? "Fatalities Per 100k" : "Total Fatalities"
+          }
           sorted
         />
       </Box>
@@ -270,7 +290,7 @@ const USOutperformed = ({ data }: PageProps) => {
             >
               {countries.map(code => (
                 <MenuItem value={code} key={code}>
-                  {getCountryNodes(code).location}
+                  {codeToCountry[code.toUpperCase()]}
                 </MenuItem>
               ))}
             </Select>
@@ -280,10 +300,10 @@ const USOutperformed = ({ data }: PageProps) => {
         </h4>
         <AboutThisGraph name="case-vs-fatalities">
           <p>
-            This is a composed, bi-axial graph (two Y axes). The left reflects the value
-            for case count, represented by the line while the right is for
-            fatalities (the bars). Change the country you'd like to view the comparison
-            of by selecting from the menu in the title.
+            This is a composed, bi-axial graph (two Y axes). The left reflects
+            the value for case count, represented by the line while the right is
+            for fatalities (the bars). Change the country you'd like to view the
+            comparison of by selecting from the menu in the title.
           </p>
           <p>
             If you're curious why the data is "smoothed" and what that means,{" "}
@@ -309,14 +329,7 @@ const USOutperformed = ({ data }: PageProps) => {
             capacity.
           </p>
         </AboutThisGraph>
-        <ComposedHistoricalComparison
-          comparisonData={getCountryNodes(comparisonChartCountry).data}
-          largerComparitor="new_cases_smoothed_per_million"
-          smallerComparitor="new_deaths_smoothed_per_million"
-          yAxisLabelLeft="New Cases (per mil.)"
-          yAxisLabelRight="New Fatalities (per mil.)"
-          slice={60}
-        />
+        {renderComparisonChartCountry()}
       </Box>
 
       <Box my={5}>
@@ -328,8 +341,14 @@ const USOutperformed = ({ data }: PageProps) => {
         />
         <HistoricComparisonLineChart
           comparisonData={lineChartData}
-          comparitor={newCasesPerMil ? "new_cases_smoothed_per_million" : "new_cases_smoothed"}
-          yAxisLabel={newCasesPerMil ? "Daily new cases (per mil)" : "Daily new cases"}
+          comparitor={
+            newCasesPerMil
+              ? "positiveIncreaseRollingAveragePerMillion"
+              : "positiveIncreaseRollingAverage"
+          }
+          yAxisLabel={
+            newCasesPerMil ? "Daily new cases (per mil)" : "Daily new cases"
+          }
         />
       </Box>
 
@@ -358,11 +377,11 @@ const USOutperformed = ({ data }: PageProps) => {
           label="Show per million"
         />
         <HistoricComparisonLineChart
-          yAxisLabel={fatalitiesPerMil ? 'Total Fatalities (per mil)' : 'Total Fatalities'}
-          comparisonData={lineChartData}
-          comparitor={
-            fatalitiesPerMil ? "total_deaths_per_million" : "total_deaths"
+          yAxisLabel={
+            fatalitiesPerMil ? "Total Fatalities (per mil)" : "Total Fatalities"
           }
+          comparisonData={lineChartData}
+          comparitor={fatalitiesPerMil ? "deathPerMillion" : "death"}
         />
       </Box>
 
@@ -370,9 +389,9 @@ const USOutperformed = ({ data }: PageProps) => {
         title="New Tests"
         aboutText={() => (
           <p>
-            Tests give us a limited view into government response. This gives us the opportunity
-            to see if a sufficient infrastructure was put into place to run systems such as a test and
-            tace regime.
+            Tests give us a limited view into government response. This gives us
+            the opportunity to see if a sufficient infrastructure was put into
+            place to run systems such as a test and tace regime.
           </p>
         )}
       >
@@ -382,9 +401,15 @@ const USOutperformed = ({ data }: PageProps) => {
           label="Show per thousand"
         />
         <HistoricComparisonLineChart
-          comparisonData={allChartData}
-          comparitor={testsPerThousand ? "new_tests_smoothed_per_thousand" : "new_tests_smoothed"}
-          yAxisLabel={testsPerThousand ? "New tests per thousand people" : "New total tests"}
+          comparisonData={data.countries.nodes}
+          comparitor={
+            testsPerThousand
+              ? "newTestsSmoothedPerThousand"
+              : "newTestsSmoothedPerThousand"
+          }
+          yAxisLabel={
+            testsPerThousand ? "New tests per thousand people" : "New tests"
+          }
         />
       </ChartDisplay>
     </Layout>
@@ -393,12 +418,9 @@ const USOutperformed = ({ data }: PageProps) => {
 
 export default USOutperformed
 
-// todo: states can be combined into a single request filtering for ny and nj
-// the countries have to be separated but should be able to account for this
-// in type declaration
 export const query = graphql`
   query {
-    states: allStateHistoricalData(filter: { code: { in: ["ny","nj"] } }) {
+    states: allStateHistoricalData(filter: { code: { in: ["ny", "nj"] } }) {
       nodes {
         population
         deaths_per_100k
@@ -408,146 +430,23 @@ export const query = graphql`
         state
       }
     }
-    fr: allEurope1Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "France" } }
-    ) {
+    countries: allCountryHistoricalData {
       nodes {
-        ...europe1Fields
-      }
-    }
-    gb: allEurope2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "United Kingdom" } }
-    ) {
-      nodes {
-        ...europe2Fields
-      }
-    }
-    es: allEurope2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "Spain" } }
-    ) {
-      nodes {
-        ...europe2Fields
-      }
-    }
-    be: allEurope1Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "Belgium" } }
-    ) {
-      nodes {
-        ...europe1Fields
-      }
-    }
-    it: allEurope1Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "Italy" } }
-    ) {
-      nodes {
-        ...europe1Fields
-      }
-    }
-    se: allEurope2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "Sweden" } }
-    ) {
-      nodes {
-        ...europe2Fields
-      }
-    }
-    deu: allEurope1Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "Germany" } }
-    ) {
-      nodes {
-        location
+        name
+        code
         population
+        deaths_per_million
+        total_deaths
         data {
-          total_deaths
           date
-          new_deaths_smoothed_per_million
-          new_cases_smoothed
-          new_tests_smoothed
-          new_tests_smoothed_per_thousand
-          new_cases_smoothed_per_million
-          total_deaths_per_million
-        }
-      }
-    }
-    che: allEurope2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "Switzerland" } }
-    ) {
-      nodes {
-        location
-        population
-        data {
-          total_deaths
-          date
-          new_deaths_smoothed_per_million
-          new_cases_smoothed
-          new_tests_smoothed
-          new_tests_smoothed_per_thousand
-          new_cases_smoothed_per_million
-          total_deaths_per_million
-        }
-      }
-    }
-    fin: allEurope1Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "Finland" } }
-    ) {
-      nodes {
-        location
-        population
-        data {
-          total_deaths
-          date
-          new_deaths_smoothed_per_million
-          new_cases_smoothed
-          new_tests_smoothed
-          new_tests_smoothed_per_thousand
-          new_cases_smoothed_per_million
-          total_deaths_per_million
-        }
-      }
-    }
-    nld: allEurope2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "Netherlands" } }
-    ) {
-      nodes {
-        location
-        population
-        data {
-          total_deaths
-          date
-          new_deaths_smoothed_per_million
-          new_cases_smoothed
-          new_tests_smoothed
-          new_tests_smoothed_per_thousand
-          new_cases_smoothed_per_million
-          total_deaths_per_million
-        }
-      }
-    }
-    us: allNorthAmerica2Json(
-      sort: { order: ASC, fields: data___date }
-      filter: { location: { eq: "United States" } }
-    ) {
-      nodes {
-        location
-        population
-        data {
-          total_deaths
-          date
-          new_deaths_smoothed_per_million
-          new_cases_smoothed
-          new_tests_smoothed
-          new_tests_smoothed_per_thousand
-          new_cases_smoothed_per_million
-          total_deaths_per_million
+          deathsIncreaseRollingAveragePerMillion
+          death
+          deathPerMillion
+          positiveIncreaseRollingAverage
+          newTestsSmoothed
+          newTestsSmoothedPerThousand
+          totalTests
+          positiveIncreaseRollingAveragePerMillion
         }
       }
     }

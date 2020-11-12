@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react"
 
 import {
   XAxis,
@@ -13,8 +13,8 @@ import {
   Bar,
 } from "recharts"
 import randomColor from "randomcolor"
-import { readableChartDate, sliceData } from '../../utils/utils';
-import { ComparisonLineChartProps } from '../../types/charts';
+import { readableChartDate, sliceData } from "../../utils/helpers"
+import { ComparisonLineChartProps } from "../../types/charts"
 
 const ComposedHistoricalComparison = ({
   comparisonData,
@@ -59,6 +59,7 @@ const ComposedHistoricalComparison = ({
           type="basisOpen"
           dot={false}
           stroke={randomColor({
+            luminosity: "dark",
             seed: JSON.stringify(data[0]),
           })}
         />
@@ -66,6 +67,7 @@ const ComposedHistoricalComparison = ({
           yAxisId={smallerComparitor}
           dataKey={smallerComparitor}
           fill={randomColor({
+            luminosity: "bright",
             seed: JSON.stringify(data[1]),
           })}
         />

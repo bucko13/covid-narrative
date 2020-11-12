@@ -1,5 +1,5 @@
-import React from "react";
-import randomColor from "randomcolor";
+import React from "react"
+import randomColor from "randomcolor"
 
 import {
   XAxis,
@@ -12,8 +12,8 @@ import {
 } from "recharts"
 
 export interface ComparisonData {
-  location: string
-  abbreviation: string
+  name: string
+  code: string
   value: number
 }
 
@@ -38,14 +38,18 @@ export default function TotalComparisonBarChart({
     <ResponsiveContainer width="100%" aspect={2}>
       <BarChart data={comparisonData}>
         <Tooltip />
-        <XAxis dataKey="location" />
+        <XAxis dataKey="name" />
         <YAxis
-          label={{ value: yAxisLabel, angle: -90, position: "insideBottomLeft" }}
+          label={{
+            value: yAxisLabel,
+            angle: -90,
+            position: "insideBottomLeft",
+          }}
         />
         <CartesianGrid strokeDasharray="3 3" />
         <Bar
           dataKey="value"
-          fill={randomColor({ seed: comparisonData[0].location, hue: "dark" })}
+          fill={randomColor({ seed: comparisonData[0].name, hue: "dark" })}
         />
       </BarChart>
     </ResponsiveContainer>
