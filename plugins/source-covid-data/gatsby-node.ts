@@ -11,6 +11,7 @@ import {
   getAllOwidCountryData,
   getAllStringencyData,
   getHistoricalPolicyData,
+  getOwidTestDataNode,
 } from "./utils/api"
 import {
   getPerMPop,
@@ -69,6 +70,13 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
         allCountryData[iso3Code],
         policyData
       )
+
+      const testData = await getOwidTestDataNode()
+      const matching = testData.find(datum => datum["ISO code"] === iso3Code)
+      if (matching) {
+        console.log(matching)
+        process.exit()
+      }
 
       await addExcessDeathData(countryName, transformed)
       await addUnemploymentData(code, transformed)
