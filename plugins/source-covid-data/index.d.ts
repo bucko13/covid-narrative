@@ -120,9 +120,7 @@ export interface OWIDDataNode {
   total_deaths: number
   new_deaths_smoothed: number
   total_cases_per_million: number
-  new_cases_per_million: number
   new_cases_smoothed_per_million: number
-  new_deaths_per_million: number
   new_deaths_smoothed_per_million: number
   total_tests: number
   total_deaths_per_million: number
@@ -192,6 +190,7 @@ export interface SurveyResultAPIResponse {
   endtime: string
   qweek: string
   i12_health_1: string
+  [key: string]: string
 }
 
 export interface SurveyDateLabels {
