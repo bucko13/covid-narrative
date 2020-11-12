@@ -6,7 +6,7 @@ import Layout from "../components/layout"
 import TotalComparisonBarChart, {
   ComparisonData,
 } from "../components/charts/TotalComparisonBarChart"
-import { getDataValue, getLastDate, readableDate } from "../utils/helpers"
+import { getLastDate, readableDate } from "../utils/helpers"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
 import AboutThisGraph from "../components/AboutThisGraph"
 import { ChartDisplay, MeasurementSwitch } from "../components/ui"
