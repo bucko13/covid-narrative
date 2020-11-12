@@ -3,7 +3,11 @@ import fs from "fs"
 import csv from "csvtojson"
 import path from "path"
 
-import { SurveyResultsForWeek, SurveyDateLabels } from ".."
+import {
+  SurveyResultsForWeek,
+  SurveyDateLabels,
+  SurveyResultAPIResponse,
+} from ".."
 import { getCountrySurveyData, getCountrySurveysList } from "./api"
 import { reverseDateString } from "./utils"
 import { codeToCountry as _codeToCountry } from "../constants"
@@ -53,18 +57,78 @@ function orderAndCalculatePercentage(
   return ordered.map(calculateSurveyPercentage)
 }
 
-async function handleUKSurvey() {
-  const DATA_FILE = `../data/united_kingdom_survey_data`
-  const csvString = fs.readFileSync(
-    path.resolve(__dirname, `${DATA_FILE}.csv`),
-    {
-      encoding: "utf-8",
+// the UK data set is larger and so is broken down into two sets
+// needs to be handled accordingly
+async function handleUKSurvey(
+  code: string
+): Promise<[SurveyResultsForWeek[], SurveyDateLabels]> {
+  // first data set
+  const data1 = await getCountrySurveyData("united-kingdom1")
+  const [results1, dateLabels1] = prepareSurveyDataForCode(data1, code)
+  // second data set
+  const data2 = await getCountrySurveyData("united-kingdom2")
+  const [results2, dateLabels2] = prepareSurveyDataForCode(data2, code)
+  // combine into a single results array, easier now that the data has been pruned
+  // only to what we need
+  const results = [
+    ...orderAndCalculatePercentage(results1),
+    ...orderAndCalculatePercentage(results2),
+  ]
+  const dateLabels = { ...dateLabels1, ...dateLabels2 }
+  // tslint:disable-next-line: no-console
+  console.log(`Finished UK survey data for code ${code}`)
+  return [results, dateLabels]
+}
+
+function prepareSurveyDataForCode(
+  surveyData: SurveyResultAPIResponse[],
+  code: string
+): [TotalSurveyResults, SurveyDateLabels] {
+  const results: TotalSurveyResults = {}
+  const dateLabels: SurveyDateLabels = {}
+
+  for (const result of surveyData) {
+    const date = reverseDateString(result.endtime.split(" ")[0])
+    const label = result.qweek
+
+    // the response dates for a given week (label) vary and so we need
+    // to add them up for each week an dstore what the start and end dates are
+    if (!results[label]) {
+      results[label] = {
+        always: 0,
+        frequently: 0,
+        sometimes: 0,
+        rarely: 0,
+        not_at_all: 0,
+        total: 0,
+      }
+      dateLabels[label] = {
+        startDate: date,
+        endDate: date,
+      }
     }
-  )
-  const data = await csv().fromString(csvString)
-  const json = JSON.stringify(data, null, 2)
-  fs.writeFileSync(path.resolve(__dirname, `${DATA_FILE}.json`), json)
-  return json
+
+    const value = result[code].split(" ").join("_").toLowerCase()
+
+    // date of current survey result is later than the saved endDate
+    if (DateTime.fromISO(date) > DateTime.fromISO(dateLabels[label].endDate)) {
+      dateLabels[label].endDate = date
+    }
+
+    if (
+      DateTime.fromISO(date) < DateTime.fromISO(dateLabels[label].startDate)
+    ) {
+      dateLabels[label].startDate = date
+    }
+
+    if (!results[label].hasOwnProperty(value)) {
+      continue
+    }
+
+    results[label][value]++
+    results[label].total++
+  }
+  return [results, dateLabels]
 }
 
 /**
@@ -99,65 +163,14 @@ export async function collateSurveyDataForCode(
     }
 
     if (country === "united-kingdom") {
-      // tslint:disable-next-line: no-console
-      console.warn(
-        "Make sure to manually download and extract the UK data because it is annoyingly saved as a zip"
-      )
-      surveyData = handleUKSurvey()
+      return await handleUKSurvey(code)
     } else {
       surveyData = await getCountrySurveyData(country)
+      const [results, dateLabels] = prepareSurveyDataForCode(surveyData, code)
+      // tslint:disable-next-line: no-console
+      console.log(`Finished with ${_country}'s data`)
+      return [orderAndCalculatePercentage(results), dateLabels]
     }
-
-    const results: TotalSurveyResults = {}
-    const dateLabels: SurveyDateLabels = {}
-
-    for (const result of surveyData) {
-      const date = reverseDateString(result.endtime.split(" ")[0])
-      const label = result.qweek
-
-      // the response dates for a given week (label) vary and so we need
-      // to add them up for each week an dstore what the start and end dates are
-      if (!results[label]) {
-        results[label] = {
-          always: 0,
-          frequently: 0,
-          sometimes: 0,
-          rarely: 0,
-          not_at_all: 0,
-          total: 0,
-        }
-        dateLabels[label] = {
-          startDate: date,
-          endDate: date,
-        }
-      }
-
-      const value = result[code].split(" ").join("_").toLowerCase()
-
-      // date of current survey result is later than the saved endDate
-      if (
-        DateTime.fromISO(date) > DateTime.fromISO(dateLabels[label].endDate)
-      ) {
-        dateLabels[label].endDate = date
-      }
-
-      if (
-        DateTime.fromISO(date) < DateTime.fromISO(dateLabels[label].startDate)
-      ) {
-        dateLabels[label].startDate = date
-      }
-
-      if (!results[label].hasOwnProperty(value)) {
-        continue
-      }
-
-      results[label][value]++
-      results[label].total++
-    }
-
-    // tslint:disable-next-line: no-console
-    console.log(`Finished with ${_country}'s data`)
-    return [orderAndCalculatePercentage(results), dateLabels]
   } catch (e) {
     // tslint:disable-next-line: no-console
     console.error(`There was a problem getting survey data for ${_country}.`)

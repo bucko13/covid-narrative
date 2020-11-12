@@ -126,7 +126,9 @@ export const getStateUnemploymentData = async (): Promise<any> => {
       },
       {}
     )
-    fs.writeFileSync(DATA_FILE, JSON.stringify(sortedData, null, 2))
+    if (process.env.SAVE_DATA_FILES) {
+      fs.writeFileSync(DATA_FILE, JSON.stringify(sortedData, null, 2))
+    }
     data = sortedData
     console.log("Finished loading employment data")
   } else {
