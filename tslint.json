@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6c170537781b18bba7b748df4bac1b420c1487bfb3fd5c196048e53e6a7727b0
-size 233
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {},
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["node_modules/**/*.ts", "dist/**/*.ts"]
+  }
+}

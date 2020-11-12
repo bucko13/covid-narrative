@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1ae02c17b0406732a6f1589cbaebde467f5efb4e904f551af88f06792bb55054
-size 330
+{
+  "name": "source-covid-data",
+  "version": "1.0.0",
+  "description": "retrieving state historical data and latest totals",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "csvtojson": "^2.0.10",
+    "luxon": "^1.25.0",
+    "moment": "^2.27.0"
+  },
+  "devDependencies": {
+    "@types/luxon": "^1.25.0"
+  }
+}
