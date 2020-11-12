@@ -91,7 +91,9 @@ export const getDataWrapper = async (
       const response = await getJsonFromApi(api)
 
       data = dataKey ? response[dataKey] : response
-      fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
+      if (process.env.SAVE_DATA_FILES) {
+        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
+      }
       console.log(`Finished loading ${dataName} data`)
     } catch (e) {
       console.error(e)

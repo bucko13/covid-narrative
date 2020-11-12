@@ -68,5 +68,5 @@ yarn-error.log
 # Yarn Integrity file
 .yarn-integrity
 
-test.js
-
+# ignore the large data files
+plugins/source-covid-data/data/*.json
