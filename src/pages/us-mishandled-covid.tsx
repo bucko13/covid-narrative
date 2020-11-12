@@ -26,13 +26,14 @@ const outlierComparisonCountries = ["de", "ch", "fi", "nl"]
 
 const UsMishandled = ({ data }: PageProps) => {
   const [outliersCasesPerMil, setOutliersCasesPerMil] = useState(true)
-
   // get data for bar chart that compares total fatalities (not per 100k)
-  const totalFatalities: ComparisonData[] = countries.map(code => ({
-    name: getDataValue(data.countries, code, "name").toString(),
-    code,
-    value: +getDataValue(data.countries, code, "total_deaths"),
-  }))
+  const totalFatalities: ComparisonData[] = data.countries.nodes
+    .filter(({ code }) => !outlierComparisonCountries.includes(code))
+    .map(({ code, name, total_deaths }) => ({
+      name,
+      code,
+      value: total_deaths,
+    }))
 
   return (
     <Layout>
