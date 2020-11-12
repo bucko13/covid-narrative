@@ -4,15 +4,15 @@ import { Box, Switch, FormControlLabel } from "@material-ui/core"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { StateData } from "../../plugins/source-state-data"
+import { StateData } from "../../plugins/source-covid-data"
 import { LineChartComparisonData, StackedAreaChartData } from "../types/charts"
 import {
   StackedAreaComparison,
   HistoricComparisonLineChart,
-  TotalComparisonBarChart
+  TotalComparisonBarChart,
 } from "../components/charts"
 import { ComparisonData } from "../components/charts/TotalComparisonBarChart"
-import { getPerMPop, readableChartDate, readableDate } from "../utils/utils"
+import { getPerMPop, readableChartDate, readableDate } from "../utils/helpers"
 import AboutThisGraph from "../components/AboutThisGraph"
 
 interface PageProps {
@@ -29,23 +29,25 @@ const NyMessedUp = ({ data }: PageProps) => {
   const [casesPer100k, setCasesPer100k] = useState(true)
 
   const stateData = data.allStateHistoricalData.nodes
-  const states: string[] = stateData.map(state => state.code);
+  const states: string[] = stateData.map(state => state.code)
 
   // array of historic data for states to compare in line chart
   const lineChartData: LineChartComparisonData[] = stateData.map(
     (state: StateData): LineChartComparisonData => ({
-        location: state.code,
-        population: state.population,
-        data: state.data,
-    }))
+      name: state.code,
+      population: state.population,
+      data: state.data,
+    })
+  )
 
   // array of data for bar chart
   const totalFatalityComparison: ComparisonData[] = stateData.map(
     (state: StateData): ComparisonData => ({
-      location: state.state,
-      abbreviation: state.code,
-      value:
-        state.jhu_deaths? getPerMPop(state.population, state.jhu_deaths) : state.deaths_per_100k,
+      name: state.state,
+      code: state.code,
+      value: state.jhu_deaths
+        ? getPerMPop(state.population, state.jhu_deaths)
+        : state.deaths_per_100k,
     })
   )
 
@@ -54,27 +56,27 @@ const NyMessedUp = ({ data }: PageProps) => {
   // to get unemployment data for a stacked area chart
   // we will take a data point for each week, add to an
   // object with the date and each state as a key
-  const dataNodes = stateData[0].data;
+  const dataNodes = stateData[0].data
 
   // early unemployment data isn't helpful so we'll cut that off
   for (let i = 20; i < dataNodes.length; i += 7) {
-    const { date } = dataNodes[i];
+    const { date } = dataNodes[i]
     // for each state get the unemployment rate at this date
     // and add to an object that can be pushed onto data list
-    let allHaveUnemployment = true;
+    let allHaveUnemployment = true
     const composed = { date: readableChartDate(date) }
     stateData.reduce((prev: any, state): any => {
-      const node = state.data.find(stateNode => stateNode.date === date);
-      if (node && node.insuredUnemploymentRate) {
-        prev[state.code] = node.insuredUnemploymentRate
+      const node = state.data.find(stateNode => stateNode.date === date)
+      if (node && node.unemploymentRate) {
+        prev[state.code] = node.unemploymentRate
       } else {
         allHaveUnemployment = false
       }
-      return prev;
-    }, composed);
+      return prev
+    }, composed)
     // only add the data point if all have an unemployment value
     if (allHaveUnemployment) {
-      unemploymentData.push(composed);
+      unemploymentData.push(composed)
     }
   }
 
@@ -89,16 +91,20 @@ const NyMessedUp = ({ data }: PageProps) => {
   )
 
   // for each day of unemployment data
-  for (const day  of unemploymentData) {
+  for (const day of unemploymentData) {
     // add the rate for that day for each state
     for (const code of Object.keys(averageUnemploymentRates)) {
-      averageUnemploymentRates[code] = averageUnemploymentRates[code] + +day[code]
+      averageUnemploymentRates[code] =
+        averageUnemploymentRates[code] + +day[code]
     }
   }
 
   Object.keys(averageUnemploymentRates).reduce((_data, code) => {
-    averageUnemploymentRates[code] = Math.round(averageUnemploymentRates[code] / unemploymentData.length * 100) / 100
-    return averageUnemploymentRates;
+    averageUnemploymentRates[code] =
+      Math.round(
+        (averageUnemploymentRates[code] / unemploymentData.length) * 100
+      ) / 100
+    return averageUnemploymentRates
   }, averageUnemploymentRates)
 
   // we want the largest average rate first
@@ -239,8 +245,8 @@ const NyMessedUp = ({ data }: PageProps) => {
       </h5>
       <TotalComparisonBarChart
         comparisonData={Object.keys(averageUnemploymentRates).map(code => ({
-          location: code,
-          abbreviation: code,
+          name: code,
+          code,
           value: averageUnemploymentRates[code],
         }))}
         sorted
@@ -348,19 +354,19 @@ export const query = graphql`
   query StateQuery {
     allStateHistoricalData {
       nodes {
-          state
-          code
-          population
+        state
+        code
+        population
+        date
+        deaths_per_100k
+        jhu_deaths
+        data {
+          hospitalizedCurrently
           date
-          deaths_per_100k
-          jhu_deaths
-          data {
-            hospitalizedCurrently
-            date
-            deathsIncreaseRollingAverage
-            insuredUnemploymentRate
-            estimatedCases
-          }
+          deathsIncreaseRollingAverage
+          unemploymentRate
+          estimatedCases
+        }
       }
     }
   }
