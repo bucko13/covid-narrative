@@ -1,4 +1,4 @@
-import { OwidData } from "./owid";
+import { ThreeLiesData } from "../../plugins/source-covid-data"
 
 export interface LineChartDataNode {
   date: string | number
@@ -6,7 +6,8 @@ export interface LineChartDataNode {
 }
 
 export interface LineChartComparisonData {
-  location: string
+  name: string
+  code?: string
   population: number
   data: LineChartDataNode[]
   yAxisLabel?: string
@@ -29,7 +30,7 @@ export interface ComparisonBarChartProps {
 }
 
 export interface ComparisonLineChartProps {
-  comparisonData: OwidData[]
+  comparisonData: ThreeLiesData[]
   largerComparitor: string
   smallerComparitor: string
   slice?: number
@@ -55,4 +56,5 @@ export interface HistoricLineChartProps {
   filter?: boolean
   slice?: number
   yAxisLabel?: string
+  excludeNodes?: string[]
 }

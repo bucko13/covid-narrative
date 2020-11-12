@@ -1,10 +1,21 @@
 import React, { useContext, useState } from "react"
 import PropTypes from "prop-types"
 import { Link } from "gatsby"
-import { AppBar, Toolbar, IconButton, SwipeableDrawer, List, ListItem, ListItemText, Grid, FormControlLabel, Switch } from "@material-ui/core"
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  SwipeableDrawer,
+  List,
+  ListItem,
+  ListItemText,
+  Grid,
+  FormControlLabel,
+  Switch,
+} from "@material-ui/core"
 import { Home, Menu } from "@material-ui/icons"
 import { ShowAboutContext } from "./layout"
-import { titleify } from "../utils/utils"
+import { titleify } from "../utils/helpers"
 
 interface HeaderProps {
   siteTitle: string
@@ -16,11 +27,9 @@ interface HeaderProps {
 
 const Header = ({ siteTitle, menu }: HeaderProps) => {
   const [open, setOpen] = useState(false)
-  const { showAbout, setShowAbout } = useContext(ShowAboutContext);
+  const { showAbout, setShowAbout } = useContext(ShowAboutContext)
 
-  const toggleDrawer = (
-    event: React.KeyboardEvent | React.MouseEvent
-  ) => {
+  const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
       event &&
       event.type === "keydown" &&
@@ -29,10 +38,13 @@ const Header = ({ siteTitle, menu }: HeaderProps) => {
     ) {
       return
     }
-    setOpen(!open);
+    setOpen(!open)
   }
 
-  const pageTitle = typeof window !== "undefined" && window.location ? titleify(window.location.pathname) : ''
+  const pageTitle =
+    typeof window !== "undefined" && window.location
+      ? titleify(window.location.pathname)
+      : ""
 
   return (
     <header>
@@ -49,11 +61,14 @@ const Header = ({ siteTitle, menu }: HeaderProps) => {
               }}
             >
               <Grid container alignItems="center">
-                <Grid item style={{ marginRight: '1rem' }}>
+                <Grid item style={{ marginRight: "1rem" }}>
                   <Home fontSize="large" />
                 </Grid>
                 <Grid item xs={10}>
-                  <h1>{siteTitle}{pageTitle.length > 1 ? ` - ${pageTitle}` : ''}</h1>
+                  <h1>
+                    {siteTitle}
+                    {pageTitle.length > 1 ? ` - ${pageTitle}` : ""}
+                  </h1>
                 </Grid>
               </Grid>
             </Link>
@@ -73,17 +88,18 @@ const Header = ({ siteTitle, menu }: HeaderProps) => {
             onOpen={toggleDrawer}
           >
             <div style={{ width: 250 }}>
-            <List>
-              {menu.map(item => (
-                <ListItem
-                  button
-                  component={(props) => <Link to={item.path} {...props} />}
-                  key={item.name}>
+              <List>
+                {menu.map(item => (
+                  <ListItem
+                    button
+                    component={props => <Link to={item.path} {...props} />}
+                    key={item.name}
+                  >
                     <ListItemText primary={item.name.toUpperCase()} />
-                </ListItem>
-              ))}
+                  </ListItem>
+                ))}
                 <ListItem
-                  component={ () =>
+                  component={() => (
                     <FormControlLabel
                       control={
                         <Switch
@@ -96,9 +112,9 @@ const Header = ({ siteTitle, menu }: HeaderProps) => {
                       labelPlacement="end"
                       label="Show Graph Explanations"
                     />
-                  }
-                 />
-            </List>
+                  )}
+                />
+              </List>
             </div>
           </SwipeableDrawer>
         </Toolbar>

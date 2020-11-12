@@ -1,8 +1,8 @@
 import moment from "moment"
 import {
-  OWIDDataNode,
+  ThreeLiesData,
   ThreeLiesNodeData,
-} from "../../plugins/source-state-data"
+} from "../../plugins/source-covid-data"
 
 import { LocationData, OwidNodes } from "../types/owid"
 
@@ -68,13 +68,12 @@ export const sliceData = (slice: number, data: any): any[] => {
   return data
 }
 
-// TODO get rid after new data model
-export const getLastDate = (data: OwidNodes) =>
-  data.us.nodes[0].data[data.us.nodes[0].data.length - 1].date
+export const getLastDate = (data: ThreeLiesData[]) =>
+  data[0].data[data[0].data.length - 1].date
 
 // given array of day data, find the last data point where a value exists
 export function getLastDataPoint(
-  data: OWIDDataNode[] | ThreeLiesNodeData[],
+  data: ThreeLiesNodeData[],
   key: string
 ): string | number {
   let value = 0
@@ -88,4 +87,24 @@ export function getLastDataPoint(
   // tslint:disable-next-line: no-console
   if (!value) console.error(`Could not find data point for ${key}`)
   return value
+}
+
+export const getCountryNode = (
+  data: { nodes: ThreeLiesData[] },
+  name: string
+): ThreeLiesData => {
+  const country = data.nodes.find(c => c.name === name || c.code === name)
+  if (!country) throw new Error(`Could not find data node for country: ${name}`)
+  return country
+}
+
+export function getDataValue(
+  data: { nodes: ThreeLiesData[] },
+  name: string,
+  key: string
+): number | string {
+  const node = getCountryNode(data, name)
+  if (!node[key])
+    throw new Error(`Data for ${name} did not have a node for key ${key}`)
+  return node[key]
 }

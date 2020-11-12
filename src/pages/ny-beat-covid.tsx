@@ -23,7 +23,7 @@ const NyBeatCovid = ({ data }: PageProps) => {
   // array of historic data for states to compare in line chart
   const chartData: LineChartComparisonData[] = stateData.map(
     (state: StateData): LineChartComparisonData => ({
-      location: state.code,
+      name: state.code,
       population: state.population,
       data: state.data,
     })
@@ -72,24 +72,22 @@ const NyBeatCovid = ({ data }: PageProps) => {
       </Box>
       <AboutThisGraph name="after-spring">
         <p>
-          This graph looks at the new fatalities per day across
-          states in the US however only includes days from the beginning
-          of June to show how an adjusted time frame can change how the
-          visualization looks.
+          This graph looks at the new fatalities per day across states in the US
+          however only includes days from the beginning of June to show how an
+          adjusted time frame can change how the visualization looks.
         </p>
         <p>
-          If we accept that perhaps
-          different regions had their outbreaks at different times, then
-          comparing one area's data at a different stage of its outbreak from
-          another, doesn't give a clear sense of the situation. Rather we should
-          look at{" "}
+          If we accept that perhaps different regions had their outbreaks at
+          different times, then comparing one area's data at a different stage
+          of its outbreak from another, doesn't give a clear sense of the
+          situation. Rather we should look at{" "}
           <Link to="/ny-messed-up/#total-fatalities">overall numbers</Link> or
-          compare timelines over the {" "}
+          compare timelines over the{" "}
           <Link to="/ny-messed-up/#daily-fatalities">
             full course of events
           </Link>{" "}
-          and adjusted by population. This is not to cast blame, but only
-          to show how narratives can be distorted based on timeline.
+          and adjusted by population. This is not to cast blame, but only to
+          show how narratives can be distorted based on timeline.
         </p>
       </AboutThisGraph>
       <HistoricComparisonLineChart

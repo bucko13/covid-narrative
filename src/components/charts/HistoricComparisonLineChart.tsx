@@ -19,7 +19,7 @@ import {
   Grid,
 } from "@material-ui/core"
 
-import { getPerMPop, readableChartDate, sliceData } from "../../utils/utils"
+import { getPerMPop, readableChartDate, sliceData } from "../../utils/helpers"
 import { HistoricLineChartProps, LineChartDataNode } from "../../types/charts"
 
 const HistoricComparisonLineChart = ({
@@ -29,8 +29,19 @@ const HistoricComparisonLineChart = ({
   filter = true,
   slice,
   yAxisLabel,
+  excludeNodes = [], // list of country/place nodes to exclude
 }: HistoricLineChartProps) => {
-  const locations = comparisonData.map(({ location }) => location)
+  // if there are any countries to exclude, filter them out
+  // from the node list
+  if (excludeNodes.length) {
+    comparisonData = comparisonData.filter(
+      node => !excludeNodes.includes(node.code || node.name)
+    )
+  }
+
+  // get list of just location names
+  // use this to index the names
+  const locations = comparisonData.map(({ name, code }) => name || code || "")
 
   const stateObject: { [key: string]: boolean } = {}
   const initialState = locations.reduce(
@@ -45,6 +56,7 @@ const HistoricComparisonLineChart = ({
   }
 
   comparisonData = [...comparisonData]
+
   const firstLocation = comparisonData.shift()
   if (!firstLocation) return null
   // go through the first location to start and create a data object for each node
@@ -54,7 +66,7 @@ const HistoricComparisonLineChart = ({
       const date = node.date
       const dataNode = {
         date: readableChartDate(node.date),
-        [firstLocation.location]: perM
+        [firstLocation.name]: perM
           ? getPerMPop(firstLocation.population, +node[comparitor])
           : node[comparitor],
       }
@@ -68,7 +80,7 @@ const HistoricComparisonLineChart = ({
         )
 
         if (currentNode) {
-          dataNode[locationData.location] = perM
+          dataNode[locationData.name] = perM
             ? getPerMPop(locationData.population, +currentNode[comparitor])
             : currentNode[comparitor]
         }

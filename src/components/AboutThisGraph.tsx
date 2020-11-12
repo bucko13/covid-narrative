@@ -1,7 +1,7 @@
-import React, { ReactNode, useContext } from 'react';
-import { linkify } from '../utils/utils';
+import React, { ReactNode, useContext } from "react"
+import { linkify } from "../utils/helpers"
 import "./AboutThisGraph.scss"
-import { ShowAboutContext } from './layout';
+import { ShowAboutContext } from "./layout"
 
 interface PropTypes {
   name?: string
@@ -9,17 +9,19 @@ interface PropTypes {
 }
 
 const AboutThisGraph = ({ name, children }: PropTypes) => {
-  const {showAbout} = useContext(ShowAboutContext)
+  const { showAbout } = useContext(ShowAboutContext)
   return (
-    <div id={name ? linkify(name) : ''} className="about-this-graph">
+    <div id={name ? linkify(name) : ""} className="about-this-graph">
       <h6>About this graph:</h6>
-      {showAbout ? children : (
+      {showAbout ? (
+        children
+      ) : (
         <p className="hidden-details">
           (turn on explanations from main menu to view details)
         </p>
       )}
     </div>
   )
-};
+}
 
-export default AboutThisGraph;
+export default AboutThisGraph

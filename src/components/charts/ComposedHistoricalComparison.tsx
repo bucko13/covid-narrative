@@ -13,7 +13,7 @@ import {
   Bar,
 } from "recharts"
 import randomColor from "randomcolor"
-import { readableChartDate, sliceData } from "../../utils/utils"
+import { readableChartDate, sliceData } from "../../utils/helpers"
 import { ComparisonLineChartProps } from "../../types/charts"
 
 const ComposedHistoricalComparison = ({

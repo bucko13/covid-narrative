@@ -19,26 +19,12 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     name: `data`,
-    //     path: `${__dirname}/src/data`,
-    //   },
-    // },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `owid`,
-        path: `${__dirname}/src/owid`,
-      },
-    },
     `gatsby-transformer-json`,
     `gatsby-transformer-sharp`,
     `gatsby-theme-material-ui`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-sass`,
-    `source-state-data`,
+    `source-covid-data`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
