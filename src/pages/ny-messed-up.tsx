@@ -4,7 +4,7 @@ import { Box, Switch, FormControlLabel } from "@material-ui/core"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { StateData } from "../../plugins/source-state-data"
+import { StateData } from "../../plugins/source-covid-data"
 import { LineChartComparisonData, StackedAreaChartData } from "../types/charts"
 import {
   StackedAreaComparison,
@@ -12,7 +12,7 @@ import {
   TotalComparisonBarChart,
 } from "../components/charts"
 import { ComparisonData } from "../components/charts/TotalComparisonBarChart"
-import { getPerMPop, readableChartDate, readableDate } from "../utils/utils"
+import { getPerMPop, readableChartDate, readableDate } from "../utils/helpers"
 import AboutThisGraph from "../components/AboutThisGraph"
 
 interface PageProps {
@@ -34,7 +34,7 @@ const NyMessedUp = ({ data }: PageProps) => {
   // array of historic data for states to compare in line chart
   const lineChartData: LineChartComparisonData[] = stateData.map(
     (state: StateData): LineChartComparisonData => ({
-      location: state.code,
+      name: state.code,
       population: state.population,
       data: state.data,
     })

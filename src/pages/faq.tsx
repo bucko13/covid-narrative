@@ -4,8 +4,8 @@ import Layout from "../components/layout"
 import "./index.scss"
 import { Link } from "gatsby"
 import { ReactComponentLike } from "prop-types"
-import { linkify } from "../utils/utils"
-import "./faq.scss";
+import { linkify } from "../utils/helpers"
+import "./faq.scss"
 import ExternalLink from "../components/ExternalLink"
 
 interface Question {
@@ -166,7 +166,7 @@ const FAQPage = () => {
               here
             </ExternalLink>{" "}
             or{" "}
-            <ExternalLink href="https://github.com/bucko13/covid-narrative/tree/master/plugins/source-state-data/data">
+            <ExternalLink href="https://github.com/bucko13/covid-narrative/tree/master/plugins/source-covid-data/data">
               here
             </ExternalLink>
             . Sometimes though shorter selective timeframes are deliberate as
@@ -207,11 +207,11 @@ const FAQPage = () => {
             <ExternalLink href="https://github.com/bucko13/covid-narrative">
               GitHub
             </ExternalLink>{" "}
-            or
-            Twitter,{" "}
+            or Twitter,{" "}
             <ExternalLink href="https://twitter.com/BuckPerley">
               @BuckPerley
-            </ExternalLink>, and I'll do my best to answer!
+            </ExternalLink>
+            , and I'll do my best to answer!
           </p>
         </>
       ),
@@ -219,28 +219,24 @@ const FAQPage = () => {
   ]
   return (
     <Layout>
-        <Box my={3}>
-          <h3>Frequently Asked Questions</h3>
+      <Box my={3}>
+        <h3>Frequently Asked Questions</h3>
       </Box>
       <Box>
         <List>
-          {
-            questions.map(({ question }) => (
-              <ListItem button component={Link} to={`#${linkify(question)}`}>
-                <ListItemText primary={question} />
-              </ListItem>
-            ))
-          }
+          {questions.map(({ question }) => (
+            <ListItem button component={Link} to={`#${linkify(question)}`}>
+              <ListItemText primary={question} />
+            </ListItem>
+          ))}
         </List>
       </Box>
-      {
-        questions.map(({question, Answer}) => (
-          <div className="answer" key={linkify(question)}>
-            <h5 id={linkify(question)}>{question}</h5>
-            <Answer />
-          </div>
-        ))
-      }
+      {questions.map(({ question, Answer }) => (
+        <div className="answer" key={linkify(question)}>
+          <h5 id={linkify(question)}>{question}</h5>
+          <Answer />
+        </div>
+      ))}
     </Layout>
   )
 }

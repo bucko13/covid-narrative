@@ -16,7 +16,7 @@ import {
 } from ".."
 import csv from "csvtojson"
 import { surveyCodes } from "../constants"
-import { collateSurveyDataForCode } from "./getMaskData"
+import { collateSurveyDataForCode } from "./survey"
 import {
   getEUGDPData,
   getEUUnemploymentData,
@@ -170,6 +170,7 @@ export const transformCountryData = (
       deathPerMillion: day.total_deaths_per_million,
       totalDeathsPerMillion: day.total_deaths,
       positive: day.new_cases,
+      positivesPerMillion: day.total_cases_per_million,
       positiveIncrease: day.new_cases,
       deathsIncreaseRollingAverage: day.new_deaths_smoothed,
       positiveIncreaseRollingAverage: day.new_cases_smoothed,

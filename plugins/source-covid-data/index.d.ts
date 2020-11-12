@@ -3,6 +3,7 @@ export interface ThreeLiesNodeData {
   death: number
   deathPerMillion: number
   positive: number
+  positivesPerMillion: number
   deathIncrease: number
   positiveIncrease: number
   deathsIncreaseRollingAverage: number

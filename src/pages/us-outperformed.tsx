@@ -15,13 +15,13 @@ import Layout from "../components/layout"
 import TotalComparisonBarChart, {
   ComparisonData,
 } from "../components/charts/TotalComparisonBarChart"
-import { getPerMPop, getLastDataPoint, readableDate } from "../utils/utils"
-import codeToCountry_ from "../data/codeToCountry.json"
-import { StateData, ThreeLiesData } from "../../plugins/source-state-data"
+import { getPerMPop, getLastDataPoint, readableDate } from "../utils/helpers"
+import { StateData, ThreeLiesData } from "../../plugins/source-covid-data"
 import ComposedHistoricalComparison from "../components/charts/ComposedHistoricalComparison"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
 import AboutThisGraph from "../components/AboutThisGraph"
 import { ChartDisplay, MeasurementSwitch } from "../components/ui"
+import { codeToCountry as codeToCountry_ } from "../../plugins/source-covid-data/constants"
 
 const useStyles = makeStyles({
   select: {
@@ -49,7 +49,6 @@ const getStateTotalDeaths = (d: StateData) => d.jhu_deaths || d.total_deaths
 
 // states and countries for comparison (must be queried on this page and passed to component)
 const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
-// const testOnlyCountries = ["deu", "che", "fin", "nld"]
 const states = ["ny", "nj"]
 
 const USOutperformed = ({ data }: PageProps) => {
@@ -181,17 +180,12 @@ const USOutperformed = ({ data }: PageProps) => {
     value: getPerMPop(adjPopulations.us, adjUSTotalFatalities),
   })
 
-  const allChartData = data.countries.nodes.map(country => ({
-    location: country.name,
-    code: country.code,
-    population: country.population,
-    data: country.data,
-  }))
-
-  const lineChartData = allChartData.filter(country =>
+  const lineChartData = data.countries.nodes.filter(country =>
     countries.includes(country.code)
   )
 
+  // separate this out so that typescript doesn't complain about the
+  // possibility that a country node isn't cfoun
   function renderComparisonChartCountry() {
     const nodes = getCountryNodes(comparisonChartCountry)
     if (nodes) {
@@ -407,7 +401,7 @@ const USOutperformed = ({ data }: PageProps) => {
           label="Show per thousand"
         />
         <HistoricComparisonLineChart
-          comparisonData={allChartData}
+          comparisonData={data.countries.nodes}
           comparitor={
             testsPerThousand
               ? "newTestsSmoothedPerThousand"
