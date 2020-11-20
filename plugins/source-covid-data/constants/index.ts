@@ -52,3 +52,6 @@ export const SURVEY_COUNTRIES_API =
 
 export const EXCESS_MORTALITY_API =
   "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/excess_mortality/excess_mortality.csv"
+
+export const OWID_TEST_API =
+  "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv"

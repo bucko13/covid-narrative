@@ -16,13 +16,16 @@ import {
   getPerMPop,
   getPerMillionPop,
   isClosestWeekend,
-  transformCountryData,
   getAverageOfDataPoint,
+} from "./utils/utils"
+import {
+  transformCountryData,
   addSurveyData,
   addUnemploymentData,
   addExcessDeathData,
   addGDPData,
-} from "./utils/utils"
+  addOwidTestData,
+} from "./utils/transforms"
 import { StateData, StateNodeData, PopulationData, StringencyData } from "."
 import {
   states,
@@ -70,6 +73,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
         policyData
       )
 
+      await addOwidTestData(iso3Code, transformed)
       await addExcessDeathData(countryName, transformed)
       await addUnemploymentData(code, transformed)
       await addSurveyData(countryName, transformed)

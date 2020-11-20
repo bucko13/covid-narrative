@@ -15,10 +15,14 @@ export interface ThreeLiesNodeData {
   unemploymentRate?: number
   policyUpdates?: PolicyUpdateNode[]
   p_scores_all_ages?: number
+  newTests?: number
+  newTestsPerThousand?: number
   newTestsSmoothed?: number
   newTestsSmoothedPerThousand?: number
   totalTestsPerThousand?: number
+  totalTests: number
   hospitalizedCurrently?: number
+  positivityRate?: number
   p_scores_0_14?: number
   p_scores_15_64?: number
   p_scores_65_74?: number
@@ -209,4 +213,18 @@ export interface ExcessMortalityDataNode {
   p_scores_65_74: string
   p_scores_75_84: string
   p_scores_85plus: string
+}
+
+export interface OwidTestDataNode {
+  entity: string
+  "ISO code": string
+  Date: string
+  "Cumulative total": string
+  "Daily change in cumulative total": string
+  "Cumulative total per thousand": string
+  "Daily change in cumulative total per thousand": string
+  "7-day smoothed daily change": string
+  "7-day smoothed daily change per thousand": string
+  "Short-term tests per case": string
+  "Short-term positive rate": string
 }

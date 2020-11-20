@@ -6,7 +6,12 @@ import path from "path"
 import moment from "moment"
 import csv from "csvtojson"
 
-import { StateEmploymentDataNode, StateEmploymentData, JHUStateData } from ".."
+import {
+  StateEmploymentDataNode,
+  StateEmploymentData,
+  JHUStateData,
+  OwidTestDataNode,
+} from ".."
 import {
   EU_UNEMPLOYMENT_API,
   OWID_DATA_API,
@@ -18,6 +23,7 @@ import {
   SURVEY_COUNTRIES_API,
   EXCESS_MORTALITY_API,
   EU_GDP_API,
+  OWID_TEST_API,
 } from "../constants"
 import { getDataWrapper } from "./utils"
 
@@ -74,6 +80,9 @@ export const getExcessMortalityData = (): Promise<any> =>
     "all_excess_mortality",
     "All Excess Mortality"
   )
+
+export const getOwidTestDataNode = (): Promise<OwidTestDataNode[]> =>
+  getDataWrapper(OWID_TEST_API, "all_owid_test_data", "All OWID test")
 
 export const getJHUStateDataSingleDay = async (
   date: string,
