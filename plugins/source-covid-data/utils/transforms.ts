@@ -24,6 +24,7 @@ import {
   getLastDataPoint,
   getPerMPop,
   isClosestWeekend,
+  getPerMillionPop,
 } from "./utils"
 
 export function getAverageUnemployment(
@@ -98,8 +99,21 @@ export const transformCountryData = (
     total_positives: lastDayData.total_cases,
     positives_per_million: lastDayData.total_cases_per_million,
     positives_per_100k: getPerMPop(data.population, lastDayData.total_cases),
-    stringency_index: getAverageOfDataPoint("stringency_index", data.data),
+    stringencyIndex: getAverageOfDataPoint("stringency_index", data.data),
     totalTests: +getLastDataPoint(data.data, "total_tests"),
+    totalTestsPerMillion: getPerMillionPop(
+      data.population,
+      +getLastDataPoint(data.data, "total_tests")
+    ),
+    totalTestsPerThousand: +getLastDataPoint(
+      data.data,
+      "total_tests_per_thousand"
+    ),
+    hospitalized: +getLastDataPoint(data.data, "hosp_patients"),
+    hospitalizedPerMillion: +getLastDataPoint(
+      data.data,
+      "hosp_patients_per_million"
+    ),
     data: [],
   }
 
@@ -127,7 +141,8 @@ export const transformCountryData = (
       totalTests: day.total_tests,
       stringencyIndex: day.stringency_index,
       policyUpdates: getPolicyUpdatesForDay(date, data.location, policyData),
-      hospitalizedCurrently: day.hosp_patients,
+      hospitalized: day.hosp_patients || 0,
+      hospitalizedPerMillion: day.hosp_patients_per_million,
     })
   }
 

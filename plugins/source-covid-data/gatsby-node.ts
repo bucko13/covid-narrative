@@ -17,6 +17,8 @@ import {
   getPerMillionPop,
   isClosestWeekend,
   getAverageOfDataPoint,
+  getLastDataPoint,
+  getPerThousandPop,
 } from "./utils/utils"
 import {
   transformCountryData,
@@ -196,6 +198,16 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       return {
         ...stateNode,
         estimatedCases,
+        totalTests: stateNode.totalTestResults,
+        totalTestsPerThousand: getPerThousandPop(
+          population,
+          stateNode.totalTestResults
+        ),
+        newTests: stateNode.totalTestsResultsIncrease,
+        newTestsPerThousand: getPerThousandPop(
+          population,
+          stateNode.totalTestsResultsIncrease
+        ),
       }
     })
 
@@ -204,7 +216,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     )
 
     const node: StateData = {
-      name: codeToState[code],
+      name: codeToState[code.toUpperCase()],
       population,
       state: codeToState[code.toUpperCase()],
       code,
@@ -217,14 +229,23 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       deaths_per_million: getPerMillionPop(population, death),
       positives_per_100k: getPerMPop(population, positive),
       positives_per_million: getPerMillionPop(population, positive),
-      hospitalized_per_100k: getPerMillionPop(population, hospitalized),
-      hospitalized_per_million: getPerMPop(population, hospitalized),
+      hospitalized_per_million: getPerMillionPop(population, hospitalized),
+      hospitalized_per_100k: getPerMPop(population, hospitalized),
       jhu_deaths: latestTotals && parseFloat(latestTotals?.Deaths),
       jhu_cases: latestTotals && parseFloat(latestTotals.Cases),
       jhu_tested: latestTotals && parseFloat(latestTotals.People_Tested),
       jhu_mortality: latestTotals && parseFloat(latestTotals.Mortality_Rate),
       jhu_testing_rate: latestTotals && parseFloat(latestTotals.Testing_Rate),
-      stringency_index: getAverageOfDataPoint("stringency_index", sortedData),
+      stringencyIndex: getAverageOfDataPoint("stringencyIndex", sortedData),
+      totalTests: +getLastDataPoint(sortedData, "totalTests"),
+      totalTestsPerMillion: getPerMillionPop(
+        population,
+        +getLastDataPoint(sortedData, "totalTests")
+      ),
+      totalTestsPerThousand: getPerThousandPop(
+        population,
+        +getLastDataPoint(sortedData, "totalTests")
+      ),
       data: sortedData,
     }
 

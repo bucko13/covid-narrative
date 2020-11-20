@@ -21,7 +21,8 @@ export interface ThreeLiesNodeData {
   newTestsSmoothedPerThousand?: number
   totalTestsPerThousand?: number
   totalTests: number
-  hospitalizedCurrently?: number
+  hospitalized: number
+  hospitalizedPerMillion?: number
   positivityRate?: number
   p_scores_0_14?: number
   p_scores_15_64?: number
@@ -43,11 +44,12 @@ export interface ThreeLiesData {
   positives_per_million: number
   positives_per_100k: number
   data: ThreeLiesNodeData[]
-  stringency_index?: number
+  stringencyIndex: number
   averageUnemploymentRate?: number
   averageExcessMortality?: number
   medianExcessMortality?: number
-  totalTests?: number
+  totalTests: number
+  totalTestsPerMillion: number
   gdp?: { quarter: string; change: number }[]
   surveyData?: {
     [label: string]: {
@@ -60,9 +62,10 @@ export interface ThreeLiesData {
 
 export interface StateNodeData extends ThreeLiesNodeData {
   fips: string
-  hospitalized: number
   hospitalizedIncrease: number
   positiveIncreaseRollingAverage: number
+  totalTestResults: number
+  totalTestsResultsIncrease: number
 }
 
 export interface StateData extends ThreeLiesData {
@@ -161,6 +164,7 @@ export interface StringencyData {
   RegionName: string
   Date: string
   StringencyIndex: string
+  RegionCode: string
 }
 
 export interface OxCGRTPolicyDataNode {

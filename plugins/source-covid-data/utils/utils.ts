@@ -13,6 +13,9 @@ export const getPerMPop = (pop: number, value: number): number =>
 export const getPerMillionPop = (pop: number, value: number): number =>
   Math.floor(value / (pop / 1000000))
 
+export const getPerThousandPop = (pop: number, value: number): number =>
+  Math.floor(value / (pop / 1000))
+
 export const getDateNumber = (date: string): number =>
   Number(moment(date).format("YYYYMMDD"))
 
@@ -80,8 +83,8 @@ export const getDataWrapper = async (
       }
       console.log(`Finished loading ${dataName} data`)
     } catch (e) {
-      console.error(e)
-      process.exit()
+      console.error(e.message)
+      // process.exit()
     }
   } else {
     data = JSON.parse(fs.readFileSync(DATA_FILE, { encoding: "utf-8" }))

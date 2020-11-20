@@ -175,7 +175,7 @@ export async function collateSurveyDataForCode(
     // tslint:disable-next-line: no-console
     console.error(`There was a problem getting survey data for ${_country}.`)
     // tslint:disable-next-line: no-console
-    console.error(e)
-    process.exit()
+    console.error(e.message)
+    // process.exit()
   }
 }

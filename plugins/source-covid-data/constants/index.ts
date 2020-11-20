@@ -16,6 +16,7 @@ export const countries = [
   "it",
   "es",
   "us",
+  "jp",
 ]
 export const surveyCodes = ["i12_health_1"]
 

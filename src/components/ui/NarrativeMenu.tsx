@@ -1,38 +1,41 @@
-import { Box, Button, Grid } from '@material-ui/core';
+import { Box, Button, Grid } from "@material-ui/core"
 import { navigate } from "gatsby"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react"
 
-const navList: {title: string; path: string}[] = [
+const navList: { title: string; path: string }[] = [
   {
-    title: 'NY Messed Up',
-    path: 'ny-messed-up'
+    title: "NY Messed Up",
+    path: "ny-messed-up",
   },
   {
-    title: 'NY Beat COVID-19',
-    path: 'ny-beat-covid',
+    title: "NY Beat COVID-19",
+    path: "ny-beat-covid",
   },
   {
-    title: 'US Mishandled COVID-19',
-    path: 'us-mishandled-covid',
+    title: "US Mishandled COVID-19",
+    path: "us-mishandled-covid",
   },
   {
-    title: 'US Outperformed',
-    path: 'us-outperformed',
-  }
-];
+    title: "US Outperformed",
+    path: "us-outperformed",
+  },
+  {
+    title: "Policy Impacts",
+    path: "policies",
+  },
+]
 
 const onClick = (e: React.MouseEvent, path: string) => {
   e.preventDefault()
   navigate(`/${path}`)
 }
 
-
 const NarrativeMenu = () => {
-  const [currentPage, setCurrentPage] = useState('');
+  const [currentPage, setCurrentPage] = useState("")
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setCurrentPage(window.location.pathname);
+      setCurrentPage(window.location.pathname)
     }
   }, [currentPage])
 
@@ -57,4 +60,4 @@ const NarrativeMenu = () => {
   )
 }
 
-export default NarrativeMenu;
+export default NarrativeMenu
