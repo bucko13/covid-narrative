@@ -11,19 +11,21 @@ import {
   getAllOwidCountryData,
   getAllStringencyData,
   getHistoricalPolicyData,
-  getOwidTestDataNode,
 } from "./utils/api"
 import {
   getPerMPop,
   getPerMillionPop,
   isClosestWeekend,
-  transformCountryData,
   getAverageOfDataPoint,
+} from "./utils/utils"
+import {
+  transformCountryData,
   addSurveyData,
   addUnemploymentData,
   addExcessDeathData,
   addGDPData,
-} from "./utils/utils"
+  addOwidTestData,
+} from "./utils/transforms"
 import { StateData, StateNodeData, PopulationData, StringencyData } from "."
 import {
   states,
@@ -71,13 +73,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
         policyData
       )
 
-      const testData = await getOwidTestDataNode()
-      const matching = testData.find(datum => datum["ISO code"] === iso3Code)
-      if (matching) {
-        console.log(matching)
-        process.exit()
-      }
-
+      await addOwidTestData(iso3Code, transformed)
       await addExcessDeathData(countryName, transformed)
       await addUnemploymentData(code, transformed)
       await addSurveyData(countryName, transformed)
