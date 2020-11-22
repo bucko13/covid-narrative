@@ -1,6 +1,8 @@
 import { expect } from "chai"
+import { DAYS_TO_DEATH } from "../constants"
 import { ThreeLiesNodeData, ThreeLiesData } from "../types"
 import {
+  calculateEstimatedCases,
   findFirstNodeWithMatchingMonth,
   getRollingAverageData,
 } from "../utils/utils"
@@ -58,6 +60,21 @@ describe("utils", () => {
       expect(positiveIncreaseRollingAverage).to.equal(
         expectedPositiveIncreaseRollingAverage
       )
+    })
+  })
+
+  describe("calculateEstimatedCases", () => {
+    it("should calculate correct case estimate", () => {
+      const index = 0
+      const expectedEstimatedCases = stateFixture.data[index].estimatedCases
+      const estimatedCases = calculateEstimatedCases(index, stateFixture.data)
+      expect(estimatedCases).to.equal(expectedEstimatedCases)
+    })
+
+    it("it should return void if not enough future data", () => {
+      const index = stateFixture.data.length - DAYS_TO_DEATH + 1
+      const estimatedCases = calculateEstimatedCases(index, stateFixture.data)
+      expect(estimatedCases).to.equal(undefined)
     })
   })
 })

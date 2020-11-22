@@ -20,6 +20,9 @@ export const countries = [
 ]
 export const surveyCodes = ["i12_health_1"]
 
+export const IFR = 0.0065
+export const DAYS_TO_DEATH = 15
+
 // APIs
 export const OWID_DATA_API =
   "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.json"

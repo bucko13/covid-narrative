@@ -7,6 +7,7 @@ import path from "path"
 import { OWIDDataNode, ThreeLiesNodeData } from "../types"
 import csv from "csvtojson"
 import { DateTime } from "luxon"
+import { DAYS_TO_DEATH, IFR } from "../constants"
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
@@ -235,4 +236,16 @@ export function getRollingAverageData(
     counter++
   }
   return totals.map(total => total / counter)
+}
+
+// estimated cases for day x equals the fatalities from DAYS_TO_DEATH in the future
+// divided by the IFR, which represents the number of infected individuals that will
+// likely result in a fatality
+export function calculateEstimatedCases(
+  index: number,
+  data: ThreeLiesNodeData[]
+): number | void {
+  if (index < data.length - DAYS_TO_DEATH) {
+    return data[index + DAYS_TO_DEATH].deathIncreaseRollingAverage / IFR
+  }
 }

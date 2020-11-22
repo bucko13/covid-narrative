@@ -20,6 +20,7 @@ import {
   getPerThousandPop,
   findFirstNodeWithMatchingMonth,
   getRollingAverageData,
+  calculateEstimatedCases,
 } from "./utils/utils"
 import {
   transformCountryData,
@@ -28,12 +29,14 @@ import {
   addExcessDeathData,
   addGDPData,
   addOwidTestData,
+  transformSortedStateNodes,
 } from "./utils/transforms"
 import {
   StateData,
   StateNodeData,
   PopulationData,
   StringencyData,
+  ThreeLiesNodeData,
 } from "./types"
 import {
   states,
@@ -134,7 +137,7 @@ async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
     const population = populations[name].Population
     const { death, hospitalized, positive, fips, date } = currentTotals
     // need to order data by date
-    let sortedData = data
+    let sortedData: StateNodeData[] = data
       .sort((a, b) => {
         if (a.date > b.date) return 1
         else return -1
@@ -183,34 +186,7 @@ async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
         }
       })
 
-    sortedData = sortedData.map((stateNode, index) => {
-      // finally calculate estimated cases based on IFR assuming 15 days to death
-      let estimatedCases: number | void
-      const IFR = 0.0065
-      const DAYS_TO_DEATH = 15
-      if (index < data.length - DAYS_TO_DEATH) {
-        // estimated cases for day x equals the fatalities from DAYS_TO_DEATH in the future
-        // divided by the IFR, which represents the number of infected individuals that will
-        // likely result in a fatality
-        estimatedCases =
-          sortedData[index + DAYS_TO_DEATH].deathIncreaseRollingAverage / IFR
-      }
-
-      return {
-        ...stateNode,
-        estimatedCases,
-        totalTests: stateNode.totalTestResults,
-        totalTestsPerThousand: getPerThousandPop(
-          population,
-          stateNode.totalTestResults
-        ),
-        newTests: stateNode.totalTestsResultsIncrease,
-        newTestsPerThousand: getPerThousandPop(
-          population,
-          stateNode.totalTestsResultsIncrease
-        ),
-      }
-    })
+    sortedData = transformSortedStateNodes(sortedData, population)
 
     const latestTotals = (await getJHUStateDataSingleDay(date.toString())).find(
       state => state.Province_State === codeToState[code.toUpperCase()]

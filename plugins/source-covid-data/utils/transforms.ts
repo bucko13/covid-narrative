@@ -6,7 +6,9 @@ import {
   OWIDData,
   OxCGRTPolicyDataNode,
   PolicyUpdateNode,
+  StateNodeData,
   ThreeLiesData,
+  ThreeLiesNodeData,
 } from "../types"
 import { surveyCodes } from "../constants"
 import {
@@ -25,6 +27,8 @@ import {
   getPerMPop,
   isClosestWeekend,
   getPerMillionPop,
+  calculateEstimatedCases,
+  getPerThousandPop,
 } from "./utils"
 
 export function getAverageUnemployment(
@@ -342,4 +346,29 @@ export const addOwidTestData = async (
   if (!data.totalTests || newTotalTests > data.totalTests) {
     data.totalTests = newTotalTests
   }
+}
+
+export function transformSortedStateNodes(
+  nodes: StateNodeData[],
+  population: number
+): StateNodeData[] {
+  return nodes.map((node, index) => {
+    // finally calculate estimated cases based on IFR assuming 15 days to death
+    const estimatedCases = calculateEstimatedCases(index, nodes)
+
+    return {
+      ...node,
+      estimatedCases,
+      totalTests: node.totalTestResults,
+      totalTestsPerThousand: getPerThousandPop(
+        population,
+        node.totalTestResults
+      ),
+      newTests: node.totalTestsResultsIncrease,
+      newTestsPerThousand: getPerThousandPop(
+        population,
+        node.totalTestsResultsIncrease
+      ),
+    }
+  })
 }
