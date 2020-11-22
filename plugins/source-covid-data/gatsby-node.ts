@@ -15,10 +15,11 @@ import {
 import {
   getPerMPop,
   getPerMillionPop,
-  isClosestWeekend,
   getAverageOfDataPoint,
   getLastDataPoint,
   getPerThousandPop,
+  findFirstNodeWithMatchingMonth,
+  getRollingAverageData,
 } from "./utils/utils"
 import {
   transformCountryData,
@@ -28,7 +29,12 @@ import {
   addGDPData,
   addOwidTestData,
 } from "./utils/transforms"
-import { StateData, StateNodeData, PopulationData, StringencyData } from "."
+import {
+  StateData,
+  StateNodeData,
+  PopulationData,
+  StringencyData,
+} from "./types"
 import {
   states,
   countries,
@@ -47,11 +53,9 @@ dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
-export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
-  actions,
-}: SourceNodesArgs) => {
-  const { createNode } = actions
-
+async function createCountryNodes({
+  actions: { createNode },
+}: SourceNodesArgs) {
   const allCountryData = await getAllOwidCountryData()
 
   const policyData = await getHistoricalPolicyData()
@@ -100,9 +104,12 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       process.exit()
     }
   }
+}
 
-  const employmentData = await getStateUnemploymentData()
-  const employmentDataWeekends: string[] = Object.keys(employmentData)
+async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
+  const stateUnemploymentData = await getStateUnemploymentData()
+
+  // const employmentDataWeekends: string[] = Object.keys(employmentData)
   // make sure we have latest stringency data
   const stringencyData: StringencyData[] = await getAllStringencyData()
 
@@ -143,27 +150,21 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 
         // calcuate rolling 7-day averages.
         // start with deaths since this is the bumpiest data
-        let totalDeathIncrease = 0
-        let totalPositiveIncrease = 0
-        let counter = 0
-        while (counter < 7 && counter <= index) {
-          totalDeathIncrease += data[index - counter].deathIncrease
-          totalPositiveIncrease += data[index - counter].positiveIncrease
-          counter++
+        const rollingAverageKeys = ["deathIncrease", "positiveIncrease"]
+        const [
+          deathIncreaseRollingAverage,
+          positiveIncreaseRollingAverage,
+        ] = getRollingAverageData(index, rollingAverageKeys, data)
+
+        const unemploymentData = stateUnemploymentData[code.toUpperCase()]
+        if (!unemploymentData) {
+          throw new Error(`Could not find unemployment data for ${code}`)
         }
 
-        const deathsIncreaseRollingAverage = totalDeathIncrease / counter
-        const positiveIncreaseRollingAverage = totalPositiveIncrease / counter
-
-        // next we need to find the insured unemployment rate for this week
-        const closestWeekend = employmentDataWeekends.find(dateString => {
-          return isClosestWeekend(dateString, stateNode.date.toString())
-        })
-
-        const unemploymentRate =
-          closestWeekend && employmentData[closestWeekend][name]
-            ? employmentData[closestWeekend][name].insured_unemployment_rate
-            : null
+        const unemploymentRate = findFirstNodeWithMatchingMonth(
+          unemploymentData,
+          stateNode.date
+        )?.value
 
         const stringencyIndex = stringencyData.find(
           ({ RegionName, Date: stringencyDate }) =>
@@ -175,8 +176,8 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
           ...stateNode,
           totalDeathsPerMillion: getPerMillionPop(population, stateNode.death),
           deathPerMillion: getPerMillionPop(population, stateNode.death),
-          unemploymentRate,
-          deathsIncreaseRollingAverage,
+          unemploymentRate: unemploymentRate ? +unemploymentRate : 0.0,
+          deathIncreaseRollingAverage,
           positiveIncreaseRollingAverage,
           stringencyIndex: stringencyIndex ? +stringencyIndex : undefined,
         }
@@ -192,7 +193,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
         // divided by the IFR, which represents the number of infected individuals that will
         // likely result in a fatality
         estimatedCases =
-          sortedData[index + DAYS_TO_DEATH].deathsIncreaseRollingAverage / IFR
+          sortedData[index + DAYS_TO_DEATH].deathIncreaseRollingAverage / IFR
       }
 
       return {
@@ -263,5 +264,12 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       },
     })
   }
+}
+
+export const sourceNodes: GatsbyNode["sourceNodes"] = async (
+  sourceNodesArgs: SourceNodesArgs
+) => {
+  await createStateNodes(sourceNodesArgs)
+  await createCountryNodes(sourceNodesArgs)
   return
 }

@@ -8,7 +8,7 @@ import {
   YAxis,
   Scatter,
 } from "recharts"
-import { ThreeLiesData } from "../../../plugins/source-covid-data"
+import { ThreeLiesData } from "../../../plugins/source-covid-data/types"
 
 interface ScatterPlotChartProps {
   xAxisLabel?: string

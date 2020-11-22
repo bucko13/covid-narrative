@@ -4,8 +4,9 @@ import moment from "moment"
 import get from "axios"
 import fs from "fs"
 import path from "path"
-import { OWIDDataNode, ThreeLiesNodeData } from ".."
+import { OWIDDataNode, ThreeLiesNodeData } from "../types"
 import csv from "csvtojson"
+import { DateTime } from "luxon"
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
@@ -137,4 +138,101 @@ export function getDateFromString(date: string): Date {
   if (day.length) return new Date(+year, +month, +day)
 
   return new Date(+year, +month)
+}
+
+/**
+ * getting seriesId needed to query uenmployment data from BLS
+ * for a specific state
+ * https://www.bls.gov/help/hlpforma.htm#LA
+ */
+type FIPS = {
+  code: string
+  state: string
+  fips: string
+}
+
+export const getBLSStateUnemploymentSeriesId = async (
+  code: string
+): Promise<string> => {
+  // find fips code for the given state/code
+  const fipsCodes: FIPS[] = JSON.parse(
+    fs
+      .readFileSync(path.resolve(__dirname, "../constants/fips.json"))
+      .toString()
+  )
+
+  let fips = fipsCodes.find(
+    state => state.code.toLowerCase() === code.toLowerCase()
+  )?.fips
+  if (!fips) {
+    fips = fipsCodes.find(
+      state => state.state.toLowerCase() === code.toLowerCase()
+    )?.fips
+  }
+
+  if (!fips) {
+    throw new Error(`Could not find fips code for state ${code}`)
+  }
+
+  // series_id for query serialization: https://www.bls.gov/help/hlpforma.htm#LA
+  const prefix = `LA` // local area
+  const seasonalAdjustmentCode = `S` // seasonally adjusted (rather than unadjusted)
+  let areaCode = `ST${fips}`
+  // serialization of area code is 14 chars
+  while (areaCode.length <= 14) {
+    areaCode = `${areaCode}0`
+  }
+  const measureCode = "03"
+  return prefix + seasonalAdjustmentCode + areaCode + measureCode
+}
+
+export const getStateCodeFromBLSSeriesId = (id: string): string => {
+  const PREFIX = "LASST"
+  const fips = id.slice(PREFIX.length, PREFIX.length + 2)
+  const fipsCodes: FIPS[] = JSON.parse(
+    fs
+      .readFileSync(path.resolve(__dirname, "../constants/fips.json"))
+      .toString()
+  )
+  const code = fipsCodes.find(state => state.fips === fips)?.code
+  if (!code)
+    throw new Error(
+      `Could not find state with fips ${fips} from seriesid ${id}`
+    )
+  return code
+}
+
+export const findFirstNodeWithMatchingMonth = (
+  data: { date: number }[],
+  date: number
+): { date: number; [key: string]: any } | undefined => {
+  const node = data.find(({ date: dateToMatch }) => {
+    const y = DateTime.fromISO(dateToMatch.toString()).year
+    const yB = DateTime.fromISO(date.toString()).year
+    const m = DateTime.fromISO(dateToMatch.toString()).month
+    const mB = DateTime.fromISO(date.toString()).month
+    return y === yB && m === mB
+  })
+
+  return node
+}
+
+export function getRollingAverageData(
+  index: number,
+  keys: string[],
+  data: ThreeLiesNodeData[],
+  period = 7
+): number[] {
+  const totals = Array(keys.length).fill(0)
+  let counter = 0
+
+  while (counter < period && counter <= index) {
+    for (let i = 0; i < keys.length; i += 1) {
+      const key = keys[i]
+      const total = data[index - counter][key]
+      totals[i] += total
+    }
+    counter++
+  }
+  return totals.map(total => total / counter)
 }

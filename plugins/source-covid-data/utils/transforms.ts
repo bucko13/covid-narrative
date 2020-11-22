@@ -7,7 +7,7 @@ import {
   OxCGRTPolicyDataNode,
   PolicyUpdateNode,
   ThreeLiesData,
-} from ".."
+} from "../types"
 import { surveyCodes } from "../constants"
 import {
   getEUGDPData,
@@ -129,9 +129,9 @@ export const transformCountryData = (
       positive: day.new_cases,
       positivesPerMillion: day.total_cases_per_million,
       positiveIncrease: day.new_cases,
-      deathsIncreaseRollingAverage: day.new_deaths_smoothed,
+      deathIncreaseRollingAverage: day.new_deaths_smoothed,
       positiveIncreaseRollingAverage: day.new_cases_smoothed,
-      deathsIncreaseRollingAveragePerMillion:
+      deathIncreaseRollingAveragePerMillion:
         day.new_deaths_smoothed_per_million,
       positiveIncreaseRollingAveragePerMillion:
         day.new_cases_smoothed_per_million,

@@ -4,7 +4,7 @@ import { Box, Switch, FormControlLabel } from "@material-ui/core"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { StateData } from "../../plugins/source-covid-data"
+import { StateData } from "../../plugins/source-covid-data/types"
 import { LineChartComparisonData, StackedAreaChartData } from "../types/charts"
 import {
   StackedAreaComparison,
@@ -195,7 +195,7 @@ const NyMessedUp = ({ data }: PageProps) => {
         />
         <HistoricComparisonLineChart
           comparisonData={lineChartData}
-          comparitor="deathsIncreaseRollingAverage"
+          comparitor="deathIncreaseRollingAverage"
           perM={fatalityPer100k}
           yAxisLabel={
             fatalityPer100k ? "Daily Fatalities (per 100k)" : "Daily Fatalities"
@@ -363,7 +363,7 @@ export const query = graphql`
         data {
           hospitalizedCurrently
           date
-          deathsIncreaseRollingAverage
+          deathIncreaseRollingAverage
           unemploymentRate
           estimatedCases
         }

@@ -56,3 +56,5 @@ export const EXCESS_MORTALITY_API =
 
 export const OWID_TEST_API =
   "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv"
+
+export const BLS_V1_API = "https://api.bls.gov/publicAPI/v1/timeseries/data/"

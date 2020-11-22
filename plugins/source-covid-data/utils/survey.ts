@@ -7,7 +7,7 @@ import {
   SurveyResultsForWeek,
   SurveyDateLabels,
   SurveyResultAPIResponse,
-} from ".."
+} from "../types"
 import { getCountrySurveyData, getCountrySurveysList } from "./api"
 import { reverseDateString } from "./utils"
 import { codeToCountry as _codeToCountry } from "../constants"

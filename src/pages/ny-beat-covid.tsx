@@ -92,7 +92,7 @@ const NyBeatCovid = ({ data }: PageProps) => {
       </AboutThisGraph>
       <HistoricComparisonLineChart
         comparisonData={chartData}
-        comparitor="deathsIncreaseRollingAverage"
+        comparitor="deathIncreaseRollingAverage"
         slice={90}
         yAxisLabel="New Fatalities"
       />
@@ -113,7 +113,7 @@ export const query = graphql`
         data {
           positiveIncreaseRollingAverage
           date
-          deathsIncreaseRollingAverage
+          deathIncreaseRollingAverage
           deathIncrease
         }
       }

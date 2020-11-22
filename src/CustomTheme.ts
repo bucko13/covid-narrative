@@ -1,8 +1,7 @@
-import { createMuiTheme } from "@material-ui/core";
+import { createMuiTheme } from "@material-ui/core"
 
 const CustomTheme = createMuiTheme({
-  typography: {
-  },
+  typography: {},
   overrides: {
     MuiAppBar: {
       colorPrimary: {
@@ -13,4 +12,4 @@ const CustomTheme = createMuiTheme({
   },
 })
 
-export default CustomTheme;
+export default CustomTheme

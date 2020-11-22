@@ -1,6 +1,6 @@
 /* tslint:disable no-console */
 
-import get from "axios"
+import axios from "axios"
 import fs from "fs"
 import path from "path"
 import moment from "moment"
@@ -11,7 +11,9 @@ import {
   StateEmploymentData,
   JHUStateData,
   OwidTestDataNode,
-} from ".."
+  StateUnemploymentData,
+  BLSResponse,
+} from "../types"
 import {
   EU_UNEMPLOYMENT_API,
   OWID_DATA_API,
@@ -24,8 +26,15 @@ import {
   EXCESS_MORTALITY_API,
   EU_GDP_API,
   OWID_TEST_API,
+  BLS_V1_API,
+  states,
 } from "../constants"
-import { getDataWrapper } from "./utils"
+import {
+  getBLSStateUnemploymentSeriesId,
+  getDataWrapper,
+  getStateCodeFromBLSSeriesId,
+} from "./utils"
+import { DateTime } from "luxon"
 
 export const getStateHistoricData = (state: string): Promise<any> =>
   getDataWrapper(
@@ -92,7 +101,7 @@ export const getJHUStateDataSingleDay = async (
   try {
     const formattedDate = moment(date).format("MM-DD-YYYY")
     const CCSE_API = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/${formattedDate}.csv`
-    const { data: csvString } = await get(CCSE_API)
+    const { data: csvString } = await axios(CCSE_API)
     data = await csv().fromString(csvString)
     return data
   } catch (e) {
@@ -107,39 +116,74 @@ export const getJHUStateDataSingleDay = async (
   }
 }
 
-export const getStateUnemploymentData = async (): Promise<any> => {
-  const DATA_FILE = path.resolve(__dirname, "../data/state_unemployment.json")
-  let data
+export const getStateUnemploymentData = async (): Promise<
+  StateUnemploymentData
+> => {
+  const DATA_FILE = path.resolve(
+    __dirname,
+    "../data/bls_state_unemployment.json"
+  )
 
-  if (
-    !fs.existsSync(DATA_FILE) ||
-    process.env.RELOAD_ALL_DATA ||
-    process.env.RELOAD_EMPLOYMENT_DATA
-  ) {
-    console.log("Reloading employment data...")
-    const response = await get(
-      "https://datausa.io/api/covid19/employment/latest/"
-    )
-    data = response.data.data
-    // sort data by date by week ended for easy lookup
-    const sortedData = data.reduce(
-      (prev: StateEmploymentData, curr: StateEmploymentDataNode) => {
-        // check that we're only getting data from this year
-        if (moment(curr.week_ended) < moment("2020-01-01")) return prev
+  let data: StateUnemploymentData = {}
 
-        if (!prev[curr.week_ended]) prev[curr.week_ended] = {}
-        prev[curr.week_ended][
-          curr.state_name.toLowerCase().split(" ").join("-")
-        ] = curr
-        return prev
-      },
-      {}
-    )
-    if (process.env.SAVE_DATA_FILES) {
-      fs.writeFileSync(DATA_FILE, JSON.stringify(sortedData, null, 2))
+  if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
+    console.log("(Re)loading unemployment data for states...")
+    try {
+      const seriesIds: string[] = await Promise.all(
+        states.map(async code => {
+          const seriesId = await getBLSStateUnemploymentSeriesId(code)
+          return seriesId
+        })
+      )
+      const options = {
+        seriesid: seriesIds,
+        startyear: 2020,
+        endyear: DateTime.local().year,
+      }
+      const response: BLSResponse = (await axios.post(BLS_V1_API, options)).data
+      const series = response.Results?.series
+      if (!series || !series.length)
+        throw new Error("No series data found from BLS request")
+
+      // create the StateUnemploymentData object, keyed to state code
+      data = series.reduce((acc, currState): StateUnemploymentData => {
+        // code based on seriesID that is returned from the API
+        const code = getStateCodeFromBLSSeriesId(currState.seriesID)
+        // key to the resulting code
+        acc[code] = currState.data
+          // make sure the unemployment data for each state is transformed correctly
+          .map(unemploymentData => ({
+            ...unemploymentData,
+            value: +unemploymentData.value,
+            date: +`${unemploymentData.year}${unemploymentData.period.slice(
+              1
+            )}01`,
+          }))
+          // sort from earliest month of data to latest
+          .sort((a, b) => {
+            if (a.date < b.date) {
+              return -1
+            } else if (a.date > b.date) {
+              return 1
+            }
+            return 0
+          })
+        return acc
+      }, data)
+      fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
+    } catch (e) {
+      if (e.response) {
+        console.error(
+          `There was a problem making request for unemployment data: ${e.response.data}`
+        )
+      } else {
+        console.error(
+          "There was a problem handling unemployment data: ",
+          e.message
+        )
+      }
+      process.exit()
     }
-    data = sortedData
-    console.log("Finished loading employment data")
   } else {
     data = JSON.parse(fs.readFileSync(DATA_FILE, { encoding: "utf-8" }))
   }

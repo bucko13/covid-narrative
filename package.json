@@ -39,8 +39,12 @@
     "typescript": "^4.0.2"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.14",
     "@types/luxon": "^1.25.0",
+    "@types/mocha": "^8.0.4",
+    "chai": "^4.2.0",
     "eslint-config-react-app": "^5.2.1",
+    "mocha": "^8.2.1",
     "prettier": "2.0.5",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0"
@@ -59,7 +63,8 @@
     "clean": "gatsby clean",
     "tslint": "tslint --project tsconfig.json",
     "tslint:fix": "tslint --project tsconfig.json --fix",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "mocha plugins/**/*.spec.ts --r ts-node/register",
+    "test:watch": "mocha plugins/**/*.spec.ts --r ts-node/register --watch --watch-files plugins/**/*.spec.ts, plugins/**/*.ts"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,4 @@
-import { ThreeLiesNodeData } from "../../plugins/source-covid-data"
+import { ThreeLiesNodeData } from "../../plugins/source-covid-data/types"
 
 export interface LineChartDataNode {
   date: string | number

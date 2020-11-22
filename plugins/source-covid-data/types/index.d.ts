@@ -3,12 +3,12 @@ export interface ThreeLiesNodeData {
   death: number
   deathPerMillion: number
   positive: number
-  positivesPerMillion: number
+  positivesPerMillion?: number
   deathIncrease: number
   positiveIncrease: number
-  deathsIncreaseRollingAverage: number
+  deathIncreaseRollingAverage: number
   positiveIncreaseRollingAverage: number
-  deathsIncreaseRollingAveragePerMillion?: number
+  deathIncreaseRollingAveragePerMillion?: number
   positiveIncreaseRollingAveragePerMillion?: number
   stringencyIndex?: number
   percentWearWasks?: number
@@ -16,7 +16,7 @@ export interface ThreeLiesNodeData {
   policyUpdates?: PolicyUpdateNode[]
   p_scores_all_ages?: number
   newTests?: number
-  newTestsPerThousand?: number
+  newTestsPerThousand?: number | null
   newTestsSmoothed?: number
   newTestsSmoothedPerThousand?: number
   totalTestsPerThousand?: number
@@ -231,4 +231,27 @@ export interface OwidTestDataNode {
   "7-day smoothed daily change per thousand": string
   "Short-term tests per case": string
   "Short-term positive rate": string
+}
+
+export interface StateUnemploymentDataNode {
+  year: string // 2020
+  period: string // M01
+  periodName: string // january
+  date: number // 20200101 (just using the first day)
+  latest: boolean | string
+  value: number | string
+}
+
+export interface StateUnemploymentData {
+  [code: string]: StateUnemploymentDataNode[]
+}
+
+export interface BLSResponse {
+  status: string
+  Results: {
+    series: {
+      seriesID: string
+      data: StateUnemploymentDataNode[]
+    }[]
+  }
 }

@@ -3,7 +3,7 @@ import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { StateData, ThreeLiesData } from "../../plugins/source-covid-data"
+import { StateData, ThreeLiesData } from "../../plugins/source-covid-data/types"
 import { ChartDisplay } from "../components/ui"
 import ScatterPlotChart from "../components/charts/ScatterPlotChart"
 
