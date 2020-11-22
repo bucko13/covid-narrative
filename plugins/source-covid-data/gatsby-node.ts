@@ -20,7 +20,6 @@ import {
   getPerThousandPop,
   findFirstNodeWithMatchingMonth,
   getRollingAverageData,
-  calculateEstimatedCases,
 } from "./utils/utils"
 import {
   transformCountryData,
@@ -36,7 +35,6 @@ import {
   StateNodeData,
   PopulationData,
   StringencyData,
-  ThreeLiesNodeData,
 } from "./types"
 import {
   states,
@@ -83,7 +81,7 @@ async function createCountryNodes({
       )
 
       await addOwidTestData(iso3Code, transformed)
-      await addExcessDeathData(countryName, transformed)
+      // await addExcessDeathData(countryName, transformed)
       await addUnemploymentData(code, transformed)
       await addSurveyData(countryName, transformed)
       await addGDPData(code, transformed)
@@ -245,7 +243,7 @@ async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
 export const sourceNodes: GatsbyNode["sourceNodes"] = async (
   sourceNodesArgs: SourceNodesArgs
 ) => {
-  await createStateNodes(sourceNodesArgs)
   await createCountryNodes(sourceNodesArgs)
+  await createStateNodes(sourceNodesArgs)
   return
 }

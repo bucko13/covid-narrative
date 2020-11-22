@@ -5,6 +5,7 @@ import ISO2ToISO3 from "./ISO2ToISO3.json"
 
 export const states = ["az", "ny", "nj", "fl", "tx", "ga", "ca"]
 export const countries = [
+  "au",
   "de",
   "ch",
   "fi",

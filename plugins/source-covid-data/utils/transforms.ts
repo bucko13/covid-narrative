@@ -8,9 +8,8 @@ import {
   PolicyUpdateNode,
   StateNodeData,
   ThreeLiesData,
-  ThreeLiesNodeData,
 } from "../types"
-import { surveyCodes } from "../constants"
+import { codeToCountry as codeToCountry_, surveyCodes } from "../constants"
 import {
   getEUGDPData,
   getEUUnemploymentData,
@@ -30,7 +29,7 @@ import {
   calculateEstimatedCases,
   getPerThousandPop,
 } from "./utils"
-
+const codeToCountry: { [key: string]: string } = codeToCountry_
 export function getAverageUnemployment(
   firstMonth: string,
   data: { [time: string]: number }
@@ -83,7 +82,6 @@ function getPolicyUpdatesForDay(
 export const transformCountryData = (
   code: string, // iso2
   data: OWIDData,
-  // unemploymentRates: { [month: string]: number},
   policyData: OxCGRTPolicyDataNode[]
 ): ThreeLiesData => {
   if (!data || !data.data)
@@ -242,7 +240,13 @@ export const addUnemploymentData = async (
     "monthly"
   )
 
-  const unemploymentData = euUnemloymentData[countryCode.toUpperCase()].data
+  const unemploymentData = euUnemloymentData[countryCode.toUpperCase()]?.data
+  if (!unemploymentData) {
+    console.warn(
+      `No unemployment data for ${codeToCountry[countryCode.toUpperCase()]}`
+    )
+    return
+  }
   const firstMonth = data.data[0].date.toString().slice(0, 6)
   const averageUnemployment = getAverageUnemployment(
     firstMonth,
@@ -277,7 +281,10 @@ export const addExcessDeathData = async (
 ): Promise<void> => {
   console.log(`Adding excess death data for ${countryName}`)
   const allMortalityData: ExcessMortalityDataNode[] = await getExcessMortalityData()
-
+  if (!allMortalityData || !data) {
+    console.warn(`No excess mortality data for ${countryName}`)
+    return
+  }
   // for calculating average
   let count = 0
   let total = 0
