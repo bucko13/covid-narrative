@@ -68,7 +68,7 @@ const ScatterPlotChart = ({
           }}
           dataKey={xAxisKey}
           name={xAxisLabel}
-          domain={["dataMin-10", "dataMax"]}
+          domain={["dataMin-5", "dataMax+5"]}
           type="number"
         />
         <YAxis

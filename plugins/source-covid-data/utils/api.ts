@@ -7,8 +7,6 @@ import moment from "moment"
 import csv from "csvtojson"
 
 import {
-  StateEmploymentDataNode,
-  StateEmploymentData,
   JHUStateData,
   OwidTestDataNode,
   StateUnemploymentData,
@@ -66,12 +64,28 @@ export const getHistoricalPolicyData = (): Promise<any> =>
     "Historical Policy"
   )
 
-export const getCountrySurveyData = (country: string): Promise<any> =>
-  getDataWrapper(
-    getCountrySurveyAPI(country),
-    `${country}_survey_data`,
-    `${country} Survey`
-  )
+export const getCountrySurveyData = async (
+  country: string,
+  extension = "csv"
+): Promise<any> => {
+  try {
+    return await getDataWrapper(
+      getCountrySurveyAPI(country, extension),
+      `${country}_survey_data`,
+      `${country} Survey`
+    )
+  } catch (e) {
+    if (e?.response?.status === 404) {
+      console.warn(`Could not find survey data for ${country}.${extension}`)
+      if (extension === "csv") return await getCountrySurveyData(country, "zip")
+    } else {
+      console.error(e.message)
+      throw new Error(
+        `Could not request survey data from ${country}.${extension}`
+      )
+    }
+  }
+}
 
 export const getCountrySurveysList = async (): Promise<string[]> =>
   await getDataWrapper(

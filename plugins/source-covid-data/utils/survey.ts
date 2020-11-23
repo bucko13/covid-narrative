@@ -162,20 +162,20 @@ export async function collateSurveyDataForCode(
       return
     }
 
-    if (country === "united-kingdom") {
-      return await handleUKSurvey(code)
-    } else {
-      surveyData = await getCountrySurveyData(country)
-      const [results, dateLabels] = prepareSurveyDataForCode(surveyData, code)
-      // tslint:disable-next-line: no-console
-      console.log(`Finished with ${_country}'s data`)
-      return [orderAndCalculatePercentage(results), dateLabels]
-    }
+    // if (country === "united-kingdom") {
+    //   return await handleUKSurvey(code)
+    // } else {
+    surveyData = await getCountrySurveyData(country)
+    const [results, dateLabels] = prepareSurveyDataForCode(surveyData, code)
+    // tslint:disable-next-line: no-console
+    console.log(`Finished with ${_country}'s data`)
+    return [orderAndCalculatePercentage(results), dateLabels]
+    // }
   } catch (e) {
     // tslint:disable-next-line: no-console
     console.error(`There was a problem getting survey data for ${_country}.`)
     // tslint:disable-next-line: no-console
-    console.error(e.message)
-    // process.exit()
+    console.error(e.stack)
+    process.exit()
   }
 }

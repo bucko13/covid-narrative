@@ -5,13 +5,13 @@ import ISO2ToISO3 from "./ISO2ToISO3.json"
 
 export const states = ["az", "ny", "nj", "fl", "tx", "ga", "ca"]
 export const countries = [
+  "gb",
   "au",
   "de",
   "ch",
   "fi",
   "nl",
   "fr",
-  "gb",
   "se",
   "be",
   "it",
@@ -47,8 +47,8 @@ export const STRINGENCY_INDEX_API =
 export const HISTORICAL_POLICY_DATA_API =
   "https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest_allchanges.csv"
 
-export const getCountrySurveyAPI = (country: string) =>
-  `https://github.com/YouGov-Data/covid-19-tracker/blob/master/data/${country}.csv?raw=true`
+export const getCountrySurveyAPI = (country: string, extension = "csv") =>
+  `https://github.com/YouGov-Data/covid-19-tracker/blob/master/data/${country}.${extension}?raw=true`
 
 export { codeToCountry, codeToState, countryToCode, ISO2ToISO3 }
 

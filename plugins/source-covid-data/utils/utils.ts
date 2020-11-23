@@ -4,10 +4,27 @@ import moment from "moment"
 import get from "axios"
 import fs from "fs"
 import path from "path"
-import { OWIDDataNode, ThreeLiesNodeData } from "../types"
+// import { promisify } from "util"
+
+import {
+  OWIDDataNode,
+  SurveyResultAPIResponse,
+  ThreeLiesNodeData,
+} from "../types"
 import csv from "csvtojson"
 import { DateTime } from "luxon"
 import { DAYS_TO_DEATH, IFR } from "../constants"
+import yauzl from "yauzl"
+
+const promisify = (api: any): any => (...args: any[]) =>
+  new Promise((resolve, reject) => {
+    api(...args, (err: object, response: any) => {
+      if (err) return reject(err)
+      resolve(response)
+    })
+  })
+
+const yauzlPromise = promisify(yauzl.fromBuffer)
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
@@ -34,7 +51,45 @@ export function isClosestWeekend(
   return diff <= 7
 }
 
+function getZipDataFromApi(api: string): Promise<string> {
+  return new Promise(async (resolve, reject) => {
+    const response = await get(api, { responseType: "arraybuffer" })
+    const zipfile = await yauzlPromise(response.data, { lazyEntries: true })
+
+    if (!zipfile)
+      throw new Error(`Could not extract zip file from request: ${api}`)
+
+    const openReadStream = promisify(zipfile.openReadStream.bind(zipfile))
+    zipfile.readEntry()
+    const data: object[] = []
+    zipfile.on("entry", async (entry: any) => {
+      const stream = await openReadStream(entry)
+
+      stream.on("data", () => (chunk: Buffer) => data.push(chunk))
+      stream.on("end", () => {
+        zipfile.readEntry()
+      })
+    })
+
+    zipfile.on("end", () => {
+      console.log("Done reading zip entries")
+      resolve(data.toString())
+    })
+
+    zipfile.on("error", reject)
+  })
+}
+
 export async function getJsonFromApi(api: string) {
+  // zip needs to be handle for some survey requests
+  // they are just compressed csvs. May need to make this more
+  // flexible in the future though
+  console.log("Requesting data from:", api)
+  if (api.includes(".zip")) {
+    const result = await getZipDataFromApi(api)
+    return await csv().fromString(result)
+  }
+
   const data = await get(api)
   if (api.includes(".csv")) {
     const result = data.data
@@ -75,19 +130,14 @@ export const getDataWrapper = async (
   let data
 
   if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
-    try {
-      console.log(`(Re)loading ${dataName} data...`)
-      const response = await getJsonFromApi(api)
+    console.log(`(Re)loading ${dataName} data...`)
+    const response = await getJsonFromApi(api)
 
-      data = dataKey ? response[dataKey] : response
-      if (process.env.SAVE_DATA_FILES) {
-        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
-      }
-      console.log(`Finished loading ${dataName} data`)
-    } catch (e) {
-      console.error(e.message)
-      // process.exit()
+    data = dataKey ? response[dataKey] : response
+    if (process.env.SAVE_DATA_FILES) {
+      fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
     }
+    console.log(`Finished loading ${dataName} data`)
   } else {
     data = JSON.parse(fs.readFileSync(DATA_FILE, { encoding: "utf-8" }))
   }

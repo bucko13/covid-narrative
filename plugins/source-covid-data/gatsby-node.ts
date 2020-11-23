@@ -81,7 +81,7 @@ async function createCountryNodes({
       )
 
       await addOwidTestData(iso3Code, transformed)
-      // await addExcessDeathData(countryName, transformed)
+      await addExcessDeathData(countryName, transformed)
       await addUnemploymentData(code, transformed)
       await addSurveyData(countryName, transformed)
       await addGDPData(code, transformed)
