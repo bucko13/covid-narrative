@@ -21,6 +21,7 @@ import {
 
 import { getPerMPop, readableChartDate, sliceData } from "../../utils/helpers"
 import { HistoricLineChartProps, LineChartDataNode } from "../../types/charts"
+import { GraphFilter } from "../ui"
 
 const HistoricComparisonLineChart = ({
   comparisonData,
@@ -48,6 +49,7 @@ const HistoricComparisonLineChart = ({
     (stateNode, location) => ({ ...stateNode, [location]: true }),
     stateObject
   )
+
   const [state, setState] = useState(initialState)
 
   const handleChange = (event: React.ChangeEvent) => {
@@ -96,26 +98,7 @@ const HistoricComparisonLineChart = ({
   return (
     <div>
       {filter && locations.length > 2 ? (
-        <FormControl component="fieldset">
-          <FormGroup>
-            <Grid container>
-              {locations.map(location => (
-                <Grid item key={location}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={state[location]}
-                        onChange={handleChange}
-                        name={location}
-                      />
-                    }
-                    label={location.toUpperCase()}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </FormGroup>
-        </FormControl>
+        <GraphFilter items={state} handleChange={handleChange} />
       ) : null}
       <ResponsiveContainer width="100%" aspect={2}>
         <LineChart data={data}>

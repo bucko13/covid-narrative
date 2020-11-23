@@ -1,7 +1,4 @@
 import { DateTime } from "luxon"
-import fs from "fs"
-import csv from "csvtojson"
-import path from "path"
 
 import {
   SurveyResultsForWeek,
@@ -55,29 +52,6 @@ function orderAndCalculatePercentage(
     }
   }
   return ordered.map(calculateSurveyPercentage)
-}
-
-// the UK data set is larger and so is broken down into two sets
-// needs to be handled accordingly
-async function handleUKSurvey(
-  code: string
-): Promise<[SurveyResultsForWeek[], SurveyDateLabels]> {
-  // first data set
-  const data1 = await getCountrySurveyData("united-kingdom1")
-  const [results1, dateLabels1] = prepareSurveyDataForCode(data1, code)
-  // second data set
-  const data2 = await getCountrySurveyData("united-kingdom2")
-  const [results2, dateLabels2] = prepareSurveyDataForCode(data2, code)
-  // combine into a single results array, easier now that the data has been pruned
-  // only to what we need
-  const results = [
-    ...orderAndCalculatePercentage(results1),
-    ...orderAndCalculatePercentage(results2),
-  ]
-  const dateLabels = { ...dateLabels1, ...dateLabels2 }
-  // tslint:disable-next-line: no-console
-  console.log(`Finished UK survey data for code ${code}`)
-  return [results, dateLabels]
 }
 
 function prepareSurveyDataForCode(
@@ -162,13 +136,10 @@ export async function collateSurveyDataForCode(
       return
     }
 
-    // if (country === "united-kingdom") {
-    //   return await handleUKSurvey(code)
-    // } else {
     surveyData = await getCountrySurveyData(country)
     const [results, dateLabels] = prepareSurveyDataForCode(surveyData, code)
     // tslint:disable-next-line: no-console
-    console.log(`Finished with ${_country}'s data`)
+    console.log(`Finished with ${_country}'s survey data`)
     return [orderAndCalculatePercentage(results), dateLabels]
     // }
   } catch (e) {
@@ -178,4 +149,29 @@ export async function collateSurveyDataForCode(
     console.error(e.stack)
     process.exit()
   }
+}
+
+// the UK data set is larger and so is broken down into two sets
+// needs to be handled accordingly.
+// Now obsolete but might be necessary again if they change
+// the format from zip to multiple files again
+async function handleUKSurvey(
+  code: string
+): Promise<[SurveyResultsForWeek[], SurveyDateLabels]> {
+  // first data set
+  const data1 = await getCountrySurveyData("united-kingdom1")
+  const [results1, dateLabels1] = prepareSurveyDataForCode(data1, code)
+  // second data set
+  const data2 = await getCountrySurveyData("united-kingdom2")
+  const [results2, dateLabels2] = prepareSurveyDataForCode(data2, code)
+  // combine into a single results array, easier now that the data has been pruned
+  // only to what we need
+  const results = [
+    ...orderAndCalculatePercentage(results1),
+    ...orderAndCalculatePercentage(results2),
+  ]
+  const dateLabels = { ...dateLabels1, ...dateLabels2 }
+  // tslint:disable-next-line: no-console
+  console.log(`Finished UK survey data for code ${code}`)
+  return [results, dateLabels]
 }

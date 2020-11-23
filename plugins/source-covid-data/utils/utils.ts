@@ -8,13 +8,14 @@ import path from "path"
 
 import {
   OWIDDataNode,
-  SurveyResultAPIResponse,
+  // SurveyResultAPIResponse,
   ThreeLiesNodeData,
 } from "../types"
 import csv from "csvtojson"
 import { DateTime } from "luxon"
 import { DAYS_TO_DEATH, IFR } from "../constants"
-import yauzl from "yauzl"
+// tslint:disable-next-line: no-var-requires
+const yauzl = require("yauzl")
 
 const promisify = (api: any): any => (...args: any[]) =>
   new Promise((resolve, reject) => {

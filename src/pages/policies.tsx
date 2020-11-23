@@ -28,6 +28,7 @@ const Policies = ({ data }: PageProps) => {
           xAxisKey="stringencyIndex"
           xAxisLabel="Stringency Index"
           yAxisLabel="Deaths per 100k"
+          paddingY={10}
           yAxisKey="deaths_per_100k"
           data={[...data.countries.nodes, ...data.states.nodes]}
         />
