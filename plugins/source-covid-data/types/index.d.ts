@@ -3,7 +3,7 @@ export interface ThreeLiesNodeData {
   death: number
   deathPerMillion: number
   positive: number
-  positivesPerMillion?: number
+  positivesPerMillion: number
   deathIncrease: number
   positiveIncrease: number
   deathIncreaseRollingAverage: number
@@ -16,7 +16,7 @@ export interface ThreeLiesNodeData {
   policyUpdates?: PolicyUpdateNode[]
   p_scores_all_ages?: number
   newTests?: number
-  newTestsPerThousand?: number | null
+  newTestsPerThousand?: number
   newTestsSmoothed?: number
   newTestsSmoothedPerThousand?: number
   totalTestsPerThousand?: number
@@ -74,11 +74,11 @@ export interface StateData extends ThreeLiesData {
   total_hospitalized: number
   hospitalized_per_million: number
   hospitalized_per_100k: number
-  jhu_deaths?: number
-  jhu_cases?: number
-  jhu_tested?: number
-  jhu_mortality?: number
-  jhu_testing_rate?: number
+  jhu_deaths?: number | null
+  jhu_cases?: number | null
+  jhu_tested?: number | null
+  jhu_mortality?: number | null
+  jhu_testing_rate?: number | null
   data: StateNodeData[]
 }
 

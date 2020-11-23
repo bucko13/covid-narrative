@@ -1,14 +1,17 @@
 import { expect } from "chai"
-import { DAYS_TO_DEATH } from "../constants"
-import { ThreeLiesNodeData, ThreeLiesData } from "../types"
+import { DAYS_TO_DEATH, getCountrySurveyAPI, surveyCodes } from "../constants"
+import { ThreeLiesNodeData } from "../types"
 import {
   calculateEstimatedCases,
   findFirstNodeWithMatchingMonth,
   getRollingAverageData,
+  extractCsvFromRemoteZip,
+  formatSurveyDateStrings,
+  getJsonFromApi,
 } from "../utils/utils"
 import _stateFixture from "./fixtures/state-fixture.json"
 
-const stateFixture: ThreeLiesData = _stateFixture
+const stateFixture: { [key: string]: any } = _stateFixture
 
 describe("utils", () => {
   describe("findFirstNodeWithMatchingMonth", () => {
@@ -39,7 +42,7 @@ describe("utils", () => {
 
     beforeEach(() => {
       keys = ["deathIncrease", "positiveIncrease"]
-      data = stateFixture.data
+      data = stateFixture?.data
       index = data.length - 1
       testNode = data[index]
     })
@@ -75,6 +78,32 @@ describe("utils", () => {
       const index = stateFixture.data.length - DAYS_TO_DEATH + 1
       const estimatedCases = calculateEstimatedCases(index, stateFixture.data)
       expect(estimatedCases).to.equal(undefined)
+    })
+  })
+
+  describe.only("extractCsvFromRemoteZip", function () {
+    this.timeout(10000)
+    it("should get the uk zip file", async () => {
+      const api = getCountrySurveyAPI("united-kingdom", "zip")
+      const data = await extractCsvFromRemoteZip(api)
+      // length of 1000 is kind of arbitrary but these should
+      // be big files so we don't expect the lack of specificity to be a problem
+      expect(data.length).to.be.greaterThan(1000)
+
+      // make sure that we can convert it to correct survey
+      const json = await getJsonFromApi(api)
+      expect(json[0]).to.have.property("endtime")
+      surveyCodes.forEach(code => expect(json[0]).to.have.property(code))
+    })
+  })
+
+  describe("formatSurveyDateStrings", () => {
+    it("should correctly format dates", () => {
+      const expected = "20200401"
+      let test = "01/04/2020"
+      expect(formatSurveyDateStrings(test)).to.equal(expected)
+      test = "2020-04-01"
+      expect(formatSurveyDateStrings(test)).to.equal(expected)
     })
   })
 })

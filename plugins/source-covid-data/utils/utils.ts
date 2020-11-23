@@ -4,18 +4,15 @@ import moment from "moment"
 import get from "axios"
 import fs from "fs"
 import path from "path"
-// import { promisify } from "util"
 
-import {
-  OWIDDataNode,
-  // SurveyResultAPIResponse,
-  ThreeLiesNodeData,
-} from "../types"
+import { OWIDDataNode, ThreeLiesNodeData } from "../types"
+
+import parse from "csv-parse/lib/sync"
+
 import csv from "csvtojson"
 import { DateTime } from "luxon"
 import { DAYS_TO_DEATH, IFR } from "../constants"
-// tslint:disable-next-line: no-var-requires
-const yauzl = require("yauzl")
+import yauzl from "yauzl"
 
 const promisify = (api: any): any => (...args: any[]) =>
   new Promise((resolve, reject) => {
@@ -52,7 +49,7 @@ export function isClosestWeekend(
   return diff <= 7
 }
 
-function getZipDataFromApi(api: string): Promise<string> {
+export function extractCsvFromRemoteZip(api: string): Promise<string> {
   return new Promise(async (resolve, reject) => {
     const response = await get(api, { responseType: "arraybuffer" })
     const zipfile = await yauzlPromise(response.data, { lazyEntries: true })
@@ -63,20 +60,19 @@ function getZipDataFromApi(api: string): Promise<string> {
     const openReadStream = promisify(zipfile.openReadStream.bind(zipfile))
     zipfile.readEntry()
     const data: object[] = []
+    console.log(`Found ${zipfile.entryCount} file entry in zip`)
     zipfile.on("entry", async (entry: any) => {
       const stream = await openReadStream(entry)
-
-      stream.on("data", () => (chunk: Buffer) => data.push(chunk))
+      stream.on("data", (chunk: object) => data.push(chunk))
       stream.on("end", () => {
         zipfile.readEntry()
       })
     })
 
     zipfile.on("end", () => {
-      console.log("Done reading zip entries")
       resolve(data.toString())
+      console.log("End of entries")
     })
-
     zipfile.on("error", reject)
   })
 }
@@ -87,8 +83,14 @@ export async function getJsonFromApi(api: string) {
   // flexible in the future though
   console.log("Requesting data from:", api)
   if (api.includes(".zip")) {
-    const result = await getZipDataFromApi(api)
-    return await csv().fromString(result)
+    const result = await extractCsvFromRemoteZip(api)
+    return parse(result, {
+      columns: true,
+      skip_empty_lines: true,
+      skip_lines_with_error: true,
+      trim: true,
+    })
+    // return await csv().fromString(result)
   }
 
   const data = await get(api)
@@ -173,13 +175,27 @@ export function getAverageOfDataPoint(
 }
 
 // e.g. "04/02/2020" => "20200204"
-export const reverseDateString = (date: string): string => {
-  const [day, month, year] = date.split("/")
-  return new Date(+year, +month - 1, +day)
-    .toISOString()
-    .slice(0, 10)
-    .split("-")
-    .join("")
+export const formatSurveyDateStrings = (date: string): string => {
+  let [day, month, year] = date.split("/")
+  if (day && month && year) {
+    return new Date(+year, +month - 1, +day)
+      .toISOString()
+      .slice(0, 10)
+      .split("-")
+      .join("")
+  } else {
+    const dateTime = DateTime.fromISO(date)
+    if (!dateTime.year || !dateTime.month || !dateTime.day) {
+      console.warn(`Could not format date string: ${date}`)
+      return ""
+    }
+    day = dateTime.day.toString()
+    month = dateTime.month.toString()
+    year = dateTime.year.toString()
+    if (day.length === 1) day = `0${day}`
+    if (month.length === 1) month = `0${month}`
+    return year + month + day
+  }
 }
 
 export function getDateFromString(date: string): Date {

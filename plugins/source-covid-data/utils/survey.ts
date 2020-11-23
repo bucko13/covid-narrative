@@ -6,7 +6,7 @@ import {
   SurveyResultAPIResponse,
 } from "../types"
 import { getCountrySurveyData, getCountrySurveysList } from "./api"
-import { reverseDateString } from "./utils"
+import { formatSurveyDateStrings } from "./utils"
 import { codeToCountry as _codeToCountry } from "../constants"
 export const VALID_VALUES = [
   "Always",
@@ -62,7 +62,8 @@ function prepareSurveyDataForCode(
   const dateLabels: SurveyDateLabels = {}
 
   for (const result of surveyData) {
-    const date = reverseDateString(result.endtime.split(" ")[0])
+    const date = formatSurveyDateStrings(result.endtime.split(" ")[0])
+    if (!date.length) continue
     const label = result.qweek
 
     // the response dates for a given week (label) vary and so we need
