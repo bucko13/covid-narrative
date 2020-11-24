@@ -5,19 +5,24 @@ import ISO2ToISO3 from "./ISO2ToISO3.json"
 
 export const states = ["az", "ny", "nj", "fl", "tx", "ga", "ca"]
 export const countries = [
+  "gb",
+  "au",
   "de",
   "ch",
   "fi",
   "nl",
   "fr",
-  "gb",
   "se",
   "be",
   "it",
   "es",
   "us",
+  "jp",
 ]
 export const surveyCodes = ["i12_health_1"]
+
+export const IFR = 0.0065
+export const DAYS_TO_DEATH = 15
 
 // APIs
 export const OWID_DATA_API =
@@ -42,8 +47,8 @@ export const STRINGENCY_INDEX_API =
 export const HISTORICAL_POLICY_DATA_API =
   "https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest_allchanges.csv"
 
-export const getCountrySurveyAPI = (country: string) =>
-  `https://github.com/YouGov-Data/covid-19-tracker/blob/master/data/${country}.csv?raw=true`
+export const getCountrySurveyAPI = (country: string, extension = "csv") =>
+  `https://github.com/YouGov-Data/covid-19-tracker/blob/master/data/${country}.${extension}?raw=true`
 
 export { codeToCountry, codeToState, countryToCode, ISO2ToISO3 }
 
@@ -55,3 +60,5 @@ export const EXCESS_MORTALITY_API =
 
 export const OWID_TEST_API =
   "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv"
+
+export const BLS_V1_API = "https://api.bls.gov/publicAPI/v1/timeseries/data/"

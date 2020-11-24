@@ -1,0 +1,25 @@
+.scatter-tooltip {
+  background-color: white;
+  border: 1px solid lightgray;
+  padding: 1rem;
+  h6 {
+    margin: 0.2rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+  p {
+    font-size: 1rem;
+    font-weight: normal;
+    margin: 0.25rem;
+  }
+}
+
+.scatter-dot {
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 10;
+}
+
+.label {
+  z-index: 1;
+}

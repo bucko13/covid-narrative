@@ -4,14 +4,34 @@ import moment from "moment"
 import get from "axios"
 import fs from "fs"
 import path from "path"
-import { OWIDDataNode, ThreeLiesNodeData } from ".."
+
+import { OWIDDataNode, ThreeLiesNodeData } from "../types"
+
+import parse from "csv-parse/lib/sync"
+
 import csv from "csvtojson"
+import { DateTime } from "luxon"
+import { DAYS_TO_DEATH, IFR } from "../constants"
+import yauzl from "yauzl"
+
+const promisify = (api: any): any => (...args: any[]) =>
+  new Promise((resolve, reject) => {
+    api(...args, (err: object, response: any) => {
+      if (err) return reject(err)
+      resolve(response)
+    })
+  })
+
+const yauzlPromise = promisify(yauzl.fromBuffer)
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
 
 export const getPerMillionPop = (pop: number, value: number): number =>
   Math.floor(value / (pop / 1000000))
+
+export const getPerThousandPop = (pop: number, value: number): number =>
+  Math.floor(value / (pop / 1000))
 
 export const getDateNumber = (date: string): number =>
   Number(moment(date).format("YYYYMMDD"))
@@ -29,7 +49,50 @@ export function isClosestWeekend(
   return diff <= 7
 }
 
+export function extractCsvFromRemoteZip(api: string): Promise<string> {
+  return new Promise(async (resolve, reject) => {
+    const response = await get(api, { responseType: "arraybuffer" })
+    const zipfile = await yauzlPromise(response.data, { lazyEntries: true })
+
+    if (!zipfile)
+      throw new Error(`Could not extract zip file from request: ${api}`)
+
+    const openReadStream = promisify(zipfile.openReadStream.bind(zipfile))
+    zipfile.readEntry()
+    const data: object[] = []
+    console.log(`Found ${zipfile.entryCount} file entry in zip`)
+    zipfile.on("entry", async (entry: any) => {
+      const stream = await openReadStream(entry)
+      stream.on("data", (chunk: object) => data.push(chunk))
+      stream.on("end", () => {
+        zipfile.readEntry()
+      })
+    })
+
+    zipfile.on("end", () => {
+      resolve(data.toString())
+      console.log("End of entries")
+    })
+    zipfile.on("error", reject)
+  })
+}
+
 export async function getJsonFromApi(api: string) {
+  // zip needs to be handle for some survey requests
+  // they are just compressed csvs. May need to make this more
+  // flexible in the future though
+  console.log("Requesting data from:", api)
+  if (api.includes(".zip")) {
+    const result = await extractCsvFromRemoteZip(api)
+    return parse(result, {
+      columns: true,
+      skip_empty_lines: true,
+      skip_lines_with_error: true,
+      trim: true,
+    })
+    // return await csv().fromString(result)
+  }
+
   const data = await get(api)
   if (api.includes(".csv")) {
     const result = data.data
@@ -70,19 +133,14 @@ export const getDataWrapper = async (
   let data
 
   if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
-    try {
-      console.log(`(Re)loading ${dataName} data...`)
-      const response = await getJsonFromApi(api)
+    console.log(`(Re)loading ${dataName} data...`)
+    const response = await getJsonFromApi(api)
 
-      data = dataKey ? response[dataKey] : response
-      if (process.env.SAVE_DATA_FILES) {
-        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
-      }
-      console.log(`Finished loading ${dataName} data`)
-    } catch (e) {
-      console.error(e)
-      process.exit()
+    data = dataKey ? response[dataKey] : response
+    if (process.env.SAVE_DATA_FILES) {
+      fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
     }
+    console.log(`Finished loading ${dataName} data`)
   } else {
     data = JSON.parse(fs.readFileSync(DATA_FILE, { encoding: "utf-8" }))
   }
@@ -117,13 +175,27 @@ export function getAverageOfDataPoint(
 }
 
 // e.g. "04/02/2020" => "20200204"
-export const reverseDateString = (date: string): string => {
-  const [day, month, year] = date.split("/")
-  return new Date(+year, +month - 1, +day)
-    .toISOString()
-    .slice(0, 10)
-    .split("-")
-    .join("")
+export const formatSurveyDateStrings = (date: string): string => {
+  let [day, month, year] = date.split("/")
+  if (day && month && year) {
+    return new Date(+year, +month - 1, +day)
+      .toISOString()
+      .slice(0, 10)
+      .split("-")
+      .join("")
+  } else {
+    const dateTime = DateTime.fromISO(date)
+    if (!dateTime.year || !dateTime.month || !dateTime.day) {
+      console.warn(`Could not format date string: ${date}`)
+      return ""
+    }
+    day = dateTime.day.toString()
+    month = dateTime.month.toString()
+    year = dateTime.year.toString()
+    if (day.length === 1) day = `0${day}`
+    if (month.length === 1) month = `0${month}`
+    return year + month + day
+  }
 }
 
 export function getDateFromString(date: string): Date {
@@ -134,4 +206,113 @@ export function getDateFromString(date: string): Date {
   if (day.length) return new Date(+year, +month, +day)
 
   return new Date(+year, +month)
+}
+
+/**
+ * getting seriesId needed to query uenmployment data from BLS
+ * for a specific state
+ * https://www.bls.gov/help/hlpforma.htm#LA
+ */
+type FIPS = {
+  code: string
+  state: string
+  fips: string
+}
+
+export const getBLSStateUnemploymentSeriesId = async (
+  code: string
+): Promise<string> => {
+  // find fips code for the given state/code
+  const fipsCodes: FIPS[] = JSON.parse(
+    fs
+      .readFileSync(path.resolve(__dirname, "../constants/fips.json"))
+      .toString()
+  )
+
+  let fips = fipsCodes.find(
+    state => state.code.toLowerCase() === code.toLowerCase()
+  )?.fips
+  if (!fips) {
+    fips = fipsCodes.find(
+      state => state.state.toLowerCase() === code.toLowerCase()
+    )?.fips
+  }
+
+  if (!fips) {
+    throw new Error(`Could not find fips code for state ${code}`)
+  }
+
+  // series_id for query serialization: https://www.bls.gov/help/hlpforma.htm#LA
+  const prefix = `LA` // local area
+  const seasonalAdjustmentCode = `S` // seasonally adjusted (rather than unadjusted)
+  let areaCode = `ST${fips}`
+  // serialization of area code is 14 chars
+  while (areaCode.length <= 14) {
+    areaCode = `${areaCode}0`
+  }
+  const measureCode = "03"
+  return prefix + seasonalAdjustmentCode + areaCode + measureCode
+}
+
+export const getStateCodeFromBLSSeriesId = (id: string): string => {
+  const PREFIX = "LASST"
+  const fips = id.slice(PREFIX.length, PREFIX.length + 2)
+  const fipsCodes: FIPS[] = JSON.parse(
+    fs
+      .readFileSync(path.resolve(__dirname, "../constants/fips.json"))
+      .toString()
+  )
+  const code = fipsCodes.find(state => state.fips === fips)?.code
+  if (!code)
+    throw new Error(
+      `Could not find state with fips ${fips} from seriesid ${id}`
+    )
+  return code
+}
+
+export const findFirstNodeWithMatchingMonth = (
+  data: { date: number }[],
+  date: number
+): { date: number; [key: string]: any } | undefined => {
+  const node = data.find(({ date: dateToMatch }) => {
+    const y = DateTime.fromISO(dateToMatch.toString()).year
+    const yB = DateTime.fromISO(date.toString()).year
+    const m = DateTime.fromISO(dateToMatch.toString()).month
+    const mB = DateTime.fromISO(date.toString()).month
+    return y === yB && m === mB
+  })
+
+  return node
+}
+
+export function getRollingAverageData(
+  index: number,
+  keys: string[],
+  data: ThreeLiesNodeData[],
+  period = 7
+): number[] {
+  const totals = Array(keys.length).fill(0)
+  let counter = 0
+
+  while (counter < period && counter <= index) {
+    for (let i = 0; i < keys.length; i += 1) {
+      const key = keys[i]
+      const total = data[index - counter][key]
+      totals[i] += total
+    }
+    counter++
+  }
+  return totals.map(total => total / counter)
+}
+
+// estimated cases for day x equals the fatalities from DAYS_TO_DEATH in the future
+// divided by the IFR, which represents the number of infected individuals that will
+// likely result in a fatality
+export function calculateEstimatedCases(
+  index: number,
+  data: ThreeLiesNodeData[]
+): number | void {
+  if (index < data.length - DAYS_TO_DEATH) {
+    return data[index + DAYS_TO_DEATH].deathIncreaseRollingAverage / IFR
+  }
 }

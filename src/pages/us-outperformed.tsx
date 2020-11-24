@@ -16,7 +16,7 @@ import TotalComparisonBarChart, {
   ComparisonData,
 } from "../components/charts/TotalComparisonBarChart"
 import { getPerMPop, getLastDataPoint, readableDate } from "../utils/helpers"
-import { StateData, ThreeLiesData } from "../../plugins/source-covid-data"
+import { StateData, ThreeLiesData } from "../../plugins/source-covid-data/types"
 import ComposedHistoricalComparison from "../components/charts/ComposedHistoricalComparison"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
 import AboutThisGraph from "../components/AboutThisGraph"
@@ -193,7 +193,7 @@ const USOutperformed = ({ data }: PageProps) => {
         <ComposedHistoricalComparison
           comparisonData={nodes.data}
           largerComparitor="positiveIncreaseRollingAverage"
-          smallerComparitor="deathsIncreaseRollingAveragePerMillion"
+          smallerComparitor="deathIncreaseRollingAveragePerMillion"
           yAxisLabelLeft="New Cases (per mil.)"
           yAxisLabelRight="New Fatalities (per mil.)"
           slice={60}
@@ -439,7 +439,7 @@ export const query = graphql`
         total_deaths
         data {
           date
-          deathsIncreaseRollingAveragePerMillion
+          deathIncreaseRollingAveragePerMillion
           death
           deathPerMillion
           positiveIncreaseRollingAverage

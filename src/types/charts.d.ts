@@ -1,4 +1,4 @@
-import { ThreeLiesData } from "../../plugins/source-covid-data"
+import { ThreeLiesNodeData } from "../../plugins/source-covid-data/types"
 
 export interface LineChartDataNode {
   date: string | number
@@ -30,7 +30,7 @@ export interface ComparisonBarChartProps {
 }
 
 export interface ComparisonLineChartProps {
-  comparisonData: ThreeLiesData[]
+  comparisonData: ThreeLiesNodeData[]
   largerComparitor: string
   smallerComparitor: string
   slice?: number

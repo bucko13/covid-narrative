@@ -15,8 +15,11 @@ import {
 import {
   getPerMPop,
   getPerMillionPop,
-  isClosestWeekend,
   getAverageOfDataPoint,
+  getLastDataPoint,
+  getPerThousandPop,
+  findFirstNodeWithMatchingMonth,
+  getRollingAverageData,
 } from "./utils/utils"
 import {
   transformCountryData,
@@ -25,8 +28,14 @@ import {
   addExcessDeathData,
   addGDPData,
   addOwidTestData,
+  transformSortedStateNodes,
 } from "./utils/transforms"
-import { StateData, StateNodeData, PopulationData, StringencyData } from "."
+import {
+  StateData,
+  StateNodeData,
+  PopulationData,
+  StringencyData,
+} from "./types"
 import {
   states,
   countries,
@@ -45,11 +54,9 @@ dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
-export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
-  actions,
-}: SourceNodesArgs) => {
-  const { createNode } = actions
-
+async function createCountryNodes({
+  actions: { createNode },
+}: SourceNodesArgs) {
   const allCountryData = await getAllOwidCountryData()
 
   const policyData = await getHistoricalPolicyData()
@@ -98,9 +105,12 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       process.exit()
     }
   }
+}
 
-  const employmentData = await getStateUnemploymentData()
-  const employmentDataWeekends: string[] = Object.keys(employmentData)
+async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
+  const stateUnemploymentData = await getStateUnemploymentData()
+
+  // const employmentDataWeekends: string[] = Object.keys(employmentData)
   // make sure we have latest stringency data
   const stringencyData: StringencyData[] = await getAllStringencyData()
 
@@ -125,7 +135,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     const population = populations[name].Population
     const { death, hospitalized, positive, fips, date } = currentTotals
     // need to order data by date
-    let sortedData = data
+    let sortedData: StateNodeData[] = data
       .sort((a, b) => {
         if (a.date > b.date) return 1
         else return -1
@@ -141,27 +151,21 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 
         // calcuate rolling 7-day averages.
         // start with deaths since this is the bumpiest data
-        let totalDeathIncrease = 0
-        let totalPositiveIncrease = 0
-        let counter = 0
-        while (counter < 7 && counter <= index) {
-          totalDeathIncrease += data[index - counter].deathIncrease
-          totalPositiveIncrease += data[index - counter].positiveIncrease
-          counter++
+        const rollingAverageKeys = ["deathIncrease", "positiveIncrease"]
+        const [
+          deathIncreaseRollingAverage,
+          positiveIncreaseRollingAverage,
+        ] = getRollingAverageData(index, rollingAverageKeys, data)
+
+        const unemploymentData = stateUnemploymentData[code.toUpperCase()]
+        if (!unemploymentData) {
+          throw new Error(`Could not find unemployment data for ${code}`)
         }
 
-        const deathsIncreaseRollingAverage = totalDeathIncrease / counter
-        const positiveIncreaseRollingAverage = totalPositiveIncrease / counter
-
-        // next we need to find the insured unemployment rate for this week
-        const closestWeekend = employmentDataWeekends.find(dateString => {
-          return isClosestWeekend(dateString, stateNode.date.toString())
-        })
-
-        const unemploymentRate =
-          closestWeekend && employmentData[closestWeekend][name]
-            ? employmentData[closestWeekend][name].insured_unemployment_rate
-            : null
+        const unemploymentRate = findFirstNodeWithMatchingMonth(
+          unemploymentData,
+          stateNode.date
+        )?.value
 
         const stringencyIndex = stringencyData.find(
           ({ RegionName, Date: stringencyDate }) =>
@@ -173,38 +177,21 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
           ...stateNode,
           totalDeathsPerMillion: getPerMillionPop(population, stateNode.death),
           deathPerMillion: getPerMillionPop(population, stateNode.death),
-          unemploymentRate,
-          deathsIncreaseRollingAverage,
+          unemploymentRate: unemploymentRate ? +unemploymentRate : 0.0,
+          deathIncreaseRollingAverage,
           positiveIncreaseRollingAverage,
           stringencyIndex: stringencyIndex ? +stringencyIndex : undefined,
         }
       })
 
-    sortedData = sortedData.map((stateNode, index) => {
-      // finally calculate estimated cases based on IFR assuming 15 days to death
-      let estimatedCases: number | void
-      const IFR = 0.0065
-      const DAYS_TO_DEATH = 15
-      if (index < data.length - DAYS_TO_DEATH) {
-        // estimated cases for day x equals the fatalities from DAYS_TO_DEATH in the future
-        // divided by the IFR, which represents the number of infected individuals that will
-        // likely result in a fatality
-        estimatedCases =
-          sortedData[index + DAYS_TO_DEATH].deathsIncreaseRollingAverage / IFR
-      }
-
-      return {
-        ...stateNode,
-        estimatedCases,
-      }
-    })
+    sortedData = transformSortedStateNodes(sortedData, population)
 
     const latestTotals = (await getJHUStateDataSingleDay(date.toString())).find(
       state => state.Province_State === codeToState[code.toUpperCase()]
     )
 
     const node: StateData = {
-      name: codeToState[code],
+      name: codeToState[code.toUpperCase()],
       population,
       state: codeToState[code.toUpperCase()],
       code,
@@ -217,14 +204,23 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       deaths_per_million: getPerMillionPop(population, death),
       positives_per_100k: getPerMPop(population, positive),
       positives_per_million: getPerMillionPop(population, positive),
-      hospitalized_per_100k: getPerMillionPop(population, hospitalized),
-      hospitalized_per_million: getPerMPop(population, hospitalized),
+      hospitalized_per_million: getPerMillionPop(population, hospitalized),
+      hospitalized_per_100k: getPerMPop(population, hospitalized),
       jhu_deaths: latestTotals && parseFloat(latestTotals?.Deaths),
       jhu_cases: latestTotals && parseFloat(latestTotals.Cases),
       jhu_tested: latestTotals && parseFloat(latestTotals.People_Tested),
       jhu_mortality: latestTotals && parseFloat(latestTotals.Mortality_Rate),
       jhu_testing_rate: latestTotals && parseFloat(latestTotals.Testing_Rate),
-      stringency_index: getAverageOfDataPoint("stringency_index", sortedData),
+      stringencyIndex: getAverageOfDataPoint("stringencyIndex", sortedData),
+      totalTests: +getLastDataPoint(sortedData, "totalTests"),
+      totalTestsPerMillion: getPerMillionPop(
+        population,
+        +getLastDataPoint(sortedData, "totalTests")
+      ),
+      totalTestsPerThousand: getPerThousandPop(
+        population,
+        +getLastDataPoint(sortedData, "totalTests")
+      ),
       data: sortedData,
     }
 
@@ -242,5 +238,12 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       },
     })
   }
+}
+
+export const sourceNodes: GatsbyNode["sourceNodes"] = async (
+  sourceNodesArgs: SourceNodesArgs
+) => {
+  await createCountryNodes(sourceNodesArgs)
+  await createStateNodes(sourceNodesArgs)
   return
 }

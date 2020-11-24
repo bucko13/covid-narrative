@@ -10,7 +10,7 @@ import { getLastDate, readableDate } from "../utils/helpers"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
 import AboutThisGraph from "../components/AboutThisGraph"
 import { ChartDisplay, MeasurementSwitch } from "../components/ui"
-import { ThreeLiesData } from "../../plugins/source-covid-data"
+import { ThreeLiesData } from "../../plugins/source-covid-data/types"
 
 interface PageProps {
   data: {

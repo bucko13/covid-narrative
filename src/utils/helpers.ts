@@ -2,7 +2,7 @@ import moment from "moment"
 import {
   ThreeLiesData,
   ThreeLiesNodeData,
-} from "../../plugins/source-covid-data"
+} from "../../plugins/source-covid-data/types"
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)

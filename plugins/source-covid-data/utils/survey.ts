@@ -1,15 +1,12 @@
 import { DateTime } from "luxon"
-import fs from "fs"
-import csv from "csvtojson"
-import path from "path"
 
 import {
   SurveyResultsForWeek,
   SurveyDateLabels,
   SurveyResultAPIResponse,
-} from ".."
+} from "../types"
 import { getCountrySurveyData, getCountrySurveysList } from "./api"
-import { reverseDateString } from "./utils"
+import { formatSurveyDateStrings } from "./utils"
 import { codeToCountry as _codeToCountry } from "../constants"
 export const VALID_VALUES = [
   "Always",
@@ -57,29 +54,6 @@ function orderAndCalculatePercentage(
   return ordered.map(calculateSurveyPercentage)
 }
 
-// the UK data set is larger and so is broken down into two sets
-// needs to be handled accordingly
-async function handleUKSurvey(
-  code: string
-): Promise<[SurveyResultsForWeek[], SurveyDateLabels]> {
-  // first data set
-  const data1 = await getCountrySurveyData("united-kingdom1")
-  const [results1, dateLabels1] = prepareSurveyDataForCode(data1, code)
-  // second data set
-  const data2 = await getCountrySurveyData("united-kingdom2")
-  const [results2, dateLabels2] = prepareSurveyDataForCode(data2, code)
-  // combine into a single results array, easier now that the data has been pruned
-  // only to what we need
-  const results = [
-    ...orderAndCalculatePercentage(results1),
-    ...orderAndCalculatePercentage(results2),
-  ]
-  const dateLabels = { ...dateLabels1, ...dateLabels2 }
-  // tslint:disable-next-line: no-console
-  console.log(`Finished UK survey data for code ${code}`)
-  return [results, dateLabels]
-}
-
 function prepareSurveyDataForCode(
   surveyData: SurveyResultAPIResponse[],
   code: string
@@ -88,7 +62,8 @@ function prepareSurveyDataForCode(
   const dateLabels: SurveyDateLabels = {}
 
   for (const result of surveyData) {
-    const date = reverseDateString(result.endtime.split(" ")[0])
+    const date = formatSurveyDateStrings(result.endtime.split(" ")[0])
+    if (!date.length) continue
     const label = result.qweek
 
     // the response dates for a given week (label) vary and so we need
@@ -162,20 +137,42 @@ export async function collateSurveyDataForCode(
       return
     }
 
-    if (country === "united-kingdom") {
-      return await handleUKSurvey(code)
-    } else {
-      surveyData = await getCountrySurveyData(country)
-      const [results, dateLabels] = prepareSurveyDataForCode(surveyData, code)
-      // tslint:disable-next-line: no-console
-      console.log(`Finished with ${_country}'s data`)
-      return [orderAndCalculatePercentage(results), dateLabels]
-    }
+    surveyData = await getCountrySurveyData(country)
+    const [results, dateLabels] = prepareSurveyDataForCode(surveyData, code)
+    // tslint:disable-next-line: no-console
+    console.log(`Finished with ${_country}'s survey data`)
+    return [orderAndCalculatePercentage(results), dateLabels]
+    // }
   } catch (e) {
     // tslint:disable-next-line: no-console
     console.error(`There was a problem getting survey data for ${_country}.`)
     // tslint:disable-next-line: no-console
-    console.error(e)
+    console.error(e.stack)
     process.exit()
   }
+}
+
+// the UK data set is larger and so is broken down into two sets
+// needs to be handled accordingly.
+// Now obsolete but might be necessary again if they change
+// the format from zip to multiple files again
+async function handleUKSurvey(
+  code: string
+): Promise<[SurveyResultsForWeek[], SurveyDateLabels]> {
+  // first data set
+  const data1 = await getCountrySurveyData("united-kingdom1")
+  const [results1, dateLabels1] = prepareSurveyDataForCode(data1, code)
+  // second data set
+  const data2 = await getCountrySurveyData("united-kingdom2")
+  const [results2, dateLabels2] = prepareSurveyDataForCode(data2, code)
+  // combine into a single results array, easier now that the data has been pruned
+  // only to what we need
+  const results = [
+    ...orderAndCalculatePercentage(results1),
+    ...orderAndCalculatePercentage(results2),
+  ]
+  const dateLabels = { ...dateLabels1, ...dateLabels2 }
+  // tslint:disable-next-line: no-console
+  console.log(`Finished UK survey data for code ${code}`)
+  return [results, dateLabels]
 }

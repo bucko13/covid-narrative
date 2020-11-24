@@ -6,9 +6,10 @@ import {
   OWIDData,
   OxCGRTPolicyDataNode,
   PolicyUpdateNode,
+  StateNodeData,
   ThreeLiesData,
-} from ".."
-import { surveyCodes } from "../constants"
+} from "../types"
+import { codeToCountry as codeToCountry_, surveyCodes } from "../constants"
 import {
   getEUGDPData,
   getEUUnemploymentData,
@@ -24,8 +25,11 @@ import {
   getLastDataPoint,
   getPerMPop,
   isClosestWeekend,
+  getPerMillionPop,
+  calculateEstimatedCases,
+  getPerThousandPop,
 } from "./utils"
-
+const codeToCountry: { [key: string]: string } = codeToCountry_
 export function getAverageUnemployment(
   firstMonth: string,
   data: { [time: string]: number }
@@ -78,7 +82,6 @@ function getPolicyUpdatesForDay(
 export const transformCountryData = (
   code: string, // iso2
   data: OWIDData,
-  // unemploymentRates: { [month: string]: number},
   policyData: OxCGRTPolicyDataNode[]
 ): ThreeLiesData => {
   if (!data || !data.data)
@@ -98,8 +101,21 @@ export const transformCountryData = (
     total_positives: lastDayData.total_cases,
     positives_per_million: lastDayData.total_cases_per_million,
     positives_per_100k: getPerMPop(data.population, lastDayData.total_cases),
-    stringency_index: getAverageOfDataPoint("stringency_index", data.data),
+    stringencyIndex: getAverageOfDataPoint("stringency_index", data.data),
     totalTests: +getLastDataPoint(data.data, "total_tests"),
+    totalTestsPerMillion: getPerMillionPop(
+      data.population,
+      +getLastDataPoint(data.data, "total_tests")
+    ),
+    totalTestsPerThousand: +getLastDataPoint(
+      data.data,
+      "total_tests_per_thousand"
+    ),
+    hospitalized: +getLastDataPoint(data.data, "hosp_patients"),
+    hospitalizedPerMillion: +getLastDataPoint(
+      data.data,
+      "hosp_patients_per_million"
+    ),
     data: [],
   }
 
@@ -115,9 +131,9 @@ export const transformCountryData = (
       positive: day.new_cases,
       positivesPerMillion: day.total_cases_per_million,
       positiveIncrease: day.new_cases,
-      deathsIncreaseRollingAverage: day.new_deaths_smoothed,
+      deathIncreaseRollingAverage: day.new_deaths_smoothed,
       positiveIncreaseRollingAverage: day.new_cases_smoothed,
-      deathsIncreaseRollingAveragePerMillion:
+      deathIncreaseRollingAveragePerMillion:
         day.new_deaths_smoothed_per_million,
       positiveIncreaseRollingAveragePerMillion:
         day.new_cases_smoothed_per_million,
@@ -127,7 +143,8 @@ export const transformCountryData = (
       totalTests: day.total_tests,
       stringencyIndex: day.stringency_index,
       policyUpdates: getPolicyUpdatesForDay(date, data.location, policyData),
-      hospitalizedCurrently: day.hosp_patients,
+      hospitalized: day.hosp_patients || 0,
+      hospitalizedPerMillion: day.hosp_patients_per_million,
     })
   }
 
@@ -223,7 +240,13 @@ export const addUnemploymentData = async (
     "monthly"
   )
 
-  const unemploymentData = euUnemloymentData[countryCode.toUpperCase()].data
+  const unemploymentData = euUnemloymentData[countryCode.toUpperCase()]?.data
+  if (!unemploymentData) {
+    console.warn(
+      `No unemployment data for ${codeToCountry[countryCode.toUpperCase()]}`
+    )
+    return
+  }
   const firstMonth = data.data[0].date.toString().slice(0, 6)
   const averageUnemployment = getAverageUnemployment(
     firstMonth,
@@ -258,7 +281,10 @@ export const addExcessDeathData = async (
 ): Promise<void> => {
   console.log(`Adding excess death data for ${countryName}`)
   const allMortalityData: ExcessMortalityDataNode[] = await getExcessMortalityData()
-
+  if (!allMortalityData || !data) {
+    console.warn(`No excess mortality data for ${countryName}`)
+    return
+  }
   // for calculating average
   let count = 0
   let total = 0
@@ -327,4 +353,29 @@ export const addOwidTestData = async (
   if (!data.totalTests || newTotalTests > data.totalTests) {
     data.totalTests = newTotalTests
   }
+}
+
+export function transformSortedStateNodes(
+  nodes: StateNodeData[],
+  population: number
+): StateNodeData[] {
+  return nodes.map((node, index) => {
+    // finally calculate estimated cases based on IFR assuming 15 days to death
+    const estimatedCases = calculateEstimatedCases(index, nodes)
+
+    return {
+      ...node,
+      estimatedCases,
+      totalTests: node.totalTestResults,
+      totalTestsPerThousand: getPerThousandPop(
+        population,
+        node.totalTestResults
+      ),
+      newTests: node.totalTestsResultsIncrease,
+      newTestsPerThousand: getPerThousandPop(
+        population,
+        node.totalTestsResultsIncrease
+      ),
+    }
+  })
 }

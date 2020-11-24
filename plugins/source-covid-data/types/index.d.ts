@@ -6,9 +6,9 @@ export interface ThreeLiesNodeData {
   positivesPerMillion: number
   deathIncrease: number
   positiveIncrease: number
-  deathsIncreaseRollingAverage: number
+  deathIncreaseRollingAverage: number
   positiveIncreaseRollingAverage: number
-  deathsIncreaseRollingAveragePerMillion?: number
+  deathIncreaseRollingAveragePerMillion?: number
   positiveIncreaseRollingAveragePerMillion?: number
   stringencyIndex?: number
   percentWearWasks?: number
@@ -21,7 +21,8 @@ export interface ThreeLiesNodeData {
   newTestsSmoothedPerThousand?: number
   totalTestsPerThousand?: number
   totalTests: number
-  hospitalizedCurrently?: number
+  hospitalized: number
+  hospitalizedPerMillion?: number
   positivityRate?: number
   p_scores_0_14?: number
   p_scores_15_64?: number
@@ -43,11 +44,12 @@ export interface ThreeLiesData {
   positives_per_million: number
   positives_per_100k: number
   data: ThreeLiesNodeData[]
-  stringency_index?: number
+  stringencyIndex: number
   averageUnemploymentRate?: number
   averageExcessMortality?: number
   medianExcessMortality?: number
-  totalTests?: number
+  totalTests: number
+  totalTestsPerMillion: number
   gdp?: { quarter: string; change: number }[]
   surveyData?: {
     [label: string]: {
@@ -60,9 +62,10 @@ export interface ThreeLiesData {
 
 export interface StateNodeData extends ThreeLiesNodeData {
   fips: string
-  hospitalized: number
   hospitalizedIncrease: number
   positiveIncreaseRollingAverage: number
+  totalTestResults: number
+  totalTestsResultsIncrease: number
 }
 
 export interface StateData extends ThreeLiesData {
@@ -71,11 +74,11 @@ export interface StateData extends ThreeLiesData {
   total_hospitalized: number
   hospitalized_per_million: number
   hospitalized_per_100k: number
-  jhu_deaths?: number
-  jhu_cases?: number
-  jhu_tested?: number
-  jhu_mortality?: number
-  jhu_testing_rate?: number
+  jhu_deaths?: number | null
+  jhu_cases?: number | null
+  jhu_tested?: number | null
+  jhu_mortality?: number | null
+  jhu_testing_rate?: number | null
   data: StateNodeData[]
 }
 
@@ -161,6 +164,7 @@ export interface StringencyData {
   RegionName: string
   Date: string
   StringencyIndex: string
+  RegionCode: string
 }
 
 export interface OxCGRTPolicyDataNode {
@@ -227,4 +231,27 @@ export interface OwidTestDataNode {
   "7-day smoothed daily change per thousand": string
   "Short-term tests per case": string
   "Short-term positive rate": string
+}
+
+export interface StateUnemploymentDataNode {
+  year: string // 2020
+  period: string // M01
+  periodName: string // january
+  date: number // 20200101 (just using the first day)
+  latest: boolean | string
+  value: number | string
+}
+
+export interface StateUnemploymentData {
+  [code: string]: StateUnemploymentDataNode[]
+}
+
+export interface BLSResponse {
+  status: string
+  Results: {
+    series: {
+      seriesID: string
+      data: StateUnemploymentDataNode[]
+    }[]
+  }
 }
