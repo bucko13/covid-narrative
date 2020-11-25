@@ -1,15 +1,6 @@
 import React, { useState } from "react"
 import { graphql, Link } from "gatsby"
-import {
-  Box,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  makeStyles,
-  MenuItem,
-  Select,
-  Switch,
-} from "@material-ui/core"
+import { Box, FormControlLabel, makeStyles, Switch } from "@material-ui/core"
 import Layout from "../components/layout"
 
 import TotalComparisonBarChart, {
@@ -20,16 +11,12 @@ import { StateData, ThreeLiesData } from "../../plugins/source-covid-data/types"
 import ComposedHistoricalComparison from "../components/charts/ComposedHistoricalComparison"
 import HistoricComparisonLineChart from "../components/charts/HistoricComparisonLineChart"
 import AboutThisGraph from "../components/AboutThisGraph"
-import { ChartDisplay, MeasurementSwitch } from "../components/ui"
+import {
+  ChartDisplay,
+  LocationSelect,
+  MeasurementSwitch,
+} from "../components/ui"
 import { codeToCountry as codeToCountry_ } from "../../plugins/source-covid-data/constants"
-
-const useStyles = makeStyles({
-  select: {
-    fontSize: "1.5rem",
-    marginTop: "5px",
-    paddingBottom: "0px",
-  },
-})
 
 // get index signature for ts so we can key by variable
 const codeToCountry: { [code: string]: string } = codeToCountry_
@@ -52,7 +39,6 @@ const countries = ["fr", "gb", "se", "be", "it", "es", "us"]
 const states = ["ny", "nj"]
 
 const USOutperformed = ({ data }: PageProps) => {
-  const classes = useStyles()
   const [fatalitiesPerMil, setFatalitiesPerMil] = useState(true)
   const [totalFalitiesPer100k, setTotalFatalitiesPer100k] = useState(true)
   const [newCasesPerMil, setNewCasesPerMil] = useState(true)
@@ -273,29 +259,11 @@ const USOutperformed = ({ data }: PageProps) => {
       <Box my={5}>
         <h4>
           Daily New Cases vs. Fatalities -{" "}
-          <FormControl
-            style={{
-              minWidth: "150px",
-              marginBottom: "1rem",
-              fontSize: "1.5rem",
-            }}
-          >
-            <Select
-              labelId="select-country"
-              id="select-country"
-              value={comparisonChartCountry}
-              onChange={onChangeCountry}
-              inputProps={{ style: { fontSize: "1.5rem" } }}
-              classes={{ select: classes.select }}
-            >
-              {countries.map(code => (
-                <MenuItem value={code} key={code}>
-                  {codeToCountry[code.toUpperCase()]}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>Select country</FormHelperText>
-          </FormControl>{" "}
+          <LocationSelect
+            locations={data.countries.nodes}
+            onChangeLocation={onChangeCountry}
+            value={comparisonChartCountry}
+          />{" "}
           (per mil.)
         </h4>
         <AboutThisGraph name="case-vs-fatalities">

@@ -11,13 +11,6 @@ import {
   Brush,
 } from "recharts"
 import randomColor from "randomcolor"
-import {
-  FormControl,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Grid,
-} from "@material-ui/core"
 
 import { getPerMPop, readableChartDate, sliceData } from "../../utils/helpers"
 import { HistoricLineChartProps, LineChartDataNode } from "../../types/charts"
@@ -61,6 +54,7 @@ const HistoricComparisonLineChart = ({
 
   const firstLocation = comparisonData.shift()
   if (!firstLocation) return null
+
   // go through the first location to start and create a data object for each node
   // where it has the date and then creates a property for each location for the data we are comparing
   let data = firstLocation.data.map(
@@ -94,7 +88,7 @@ const HistoricComparisonLineChart = ({
   if (slice) {
     data = sliceData(slice, data)
   }
-
+  console.log("data:", data)
   return (
     <div>
       {filter && locations.length > 2 ? (

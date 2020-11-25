@@ -28,6 +28,7 @@ import {
   getPerMillionPop,
   calculateEstimatedCases,
   getPerThousandPop,
+  getRollingAverageData,
 } from "./utils"
 const codeToCountry: { [key: string]: string } = codeToCountry_
 export function getAverageUnemployment(
@@ -120,8 +121,15 @@ export const transformCountryData = (
   }
 
   // transform data for each day
-  for (const day of data.data) {
+  for (let i = 0; i < data.data.length; i++) {
+    const day = data.data[i]
     const date = getDateNumber(day.date)
+    const [stringencyIndexRollingAverage] = getRollingAverageData(
+      i,
+      ["stringency_index"],
+      data.data
+    )
+
     transformed.data.push({
       date,
       deathIncrease: day.new_deaths,
@@ -145,6 +153,7 @@ export const transformCountryData = (
       policyUpdates: getPolicyUpdatesForDay(date, data.location, policyData),
       hospitalized: day.hosp_patients || 0,
       hospitalizedPerMillion: day.hosp_patients_per_million,
+      stringencyIndexRollingAverage,
     })
   }
 
@@ -362,7 +371,16 @@ export function transformSortedStateNodes(
   return nodes.map((node, index) => {
     // finally calculate estimated cases based on IFR assuming 15 days to death
     const estimatedCases = calculateEstimatedCases(index, nodes)
-
+    const rollingAverageKeys = [
+      "stringencyIndex",
+      "deathIncrease",
+      "positiveIncrease",
+    ]
+    const [
+      stringencyIndexRollingAverage,
+      deathIncreaseRollingAverage,
+      positiveIncreaseRollingAverage,
+    ] = getRollingAverageData(index, rollingAverageKeys, nodes)
     return {
       ...node,
       estimatedCases,
@@ -376,6 +394,13 @@ export function transformSortedStateNodes(
         population,
         node.totalTestsResultsIncrease
       ),
+      positiveIncreaseRollingAveragePerMillion: getPerMillionPop(
+        population,
+        positiveIncreaseRollingAverage
+      ),
+      stringencyIndexRollingAverage,
+      deathIncreaseRollingAverage,
+      positiveIncreaseRollingAverage,
     }
   })
 }

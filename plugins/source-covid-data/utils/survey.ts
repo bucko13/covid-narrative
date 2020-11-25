@@ -26,8 +26,13 @@ function calculateSurveyPercentage(
   weekResults: SurveyResultsForWeek
 ): SurveyResultsForWeek {
   return Object.keys(weekResults).reduce((results, key) => {
-    if (key !== "total" && results.total) {
-      results[key] = +(results[key] / results.total).toFixed(4)
+    if (
+      key !== "total" &&
+      key !== "date" &&
+      typeof results[key] === "number" &&
+      results.total
+    ) {
+      results[key] = +(+results[key] / results.total).toFixed(4)
     } else {
       results[key] = results[key]
     }
@@ -76,6 +81,7 @@ function prepareSurveyDataForCode(
         rarely: 0,
         not_at_all: 0,
         total: 0,
+        date,
       }
       dateLabels[label] = {
         startDate: date,
@@ -88,6 +94,7 @@ function prepareSurveyDataForCode(
     // date of current survey result is later than the saved endDate
     if (DateTime.fromISO(date) > DateTime.fromISO(dateLabels[label].endDate)) {
       dateLabels[label].endDate = date
+      results[label].date = date
     }
 
     if (
@@ -100,8 +107,10 @@ function prepareSurveyDataForCode(
       continue
     }
 
-    results[label][value]++
-    results[label].total++
+    if (value !== "date") {
+      results[label][value] = +results[label][value] + 1
+      results[label].total++
+    }
   }
   return [results, dateLabels]
 }
@@ -133,7 +142,7 @@ export async function collateSurveyDataForCode(
     const countryList = await getCountrySurveysList()
     if (!countryList.includes(country)) {
       // tslint:disable-next-line: no-console
-      console.log(`No survey data available for ${_country}`)
+      console.warn(`No survey data available for ${_country}`)
       return
     }
 

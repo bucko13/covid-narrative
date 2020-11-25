@@ -86,3 +86,16 @@ export function getDataValue(
     throw new Error(`Data for ${name} did not have a node for key ${key}`)
   return node[key]
 }
+
+// given two dates, determine if the first one is the closest date
+// that ends the week that the second one is contained in
+// used to match daily data with employment data which is only per week
+export function isClosestWeekend(
+  dateStringA: string,
+  dateStringB: string
+): boolean {
+  const dateA = moment(dateStringA)
+  const dateB = moment(dateStringB)
+  const diff = Math.abs(dateA.diff(dateB, "days"))
+  return diff <= 7
+}

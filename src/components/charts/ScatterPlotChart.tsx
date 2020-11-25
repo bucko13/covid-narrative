@@ -3,7 +3,6 @@ import "./ScatterPlotChart.scss"
 import {
   Tooltip,
   CartesianGrid,
-  Brush,
   ResponsiveContainer,
   ScatterChart,
   XAxis,
@@ -13,8 +12,8 @@ import {
 } from "recharts"
 import { ThreeLiesData } from "../../../plugins/source-covid-data/types"
 import { GraphFilter } from "../ui"
-import { Box, Button, ButtonGroup, Grid, IconButton } from "@material-ui/core"
-import { Add, Remove, RemoveCircleSharp } from "@material-ui/icons"
+import { Box, Button, ButtonGroup, Grid } from "@material-ui/core"
+import { Add, Remove } from "@material-ui/icons"
 
 interface ScatterPlotChartProps {
   xAxisLabel?: string

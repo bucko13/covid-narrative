@@ -81,8 +81,8 @@ describe("utils", () => {
     })
   })
 
-  describe.only("extractCsvFromRemoteZip", function () {
-    this.timeout(10000)
+  describe("extractCsvFromRemoteZip", function () {
+    this.timeout(15000)
     it("should get the uk zip file", async () => {
       const api = getCountrySurveyAPI("united-kingdom", "zip")
       const data = await extractCsvFromRemoteZip(api)

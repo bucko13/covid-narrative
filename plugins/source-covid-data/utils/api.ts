@@ -140,7 +140,7 @@ export const getStateUnemploymentData = async (): Promise<
 
   let data: StateUnemploymentData = {}
 
-  if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
+  if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_EMPLOYMENT_DATA) {
     console.log("(Re)loading unemployment data for states...")
     try {
       const seriesIds: string[] = await Promise.all(
