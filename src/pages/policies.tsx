@@ -77,7 +77,6 @@ const Policies = ({ data }: PageProps) => {
         population: country.population,
         data: [],
       }
-      // console.log("country:", country.code)
       if (surveyData) {
         return {
           ...results,

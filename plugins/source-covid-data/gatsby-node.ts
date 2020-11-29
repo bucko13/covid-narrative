@@ -19,6 +19,7 @@ import {
   getLastDataPoint,
   getPerThousandPop,
   findFirstNodeWithMatchingMonth,
+  calculateEstimatedCases,
 } from "./utils/utils"
 import {
   transformCountryData,
@@ -174,6 +175,11 @@ async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
 
     sortedData = transformSortedStateNodes(sortedData, population)
 
+    // add estimated cases based on IFR and rolling average
+    sortedData = sortedData.map((n, index) => ({
+      ...n,
+      estimatedCases: calculateEstimatedCases(index, sortedData),
+    }))
     const latestTotals = (await getJHUStateDataSingleDay(date.toString())).find(
       state => state.Province_State === codeToState[code.toUpperCase()]
     )

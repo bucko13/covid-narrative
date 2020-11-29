@@ -369,8 +369,6 @@ export function transformSortedStateNodes(
   population: number
 ): StateNodeData[] {
   return nodes.map((node, index) => {
-    // finally calculate estimated cases based on IFR assuming 15 days to death
-    const estimatedCases = calculateEstimatedCases(index, nodes)
     const rollingAverageKeys = [
       "stringencyIndex",
       "deathIncrease",
@@ -383,7 +381,6 @@ export function transformSortedStateNodes(
     ] = getRollingAverageData(index, rollingAverageKeys, nodes)
     return {
       ...node,
-      estimatedCases,
       totalTests: node.totalTestResults,
       totalTestsPerThousand: getPerThousandPop(
         population,

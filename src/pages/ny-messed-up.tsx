@@ -338,7 +338,7 @@ const NyMessedUp = ({ data }: PageProps) => {
         comparisonData={lineChartData}
         comparitor="estimatedCases"
         perM={casesPer100k}
-        slice={-15}
+        slice={[30, -15]}
         yAxisLabel={
           casesPer100k ? "Estimated cases (per 100k)" : "Estimated cases"
         }
