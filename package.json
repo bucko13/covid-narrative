@@ -44,7 +44,6 @@
     "@types/luxon": "^1.25.0",
     "@types/mocha": "^8.0.4",
     "@types/yauzl": "^2.9.1",
-    "@typescript-eslint/parser": "^4.8.2",
     "chai": "^4.2.0",
     "eslint-config-react-app": "^5.2.1",
     "mocha": "^8.2.1",
@@ -67,7 +66,8 @@
     "tslint": "tslint --project tsconfig.json",
     "tslint:fix": "tslint --project tsconfig.json --fix",
     "test": "mocha plugins/**/*.spec.ts --r ts-node/register",
-    "test:watch": "mocha plugins/**/*.spec.ts --r ts-node/register --watch --watch-files plugins/**/*.spec.ts, plugins/**/*.ts"
+    "test:watch": "mocha plugins/**/*.spec.ts --r ts-node/register --watch --watch-files plugins/**/*.spec.ts, plugins/**/*.ts",
+    "test:app": "mocha src/tests/*.spec.ts --r ts-node/register --watch --watch-files \"src/**/!(.d)*.ts\""
   },
   "repository": {
     "type": "git",

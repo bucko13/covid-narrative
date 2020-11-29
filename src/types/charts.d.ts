@@ -57,4 +57,5 @@ export interface HistoricLineChartProps {
   slice?: number
   yAxisLabel?: string
   excludeNodes?: string[]
+  multi?: boolean
 }

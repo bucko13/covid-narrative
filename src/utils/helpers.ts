@@ -3,6 +3,7 @@ import {
   ThreeLiesData,
   ThreeLiesNodeData,
 } from "../../plugins/source-covid-data/types"
+import { LineChartComparisonData, LineChartDataNode } from "../types/charts"
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
@@ -34,14 +35,18 @@ export const titleify = (link: string): string =>
     })
     .join(" ")
 
-export const sliceData = (slice: number, data: any): any[] => {
-  if (slice) {
-    // positive we will read as cutting off the beginning data
-    if (slice >= 0) {
-      data = data.slice(slice)
-    } else {
-      data = data.slice(0, slice)
-    }
+export const sliceData = (
+  slice: number | [number, number],
+  data: any
+): any[] => {
+  if (Array.isArray(slice))
+    return sliceData(slice[0], sliceData(slice[1], data))
+
+  // positive we will read as cutting off the beginning data
+  if (slice >= 0) {
+    data = [...data.slice(slice)]
+  } else {
+    data = [...data.slice(0, slice)]
   }
   return data
 }
@@ -97,5 +102,58 @@ export function isClosestWeekend(
   const dateA = moment(dateStringA)
   const dateB = moment(dateStringB)
   const diff = Math.abs(dateA.diff(dateB, "days"))
-  return diff <= 7
+  return diff < 7
+}
+
+export function sortByDate(
+  a: { date: number | string },
+  b: { date: number | string }
+): number {
+  const dateA = moment(a.date)
+  const dateB = moment(b.date)
+
+  if (dateA.isBefore(dateB)) return -1
+  if (dateA.isAfter(dateB)) return 1
+  return 0
+}
+
+export function createHistoricalComparisonDataSet(
+  locations: LineChartComparisonData[] | ThreeLiesData[],
+  comparitor: string,
+  perMPop = false
+): LineChartDataNode[] {
+  const results: LineChartDataNode[] = []
+  // going through each data set (usually a location)
+  // and for each of those add its data nodes to the results array
+  for (const location of locations) {
+    const name = location.name
+    for (const node of location.data) {
+      // const chartDate = readableChartDate(node.date)
+      // we want to see if the date exists yet or not
+      const index = results.findIndex(({ date }) => date === node.date)
+      const value = perMPop
+        ? getPerMPop(location.population, +node[comparitor])
+        : +node[comparitor]
+      // if it doesn't exist then push new item on
+      if (index > -1) {
+        results[index] = { ...results[index], [name]: value }
+      } else {
+        results.push({
+          date: node.date,
+          [name]: value,
+        })
+      }
+    }
+  }
+  return results
+    .sort(sortByDate)
+    .map(dataNode => ({ ...dataNode, date: readableChartDate(dataNode.date) }))
+}
+
+export function isDateEarlier(a: string | number, b: string | number) {
+  return moment(a.toString()).isBefore(moment(b.toString()))
+}
+
+export function isDateLater(a: string | number, b: string | number) {
+  return moment(a.toString()).isAfter(moment(b.toString()))
 }

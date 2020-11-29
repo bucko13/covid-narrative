@@ -27,11 +27,8 @@ const ComposedHistoricalComparison = ({
 }: ComparisonLineChartProps) => {
   let data = comparisonData
 
-  if (slice && typeof slice === "number") {
+  if (slice) {
     data = sliceData(slice, data)
-  } else if (slice && Array.isArray(slice)) {
-    data = sliceData(slice[0], data)
-    data = sliceData(slice[1], data)
   }
 
   return (

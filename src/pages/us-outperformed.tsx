@@ -373,11 +373,12 @@ const USOutperformed = ({ data }: PageProps) => {
           comparitor={
             testsPerThousand
               ? "newTestsSmoothedPerThousand"
-              : "newTestsSmoothedPerThousand"
+              : "newTestsSmoothed"
           }
           yAxisLabel={
             testsPerThousand ? "New tests per thousand people" : "New tests"
           }
+          slice={[60, -10]}
         />
       </ChartDisplay>
     </Layout>

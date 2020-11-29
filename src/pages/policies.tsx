@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { graphql } from "gatsby"
+import moment from "moment"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -11,6 +12,7 @@ import {
   ComposedHistoricalComparison,
   HistoricComparisonLineChart,
 } from "../components/charts"
+import { isClosestWeekend, isDateEarlier, isDateLater } from "../utils/helpers"
 
 interface PageProps {
   data: {
@@ -42,26 +44,73 @@ const Policies = ({ data }: PageProps) => {
     setStringencyLocation(target.value)
   }
 
+  // find out the count and name of country w/ most surveys
+  const [earliestSurvey, latestSurvey] = data.countries.nodes.reduce(
+    ([earliest, latest], node) => {
+      const surveyResults = node.surveyData?.i12_health_1?.results
+      if (surveyResults) {
+        const firstDate = surveyResults[0].date
+        const lastDate = surveyResults[surveyResults.length - 1].date
+        if (!earliest || isDateEarlier(firstDate, earliest))
+          earliest = firstDate
+        if (!latest || isDateLater(lastDate, latest)) latest = lastDate
+      }
+      return [earliest, latest]
+    },
+    ["", ""]
+  )
+
+  const weeks: string[] = [earliestSurvey]
+  let lastWeek = weeks[weeks.length - 1]
+  while (isDateEarlier(lastWeek, latestSurvey)) {
+    weeks.push(moment(lastWeek).add(7, "days").format("YYYYMMDD"))
+    lastWeek = weeks[weeks.length - 1]
+  }
+
   const maskData = data.countries.nodes
-    .filter(
-      country =>
-        (country?.surveyData?.i12_health_1 && country.code === "us") ||
-        country.code === "gb"
-    )
+    .filter(country => country?.surveyData?.i12_health_1)
     .map(country => {
       const surveyData = country?.surveyData?.i12_health_1.results
-      if (!surveyData) return 0
-      else {
+      const results = {
+        name: country.name,
+        code: country.code,
+        population: country.population,
+        data: [],
+      }
+      // console.log("country:", country.code)
+      if (surveyData) {
         return {
-          name: country.name,
-          code: country.code,
-          population: country.population,
-          data: surveyData.map(week => ({
-            date: week.date,
-            results: week.always + week.frequently,
-          })),
+          ...results,
+          data: weeks.map(week => {
+            const weekResults = surveyData.find(result =>
+              isClosestWeekend(result.date, week)
+            )
+
+            return {
+              date: week,
+              results: weekResults
+                ? weekResults.always + weekResults.frequently
+                : 0,
+            }
+          }),
         }
       }
+      return results
+    })
+    .map(country => {
+      // get rolling average for missing weeks
+      const averagedResults = [...country.data]
+      for (let i = 1; i < averagedResults.length - 1; i++) {
+        const node = averagedResults[i]
+        if (!node.results) {
+          let prevResult = averagedResults[i - 1].results
+          let nextResult = averagedResults[i + 1].results
+          if (!prevResult && nextResult) prevResult = nextResult
+          if (prevResult && !nextResult) nextResult = prevResult
+          node.results = (prevResult + nextResult) / 2
+        }
+      }
+      return { ...country, data: averagedResults }
     })
 
   return (
@@ -98,7 +147,7 @@ const Policies = ({ data }: PageProps) => {
             largerComparitor="positiveIncreaseRollingAveragePerMillion"
             smallerComparitor="stringencyIndexRollingAverage"
             smallerPlotType="line"
-            slice={[10, -12]}
+            slice={[30, -12]}
             yAxisLabelLeft="New Cases"
             yAxisLabelRight="Stringency Index"
           />
@@ -114,6 +163,7 @@ const Policies = ({ data }: PageProps) => {
         <HistoricComparisonLineChart
           comparisonData={maskData}
           comparitor="results"
+          multi
         />
       </ChartDisplay>
     </Layout>
