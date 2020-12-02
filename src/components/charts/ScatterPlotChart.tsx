@@ -114,7 +114,9 @@ const ScatterPlotChart = ({
   }
 
   const [domainState, setDomains] = useState(initialDomainState)
-  const chartNodes = data.filter(node => locations[node.name])
+  const chartNodes = data.filter(
+    node => locations[node.name] && node[xAxisKey] && node[yAxisKey]
+  )
 
   const handleZoom = (direction: "plus" | "minus") => {
     let newDomainState: { x: [number, number]; y: [number, number] }

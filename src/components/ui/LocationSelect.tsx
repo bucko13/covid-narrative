@@ -34,7 +34,6 @@ interface LocationSelectProps {
   locations: ThreeLiesData[]
   onChangeLocation: (value: string) => void
   value: string
-  // displayValue: string
   helperText?: string
 }
 
