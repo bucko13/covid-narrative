@@ -32,9 +32,7 @@ const useStyles = makeStyles({
 
 interface LocationSelectProps {
   locations: ThreeLiesData[]
-  onChangeLocation: (
-    e: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => void
+  onChangeLocation: (value: string) => void
   value: string
   // displayValue: string
   helperText?: string
@@ -52,13 +50,22 @@ export const LocationSelect = ({
     if (nameA.toLowerCase() > nameB.toLowerCase()) return 1
     return 0
   })
+  const handleChangeLocation = (
+    e: React.ChangeEvent<{
+      name?: string
+      value: unknown
+    }>
+  ): void => {
+    const target = e.target as HTMLInputElement
+    onChangeLocation(target.value)
+  }
   return (
     <FormControl classes={{ root: classes.formControl }}>
       <Select
         labelId="select-country"
         id="select-country"
         value={value}
-        onChange={onChangeLocation}
+        onChange={handleChangeLocation}
         inputProps={{ style: { fontSize: "1.5rem" } }}
         classes={{ select: classes.select }}
       >

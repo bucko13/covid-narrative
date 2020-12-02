@@ -397,6 +397,10 @@ export function transformSortedStateNodes(
       ),
       stringencyIndexRollingAverage,
       deathIncreaseRollingAverage,
+      deathIncreaseRollingAveragePerMillion: getPerMillionPop(
+        population,
+        deathIncreaseRollingAverage
+      ),
       positiveIncreaseRollingAverage,
     }
   })

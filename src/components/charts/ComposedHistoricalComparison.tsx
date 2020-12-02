@@ -42,7 +42,7 @@ const ComposedHistoricalComparison = ({
         />
         <YAxis
           orientation="left"
-          name="Cases"
+          name={largerComparitor}
           yAxisId={largerComparitor}
           label={{ value: yAxisLabelLeft, angle: -90, position: "insideLeft" }}
         />

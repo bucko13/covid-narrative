@@ -66,10 +66,11 @@ const HistoricComparisonLineChart = ({
         return {
           name: location.name,
           data: location.data.map(node => ({
-            date: +node.date,
-            value: perM
+            date: readableChartDate(+node.date),
+            value: (perM
               ? getPerMPop(location.population, +node[comparitor])
-              : +node[comparitor],
+              : +node[comparitor]
+            ).toFixed(3),
           })),
         }
       })

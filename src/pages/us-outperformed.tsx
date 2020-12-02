@@ -63,14 +63,6 @@ const USOutperformed = ({ data }: PageProps) => {
   const getCountryNodes = (code: string) =>
     data.countries.nodes.find(country => country.code === code)
 
-  // handle country change for comparison graph
-  const onChangeCountry = (
-    e: React.ChangeEvent<{ name?: string; value: unknown }>
-  ): void => {
-    const target = e.target as HTMLInputElement
-    setComparisonChartCountry(target.value)
-  }
-
   let stateData: { [code: string]: StateData } = {}
 
   stateData = states.reduce((prev, code) => {
@@ -261,7 +253,7 @@ const USOutperformed = ({ data }: PageProps) => {
           Daily New Cases vs. Fatalities -{" "}
           <LocationSelect
             locations={data.countries.nodes}
-            onChangeLocation={onChangeCountry}
+            onChangeLocation={setComparisonChartCountry}
             value={comparisonChartCountry}
           />{" "}
           (per mil.)
