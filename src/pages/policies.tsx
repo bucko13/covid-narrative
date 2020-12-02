@@ -181,13 +181,13 @@ const Policies = ({ data }: PageProps) => {
               ? "Deaths per 100k"
               : "Cases per 100k"
           }
-          paddingY={10}
+          paddingY={15}
           yAxisKey={
             stringencyComparisonFatalities
               ? "deaths_per_100k"
               : "positives_per_100k"
           }
-          data={[...data.countries.nodes, ...data.states.nodes]}
+          data={allLocations}
         />
       </ChartDisplay>
 
@@ -270,7 +270,7 @@ const Policies = ({ data }: PageProps) => {
           multi
         />
       </ChartDisplay>
-      <ChartDisplay title="Mask Wearing Ratesvs. Outcomes">
+      <ChartDisplay title="Mask Wearing Rates vs. Outcomes">
         <AboutThisGraph>
           <p>
             Another way to view the mask wearing rates is not just compared to
