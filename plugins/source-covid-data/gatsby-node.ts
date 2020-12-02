@@ -19,7 +19,7 @@ import {
   getLastDataPoint,
   getPerThousandPop,
   findFirstNodeWithMatchingMonth,
-  getRollingAverageData,
+  calculateEstimatedCases,
 } from "./utils/utils"
 import {
   transformCountryData,
@@ -110,7 +110,6 @@ async function createCountryNodes({
 async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
   const stateUnemploymentData = await getStateUnemploymentData()
 
-  // const employmentDataWeekends: string[] = Object.keys(employmentData)
   // make sure we have latest stringency data
   const stringencyData: StringencyData[] = await getAllStringencyData()
 
@@ -140,7 +139,7 @@ async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
         if (a.date > b.date) return 1
         else return -1
       })
-      .map((stateNode, index) => {
+      .map(stateNode => {
         /*
          * in this map function we calculate custom
          * data points for each date based on available data
@@ -148,14 +147,6 @@ async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
          * 2. insured unemployment for a given week
          * 3. estimated cases based on IFR
          */
-
-        // calcuate rolling 7-day averages.
-        // start with deaths since this is the bumpiest data
-        const rollingAverageKeys = ["deathIncrease", "positiveIncrease"]
-        const [
-          deathIncreaseRollingAverage,
-          positiveIncreaseRollingAverage,
-        ] = getRollingAverageData(index, rollingAverageKeys, data)
 
         const unemploymentData = stateUnemploymentData[code.toUpperCase()]
         if (!unemploymentData) {
@@ -178,14 +169,17 @@ async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {
           totalDeathsPerMillion: getPerMillionPop(population, stateNode.death),
           deathPerMillion: getPerMillionPop(population, stateNode.death),
           unemploymentRate: unemploymentRate ? +unemploymentRate : 0.0,
-          deathIncreaseRollingAverage,
-          positiveIncreaseRollingAverage,
           stringencyIndex: stringencyIndex ? +stringencyIndex : undefined,
         }
       })
 
     sortedData = transformSortedStateNodes(sortedData, population)
 
+    // add estimated cases based on IFR and rolling average
+    sortedData = sortedData.map((n, index) => ({
+      ...n,
+      estimatedCases: calculateEstimatedCases(index, sortedData),
+    }))
     const latestTotals = (await getJHUStateDataSingleDay(date.toString())).find(
       state => state.Province_State === codeToState[code.toUpperCase()]
     )

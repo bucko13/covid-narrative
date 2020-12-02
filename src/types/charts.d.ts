@@ -10,7 +10,6 @@ export interface LineChartComparisonData {
   code?: string
   population: number
   data: LineChartDataNode[]
-  yAxisLabel?: string
 }
 
 export interface BiaxialComparisonData {
@@ -33,9 +32,10 @@ export interface ComparisonLineChartProps {
   comparisonData: ThreeLiesNodeData[]
   largerComparitor: string
   smallerComparitor: string
-  slice?: number
+  slice?: number | [number, number]
   yAxisLabelLeft?: string
   yAxisLabelRight?: string
+  smallerPlotType?: "line" | "bar"
 }
 
 export interface StackedAreaChartData {
@@ -57,4 +57,5 @@ export interface HistoricLineChartProps {
   slice?: number
   yAxisLabel?: string
   excludeNodes?: string[]
+  multi?: boolean
 }

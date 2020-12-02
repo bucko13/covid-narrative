@@ -1,7 +1,7 @@
 import React from "react"
 import { Box } from "@material-ui/core"
 import Layout from "../components/layout"
-import './index.scss'
+import "./index.scss"
 import { Link } from "gatsby"
 import ExternalLink from "../components/ExternalLink"
 import { NarrativeMenu } from "../components/ui"
@@ -208,8 +208,24 @@ const IndexPage = () => {
             <a href="https://datausa.io/">DataUSA.io</a>
           </p>
           <p>
-            <strong>Employment Statistics (US): </strong>
-            <a href="https://datausa.io/">DataUSA.io</a>
+            <strong>Employment/Labor Statistics (US): </strong>
+            <a href="https://www.bls.gov/">Bureau of Labor Statistics</a>
+          </p>
+          <p>
+            <strong>Labor and GDP Statistics (EU): </strong>
+            <a href="https://ec.europa.eu/eurostat/">Eurostat</a>
+          </p>
+          <p>
+            <strong>Policy Tracking Data (US and Global): </strong>
+            <ExternalLink href="https://github.com/OxCGRT/covid-policy-tracker">
+              Oxford Covid-19 Government Response Tracker
+            </ExternalLink>
+          </p>
+          <p>
+            <strong>Behavior/Survey Data: </strong>
+            <ExternalLink href="https://github.com/YouGov-Data/covid-19-tracker">
+              Imperial College London YouGov Covid 19 Behaviour Tracker Data Hub
+            </ExternalLink>
           </p>
           <p>
             <strong>Rt (transmission rate) Data: </strong>

@@ -11,6 +11,7 @@ interface GraphFilterPropTypes {
   items: { [key: string]: boolean }
   handleChange: (event: React.ChangeEvent) => void
 }
+
 const GraphFilter = ({ items, handleChange }: GraphFilterPropTypes) => (
   <FormControl component="fieldset">
     <FormGroup>

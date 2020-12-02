@@ -66,7 +66,8 @@
     "tslint": "tslint --project tsconfig.json",
     "tslint:fix": "tslint --project tsconfig.json --fix",
     "test": "mocha plugins/**/*.spec.ts --r ts-node/register",
-    "test:watch": "mocha plugins/**/*.spec.ts --r ts-node/register --watch --watch-files plugins/**/*.spec.ts, plugins/**/*.ts"
+    "test:watch": "mocha plugins/**/*.spec.ts --r ts-node/register --watch --watch-files plugins/**/*.spec.ts, plugins/**/*.ts",
+    "test:app": "mocha src/tests/*.spec.ts --r ts-node/register --watch --watch-files \"src/**/!(.d)*.ts\""
   },
   "repository": {
     "type": "git",

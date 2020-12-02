@@ -288,7 +288,7 @@ export const findFirstNodeWithMatchingMonth = (
 export function getRollingAverageData(
   index: number,
   keys: string[],
-  data: ThreeLiesNodeData[],
+  data: ThreeLiesNodeData[] | OWIDDataNode[],
   period = 7
 ): number[] {
   const totals = Array(keys.length).fill(0)
@@ -297,7 +297,7 @@ export function getRollingAverageData(
   while (counter < period && counter <= index) {
     for (let i = 0; i < keys.length; i += 1) {
       const key = keys[i]
-      const total = data[index - counter][key]
+      const total = data[index - counter][key] || 0
       totals[i] += total
     }
     counter++

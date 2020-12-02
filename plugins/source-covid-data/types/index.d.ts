@@ -9,7 +9,7 @@ export interface ThreeLiesNodeData {
   deathIncreaseRollingAverage: number
   positiveIncreaseRollingAverage: number
   deathIncreaseRollingAveragePerMillion?: number
-  positiveIncreaseRollingAveragePerMillion?: number
+  positiveIncreaseRollingAveragePerMillion: number
   stringencyIndex?: number
   percentWearWasks?: number
   unemploymentRate?: number
@@ -24,6 +24,7 @@ export interface ThreeLiesNodeData {
   hospitalized: number
   hospitalizedPerMillion?: number
   positivityRate?: number
+  stringencyIndexRollingAverage: number
   p_scores_0_14?: number
   p_scores_15_64?: number
   p_scores_65_74?: number
@@ -191,7 +192,8 @@ export interface SurveyResultsForWeek {
   rarely: number
   not_at_all: number
   total: number
-  [key: string]: number
+  date: string // end date
+  [key: string]: number | string
 }
 
 export interface SurveyResultAPIResponse {

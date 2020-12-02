@@ -3,7 +3,9 @@ import codeToState from "./codeToState.json"
 import countryToCode from "./countryToCode.json"
 import ISO2ToISO3 from "./ISO2ToISO3.json"
 
-export const states = ["az", "ny", "nj", "fl", "tx", "ga", "ca"]
+export { codeToCountry, codeToState, countryToCode, ISO2ToISO3 }
+
+export const states = ["az", "ny", "nj", "fl", "tx", "ga", "ca", "il"]
 export const countries = [
   "gb",
   "au",
@@ -18,6 +20,7 @@ export const countries = [
   "es",
   "us",
   "jp",
+  "nz",
 ]
 export const surveyCodes = ["i12_health_1"]
 
@@ -49,8 +52,6 @@ export const HISTORICAL_POLICY_DATA_API =
 
 export const getCountrySurveyAPI = (country: string, extension = "csv") =>
   `https://github.com/YouGov-Data/covid-19-tracker/blob/master/data/${country}.${extension}?raw=true`
-
-export { codeToCountry, codeToState, countryToCode, ISO2ToISO3 }
 
 export const SURVEY_COUNTRIES_API =
   "https://raw.githubusercontent.com/YouGov-Data/covid-19-tracker/master/countries.csv"

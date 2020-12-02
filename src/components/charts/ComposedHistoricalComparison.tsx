@@ -23,8 +23,10 @@ const ComposedHistoricalComparison = ({
   slice,
   yAxisLabelLeft,
   yAxisLabelRight,
+  smallerPlotType = "bar",
 }: ComparisonLineChartProps) => {
   let data = comparisonData
+
   if (slice) {
     data = sliceData(slice, data)
   }
@@ -40,7 +42,7 @@ const ComposedHistoricalComparison = ({
         />
         <YAxis
           orientation="left"
-          name="Cases"
+          name={largerComparitor}
           yAxisId={largerComparitor}
           label={{ value: yAxisLabelLeft, angle: -90, position: "insideLeft" }}
         />
@@ -63,14 +65,28 @@ const ComposedHistoricalComparison = ({
             seed: JSON.stringify(data[0]),
           })}
         />
-        <Bar
-          yAxisId={smallerComparitor}
-          dataKey={smallerComparitor}
-          fill={randomColor({
-            luminosity: "bright",
-            seed: JSON.stringify(data[1]),
-          })}
-        />
+        {smallerPlotType === "line" ? (
+          <Line
+            yAxisId={smallerComparitor}
+            dataKey={smallerComparitor}
+            dot={false}
+            type="basisOpen"
+            fill={randomColor({
+              luminosity: "bright",
+              seed: JSON.stringify(data[1]),
+            })}
+          />
+        ) : (
+          <Bar
+            yAxisId={smallerComparitor}
+            dataKey={smallerComparitor}
+            fill={randomColor({
+              luminosity: "bright",
+              seed: JSON.stringify(data[1]),
+            })}
+          />
+        )}
+
         <Brush />
       </ComposedChart>
     </ResponsiveContainer>
