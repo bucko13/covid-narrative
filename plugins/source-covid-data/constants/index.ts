@@ -1,12 +1,29 @@
+import { CountryCode, StateCode } from "../types"
 import codeToCountry from "./codeToCountry.json"
 import codeToState from "./codeToState.json"
 import countryToCode from "./countryToCode.json"
 import ISO2ToISO3 from "./ISO2ToISO3.json"
+import statePopulations from "./statePopulations.json"
 
-export { codeToCountry, codeToState, countryToCode, ISO2ToISO3 }
+export {
+  codeToCountry,
+  codeToState,
+  countryToCode,
+  ISO2ToISO3,
+  statePopulations,
+}
 
-export const states = ["az", "ny", "nj", "fl", "tx", "ga", "ca", "il"]
-export const countries = [
+export const states: StateCode[] = [
+  "az",
+  "ny",
+  "nj",
+  "fl",
+  "tx",
+  "ga",
+  "ca",
+  "il",
+]
+export const countries: CountryCode[] = [
   "gb",
   "au",
   "de",

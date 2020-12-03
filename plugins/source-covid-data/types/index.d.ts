@@ -257,3 +257,21 @@ export interface BLSResponse {
     }[]
   }
 }
+
+export type CountryCode =
+  | "gb"
+  | "au"
+  | "de"
+  | "ch"
+  | "fi"
+  | "nl"
+  | "fr"
+  | "se"
+  | "be"
+  | "it"
+  | "es"
+  | "us"
+  | "jp"
+  | "nz"
+
+export type StateCode = "az" | "ny" | "nj" | "fl" | "tx" | "ga" | "ca" | "il"

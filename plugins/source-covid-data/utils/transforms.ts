@@ -1,21 +1,22 @@
 /* tslint:disable no-console */
 import { DateTime } from "luxon"
 import {
+  CountryCode,
   EUUnemploymentData,
   ExcessMortalityDataNode,
   OWIDData,
+  OwidTestDataNode,
   OxCGRTPolicyDataNode,
   PolicyUpdateNode,
   StateNodeData,
   ThreeLiesData,
 } from "../types"
-import { codeToCountry as codeToCountry_, surveyCodes } from "../constants"
 import {
-  getEUGDPData,
-  getEUUnemploymentData,
-  getExcessMortalityData,
-  getOwidTestDataNode,
-} from "./api"
+  codeToCountry as codeToCountry_,
+  surveyCodes,
+  ISO2ToISO3 as ISO2ToISO3_,
+} from "../constants"
+import { getEUGDPData, getExcessMortalityData, getOwidTestData } from "./api"
 import { collateSurveyDataForCode } from "./survey"
 import {
   getAverageOfDataPoint,
@@ -26,11 +27,14 @@ import {
   getPerMPop,
   isClosestWeekend,
   getPerMillionPop,
-  calculateEstimatedCases,
   getPerThousandPop,
   getRollingAverageData,
+  countryNameFromCode,
 } from "./utils"
+
 const codeToCountry: { [key: string]: string } = codeToCountry_
+const ISO2ToISO3: { [key: string]: string } = ISO2ToISO3_
+
 export function getAverageUnemployment(
   firstMonth: string,
   data: { [time: string]: number }
@@ -221,9 +225,10 @@ export const transformEuroStatData = (
 }
 
 export const addSurveyData = async (
-  countryName: string,
+  code: CountryCode,
   data: ThreeLiesData
 ): Promise<void> => {
+  const countryName = countryNameFromCode(code)
   for (const surveyCode of surveyCodes) {
     const survey = await collateSurveyDataForCode(countryName, surveyCode)
     if (!survey) return
@@ -240,16 +245,12 @@ export const addSurveyData = async (
 }
 
 // calculate average unemployment for the whole time period.
-export const addUnemploymentData = async (
+export const addUnemploymentData = (
   countryCode: string,
-  data: ThreeLiesData
-): Promise<void> => {
-  const euUnemloymentData = transformEuroStatData(
-    await getEUUnemploymentData(),
-    "monthly"
-  )
-
-  const unemploymentData = euUnemloymentData[countryCode.toUpperCase()]?.data
+  data: ThreeLiesData,
+  euUnemploymentData: any
+): void => {
+  const unemploymentData = euUnemploymentData[countryCode.toUpperCase()]?.data
   if (!unemploymentData) {
     console.warn(
       `No unemployment data for ${codeToCountry[countryCode.toUpperCase()]}`
@@ -269,11 +270,12 @@ export const addUnemploymentData = async (
   }
 }
 
-export const addGDPData = async (
+export const addGDPData = (
   countryCode: string,
-  data: ThreeLiesData
-): Promise<void> => {
-  const gdpData = transformEuroStatData(await getEUGDPData())
+  data: ThreeLiesData,
+  gdpData: any
+): void => {
+  gdpData = transformEuroStatData(gdpData)
   const countryGDP = gdpData[countryCode.toUpperCase()]?.data
   if (countryGDP) {
     data.gdp = Object.keys(countryGDP).map(quarter => ({
@@ -284,12 +286,13 @@ export const addGDPData = async (
 }
 
 // goes through each day and add the excess death data from the week corresponding to that day
-export const addExcessDeathData = async (
-  countryName: string,
-  data: ThreeLiesData
-): Promise<void> => {
+export const addExcessDeathData = (
+  code: CountryCode,
+  data: ThreeLiesData,
+  allMortalityData: ExcessMortalityDataNode[]
+): void => {
+  const countryName = countryNameFromCode(code)
   console.log(`Adding excess death data for ${countryName}`)
-  const allMortalityData: ExcessMortalityDataNode[] = await getExcessMortalityData()
   if (!allMortalityData || !data) {
     console.warn(`No excess mortality data for ${countryName}`)
     return
@@ -326,14 +329,15 @@ export const addExcessDeathData = async (
   data.averageExcessMortality = total / count
 }
 
-export const addOwidTestData = async (
-  code: string,
-  data: ThreeLiesData
-): Promise<void> => {
+export const addOwidTestData = (
+  iso2Code: CountryCode,
+  data: ThreeLiesData,
+  testData: OwidTestDataNode[]
+): void => {
+  // country data indexed to ISO3
+  const code = ISO2ToISO3[iso2Code.toUpperCase()]
   console.log(`Adding test data...`)
-  const allTestData = (await getOwidTestDataNode()).filter(
-    node => node["ISO code"] === code
-  )
+  const allTestData = testData.filter(node => node["ISO code"] === code)
   if (!allTestData.length) {
     throw new Error(`Could not find any test data for ${code}`)
   }
