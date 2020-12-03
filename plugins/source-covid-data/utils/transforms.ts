@@ -1,6 +1,7 @@
 /* tslint:disable no-console */
 import { DateTime } from "luxon"
 import {
+  CountryCode,
   EUUnemploymentData,
   ExcessMortalityDataNode,
   OWIDData,
@@ -9,7 +10,11 @@ import {
   StateNodeData,
   ThreeLiesData,
 } from "../types"
-import { codeToCountry as codeToCountry_, surveyCodes } from "../constants"
+import {
+  codeToCountry as codeToCountry_,
+  surveyCodes,
+  ISO2ToISO3 as ISO2ToISO3_,
+} from "../constants"
 import {
   getEUGDPData,
   getEUUnemploymentData,
@@ -26,11 +31,14 @@ import {
   getPerMPop,
   isClosestWeekend,
   getPerMillionPop,
-  calculateEstimatedCases,
   getPerThousandPop,
   getRollingAverageData,
+  countryNameFromCode,
 } from "./utils"
+
 const codeToCountry: { [key: string]: string } = codeToCountry_
+const ISO2ToISO3: { [key: string]: string } = ISO2ToISO3_
+
 export function getAverageUnemployment(
   firstMonth: string,
   data: { [time: string]: number }
@@ -221,9 +229,10 @@ export const transformEuroStatData = (
 }
 
 export const addSurveyData = async (
-  countryName: string,
+  code: CountryCode,
   data: ThreeLiesData
 ): Promise<void> => {
+  const countryName = countryNameFromCode(code)
   for (const surveyCode of surveyCodes) {
     const survey = await collateSurveyDataForCode(countryName, surveyCode)
     if (!survey) return
@@ -285,9 +294,10 @@ export const addGDPData = async (
 
 // goes through each day and add the excess death data from the week corresponding to that day
 export const addExcessDeathData = async (
-  countryName: string,
+  code: CountryCode,
   data: ThreeLiesData
 ): Promise<void> => {
+  const countryName = countryNameFromCode(code)
   console.log(`Adding excess death data for ${countryName}`)
   const allMortalityData: ExcessMortalityDataNode[] = await getExcessMortalityData()
   if (!allMortalityData || !data) {
@@ -327,9 +337,11 @@ export const addExcessDeathData = async (
 }
 
 export const addOwidTestData = async (
-  code: string,
+  iso2Code: CountryCode,
   data: ThreeLiesData
 ): Promise<void> => {
+  // country data indexed to ISO3
+  const code = ISO2ToISO3[iso2Code.toUpperCase()]
   console.log(`Adding test data...`)
   const allTestData = (await getOwidTestDataNode()).filter(
     node => node["ISO code"] === code

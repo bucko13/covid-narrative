@@ -5,7 +5,12 @@ import get from "axios"
 import fs from "fs"
 import path from "path"
 
-import { OWIDDataNode, ThreeLiesNodeData } from "../types"
+import {
+  CountryCode,
+  OWIDDataNode,
+  StateCode,
+  ThreeLiesNodeData,
+} from "../types"
 
 import parse from "csv-parse/lib/sync"
 
@@ -13,6 +18,13 @@ import csv from "csvtojson"
 import { DateTime } from "luxon"
 import { DAYS_TO_DEATH, IFR } from "../constants"
 import yauzl from "yauzl"
+import {
+  codeToState as codeToState_,
+  codeToCountry as codeToCountry_,
+} from "../constants"
+
+const codeToState: { [key: string]: string } = codeToState_
+const codeToCountry: { [key: string]: string } = codeToCountry_
 
 const promisify = (api: any): any => (...args: any[]) =>
   new Promise((resolve, reject) => {
@@ -47,6 +59,29 @@ export function isClosestWeekend(
   const dateB = moment(dateStringB)
   const diff = Math.abs(dateA.diff(dateB, "days"))
   return diff <= 7
+}
+
+export function countryNameFromCode(code: CountryCode): string {
+  let countryName = codeToCountry[code.toUpperCase()]
+  if (!countryName) {
+    throw new Error(`could not find country ${code}`)
+  }
+
+  if (countryName.toLowerCase() === "us") countryName = "United States"
+  return countryName
+}
+
+export const getStateNameFromCode = (code: StateCode): string => {
+  const name = codeToState[code.toUpperCase()]
+  if (!name) throw new Error(`Could not find state with code ${code}`)
+  return name
+}
+
+export const getDashedString = (s: string): string =>
+  s.toLowerCase().split(" ").join("-")
+
+export function stateNameDashedFromCode(code: StateCode): string {
+  return getDashedString(getStateNameFromCode(code))
 }
 
 export function extractCsvFromRemoteZip(api: string): Promise<string> {

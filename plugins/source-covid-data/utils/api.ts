@@ -11,6 +11,7 @@ import {
   OwidTestDataNode,
   StateUnemploymentData,
   BLSResponse,
+  OxCGRTPolicyDataNode,
 } from "../types"
 import {
   EU_UNEMPLOYMENT_API,
@@ -57,7 +58,7 @@ export const getEUGDPData = (): Promise<any> =>
 export const getAllStringencyData = (): Promise<any> =>
   getDataWrapper(STRINGENCY_INDEX_API, "all_stringency_data", "All Stringency")
 
-export const getHistoricalPolicyData = (): Promise<any> =>
+export const getHistoricalPolicyData = (): Promise<OxCGRTPolicyDataNode[]> =>
   getDataWrapper(
     HISTORICAL_POLICY_DATA_API,
     "historical_policy_data",
