@@ -1,7 +1,13 @@
 import crypto from "crypto"
 import { SourceNodesArgs } from "gatsby"
 
-import { CountryCode, OWIDData, OxCGRTPolicyDataNode } from "../types"
+import {
+  CountryCode,
+  ExcessMortalityDataNode,
+  OWIDData,
+  OwidTestDataNode,
+  OxCGRTPolicyDataNode,
+} from "../types"
 import {
   addExcessDeathData,
   addGDPData,
@@ -16,12 +22,20 @@ interface CreateNodeArgs {
   code: CountryCode
   data: OWIDData
   policyData: OxCGRTPolicyDataNode[]
+  unemploymentData: any
+  testData: OwidTestDataNode[]
+  mortalityData: ExcessMortalityDataNode[]
   createNode: SourceNodesArgs["actions"]["createNode"]
+  gdpData: any
 }
 async function createCountryNode({
   code,
   data,
   policyData,
+  unemploymentData,
+  testData,
+  mortalityData,
+  gdpData,
   createNode,
 }: CreateNodeArgs): Promise<void> {
   const countryName = countryNameFromCode(code)
@@ -33,11 +47,11 @@ async function createCountryNode({
     // these cannot be done in parallel b/c some of them require
     // data that is added onto the node in the prior operation
     // (this isn't true for all of them so there is room for optimization)
-    await addOwidTestData(code, transformed)
-    await addExcessDeathData(code, transformed)
-    await addUnemploymentData(code, transformed)
+    addOwidTestData(code, transformed, testData)
+    addExcessDeathData(code, transformed, mortalityData)
+    addUnemploymentData(code, transformed, unemploymentData)
     await addSurveyData(code, transformed)
-    await addGDPData(code, transformed)
+    addGDPData(code, transformed, gdpData)
 
     createNode({
       ...transformed,

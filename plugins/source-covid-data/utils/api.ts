@@ -53,7 +53,7 @@ export const getEUUnemploymentData = (): Promise<any> =>
   getDataWrapper(EU_UNEMPLOYMENT_API, "eu_unemployment_data", "EU Unemployment")
 
 export const getEUGDPData = (): Promise<any> =>
-  getDataWrapper(EU_GDP_API, "eu_gdp_data", "EU Unemployment")
+  getDataWrapper(EU_GDP_API, "eu_gdp_data", "EU GDP")
 
 export const getAllStringencyData = (): Promise<any> =>
   getDataWrapper(STRINGENCY_INDEX_API, "all_stringency_data", "All Stringency")
@@ -105,7 +105,7 @@ export const getExcessMortalityData = (): Promise<any> =>
     "All Excess Mortality"
   )
 
-export const getOwidTestDataNode = (): Promise<OwidTestDataNode[]> =>
+export const getOwidTestData = (): Promise<OwidTestDataNode[]> =>
   getDataWrapper(OWID_TEST_API, "all_owid_test_data", "All OWID test")
 
 export const getJHUStateDataSingleDay = async (
