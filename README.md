@@ -1,24 +1,22 @@
 # The COVID Narrative Project
 
 This is the repo for the data and visualization website
-currently available live at [covid-narrative.vercel.app/](https://covid-narrative.vercel.app/).
-as well as [threekindsoflies.com](https://threekindsoflies.com).
+currently available live at [threekindsoflies.com](https://threekindsoflies.com).
 
-Pull Request and issue submissions are welcome on this repo
-in case there are any requests for new narratives or graphs
-or a bug or mistake is found in the data visualizations or
-calculations.
+Pull Requests and issue submissions are welcome on this repo
+for requests for new narratives or graphs or a bug or mistake is found in the data visualizations or calculations.
 
 ## Running a Self-Hosted Graphql Server for Data
 
-This entire project can be self-hosted. This includes running all data queries from
+If you're curious to inspect the data yourself, would like to change the locations
+being displayed, or just want to poke around, this entire project can be self-hosted. This includes running all data queries from
 their original sources and making them available via a graphql server which
 is setup automatically by [Gatsby](https://gatsbyjs.com/). This means that you can
 make custom queries against all of the data available as well as run the site yourself.
 
 #### Custom list of countries and states
 
-The list of locations to query is also completely customizable. To edit the list of countries go to the constants file `plugins/source-covid-data/constants/index.ts`
+The list of locations to query is also completely customizable. To edit the list of countries and states, go to the constants file `plugins/source-covid-data/constants/index.ts`
 and either add or remove from the list of states or countries. The lists store locations
 based on their [ISO Alpha-2 code](https://www.nationsonline.org/oneworld/country_code_list.htm),
 so make sure to look up the appropriate code if you're adding to the list.
@@ -34,7 +32,7 @@ compiles correctly.
 - Note that a Gatsby plugin manages all the data retrieval and calculations and
   has its own directory and set of dependencies.
 - Next run `gatsby develop`. This will make network requests for
-  the latest data from all relevant API endpoints and store them locally as
+  the latest data from all relevant API endpoints and stores them locally as
   json files (this makes re-running the script faster).
 
 This will take some time to complete due to the size of
@@ -48,8 +46,9 @@ Learn more about interacting with Gatsby's Graphql server and UI [here](https://
 ### Refreshing the data
 
 If you stop the server and want to restart it, just run `gatsby develop` again.
-This should run significantly faster however will only run using the data from the
-last time the network requests were made.
+This should run significantly faster since no network requests will be made if a
+local version of the data is stored from a previous run. This means however
+that only the data from the last time the network requests were made is used.
 
 To reload the data with the latest versions from the respective sources, run:
 
