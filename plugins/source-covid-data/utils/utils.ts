@@ -40,10 +40,10 @@ export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
 
 export const getPerMillionPop = (pop: number, value: number): number =>
-  Math.floor(value / (pop / 1000000))
+  value / (pop / 1000000)
 
 export const getPerThousandPop = (pop: number, value: number): number =>
-  Math.floor(value / (pop / 1000))
+  value / (pop / 1000)
 
 export const getDateNumber = (date: string): number =>
   Number(moment(date).format("YYYYMMDD"))

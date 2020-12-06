@@ -8,7 +8,9 @@ import {
   OwidTestDataNode,
   OxCGRTPolicyDataNode,
   PolicyUpdateNode,
+  StateCode,
   StateNodeData,
+  StringencyData,
   ThreeLiesData,
 } from "../types"
 import {
@@ -16,7 +18,6 @@ import {
   surveyCodes,
   ISO2ToISO3 as ISO2ToISO3_,
 } from "../constants"
-import { getEUGDPData, getExcessMortalityData, getOwidTestData } from "./api"
 import { collateSurveyDataForCode } from "./survey"
 import {
   getAverageOfDataPoint,
@@ -80,6 +81,41 @@ function getPolicyUpdatesForDay(
         }
       })
   )
+}
+
+export function getStatePolicyUpdatesForDay(
+  date: string | number,
+  stateCode: StateCode,
+  data: StringencyData[]
+): PolicyUpdateNode[] {
+  const regionCode = `US_${stateCode.toUpperCase()}`
+  const policyDay = data.find(
+    node =>
+      node.RegionCode === regionCode &&
+      getDateNumber(node.Date) === getDateNumber(date.toString())
+  )
+  if (!policyDay) return []
+  // want to find all policies that updates and convert to a OxCGRTPolicyDataNode
+  return Object.keys(policyDay)
+    .filter(
+      // key is a policy type which has an underscore in it
+      // and has a value and is not the flag (which we will manually find the corresponding flag for a code)
+      key =>
+        key.includes("_") &&
+        policyDay[key].length &&
+        +policyDay[key] &&
+        !key.includes("Flag")
+    )
+    .map(key => {
+      const [code, type] = key.split("_")
+      const flag = +policyDay[`${code}_Flag`]
+      return {
+        code,
+        flag,
+        type,
+        value: +policyDay[key],
+      }
+    })
 }
 
 // transforms OWID data to ThreeKindsOfLies data structures

@@ -163,25 +163,53 @@ export interface EUUnemploymentData {
 
 export interface StringencyData {
   RegionName: string
+  RegionCode: string
   Date: string
   StringencyIndex: string
   RegionCode: string
+  [code: string]: string
+  // codes are stringified numbers
+  "H6_Facial Coverings": string
+  "C6_Stay at home requirements": string
+  "C8_International travel controls": string
+  "C8_International travel controls": string
 }
 
-export interface OxCGRTPolicyDataNode {
-  CountryName: string
-  CountryCode: string
+export interface OxCGRTPolicyDataNodeBase {
   Date: string
   PolicyType: string
   PolicyValue: string
   Flag: string
+}
+
+export interface OxCGRTPolicyDataNode extends OxCGRTPolicyDataNodeBase {
+  CountryName: string
+  CountryCode: string
   Notes: string
 }
 
+// there are more types, but these are onese care about for now
+// can add later
+export type PolicyCode =
+  | "C6" // Stay at home requirements
+  | "C7" // Restrictions on internal movement
+  | "H3" // Contact tracing
+  | "H6" // Facial covering
+  | "C4" // restrictions on gatherings
+  | string
+
+export type PolicyType =
+  | "Stay at home requirements"
+  | "Restrictions on internal movement"
+  | "Contact tracing"
+  | "Facial covering"
+  | "Restrictions on gatherings"
+  | string
+
 export interface PolicyUpdateNode {
-  code: string
-  type: string
-  flag: number
+  code: PolicyCode
+  type: PolicyType
+  flag: number | null
   value: number
 }
 

@@ -45,7 +45,7 @@ Learn more about interacting with Gatsby's Graphql server and UI [here](https://
 
 ### Refreshing the data
 
-If you stop the server and want to restart it, just run `gatsby develop` again.
+If you stop the server and want to restart it, just run `yarn develop` again.
 This should run significantly faster since no network requests will be made if a
 local version of the data is stored from a previous run. This means however
 that only the data from the last time the network requests were made is used.
@@ -53,7 +53,7 @@ that only the data from the last time the network requests were made is used.
 To reload the data with the latest versions from the respective sources, run:
 
 ```
-gatsby develop:reload
+yarn develop:reload
 ```
 
 ## Data Sources

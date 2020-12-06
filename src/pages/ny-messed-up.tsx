@@ -164,6 +164,7 @@ const NyMessedUp = ({ data }: PageProps) => {
         comparisonData={lineChartData}
         comparitor="hospitalizedCurrently"
         perM={hospitalizedPer100k}
+        slice={40}
         yAxisLabel={
           hospitalizedPer100k ? "Hospitalized (per 100k)" : "Hospitalized"
         }
@@ -197,6 +198,7 @@ const NyMessedUp = ({ data }: PageProps) => {
           comparisonData={lineChartData}
           comparitor="deathIncreaseRollingAverage"
           perM={fatalityPer100k}
+          slice={40}
           yAxisLabel={
             fatalityPer100k ? "Daily Fatalities (per 100k)" : "Daily Fatalities"
           }

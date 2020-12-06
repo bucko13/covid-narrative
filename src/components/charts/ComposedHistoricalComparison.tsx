@@ -11,10 +11,53 @@ import {
   Brush,
   ComposedChart,
   Bar,
+  ReferenceLine,
+  TooltipProps,
 } from "recharts"
 import randomColor from "randomcolor"
 import { readableChartDate, sliceData } from "../../utils/helpers"
-import { ComparisonLineChartProps } from "../../types/charts"
+import {
+  ComparisonLineChartProps,
+  ReferenceLineDataNode,
+} from "../../types/charts"
+
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+  referenceLines,
+  keys = [],
+}: TooltipProps & {
+  referenceLines: ReferenceLineDataNode[]
+  keys?: string[]
+}) => {
+  if (active && payload) {
+    const referenceLabel =
+      referenceLines.find(node => node.date === label)?.label || ""
+
+    return (
+      <div className="custom-tooltip">
+        <h6>{readableChartDate(label || "")}</h6>
+        {payload.map((item, index) => {
+          const value = +item.value
+          return (
+            <p key={value}>
+              <strong>{keys[index] || item.name}:</strong> {value.toFixed(2)}
+            </p>
+          )
+        })}
+        {referenceLabel.length ? (
+          <p>
+            <strong>{referenceLabel}</strong>
+          </p>
+        ) : (
+          ""
+        )}
+      </div>
+    )
+  }
+  return null
+}
 
 const ComposedHistoricalComparison = ({
   comparisonData,
@@ -24,13 +67,13 @@ const ComposedHistoricalComparison = ({
   yAxisLabelLeft,
   yAxisLabelRight,
   smallerPlotType = "bar",
+  referenceLines = [],
 }: ComparisonLineChartProps) => {
   let data = comparisonData
 
   if (slice) {
     data = sliceData(slice, data)
   }
-
   return (
     <ResponsiveContainer width="100%" aspect={2}>
       <ComposedChart data={data}>
@@ -53,13 +96,25 @@ const ComposedHistoricalComparison = ({
           domain={[0, "dataMax + 30"]}
           label={{ value: yAxisLabelRight, angle: 90, position: "insideRight" }}
         />
-        <Tooltip />
+        <Tooltip
+          content={
+            <CustomTooltip
+              referenceLines={referenceLines}
+              keys={
+                yAxisLabelLeft && yAxisLabelRight
+                  ? [yAxisLabelLeft, yAxisLabelRight]
+                  : []
+              }
+            />
+          }
+        />
         <Legend />
         <Line
           yAxisId={largerComparitor}
           dataKey={largerComparitor}
           type="basisOpen"
           dot={false}
+          strokeWidth={2}
           stroke={randomColor({
             luminosity: "dark",
             seed: JSON.stringify(data[0]),
@@ -69,6 +124,7 @@ const ComposedHistoricalComparison = ({
           <Line
             yAxisId={smallerComparitor}
             dataKey={smallerComparitor}
+            strokeWidth={2}
             dot={false}
             type="basisOpen"
             fill={randomColor({
@@ -86,7 +142,17 @@ const ComposedHistoricalComparison = ({
             })}
           />
         )}
-
+        {referenceLines.map(({ type, date }) => (
+          <ReferenceLine
+            x={date}
+            stroke={type === "tightened" ? "red" : "black"}
+            strokeWidth={3}
+            yAxisId={smallerComparitor}
+            strokeDasharray="3"
+            key={date}
+            style={{ cursor: "pointer", padding: "3px" }}
+          />
+        ))}
         <Brush />
       </ComposedChart>
     </ResponsiveContainer>

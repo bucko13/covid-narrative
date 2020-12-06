@@ -3,13 +3,12 @@ import {
   ThreeLiesData,
   ThreeLiesNodeData,
 } from "../../plugins/source-covid-data/types"
-import { LineChartComparisonData, LineChartDataNode } from "../types/charts"
 
 export const getPerMPop = (pop: number, value: number): number =>
   value / (pop / 100000)
 
 export const getPerMillionPop = (pop: number, value: number): number =>
-  Math.floor(value / (pop / 1000000))
+  value / (pop / 1000000)
 
 export const readableChartDate = (date: number | string): string =>
   moment(date.toString()).format("MMM D")
@@ -115,39 +114,6 @@ export function sortByDate(
   if (dateA.isBefore(dateB)) return -1
   if (dateA.isAfter(dateB)) return 1
   return 0
-}
-
-export function createHistoricalComparisonDataSet(
-  locations: LineChartComparisonData[] | ThreeLiesData[],
-  comparitor: string,
-  perMPop = false
-): LineChartDataNode[] {
-  const results: LineChartDataNode[] = []
-  // going through each data set (usually a location)
-  // and for each of those add its data nodes to the results array
-  for (const location of locations) {
-    const name = location.name
-    for (const node of location.data) {
-      // const chartDate = readableChartDate(node.date)
-      // we want to see if the date exists yet or not
-      const index = results.findIndex(({ date }) => date === node.date)
-      const value = perMPop
-        ? getPerMPop(location.population, +node[comparitor])
-        : +node[comparitor]
-      // if it doesn't exist then push new item on
-      if (index > -1) {
-        results[index] = { ...results[index], [name]: value }
-      } else {
-        results.push({
-          date: node.date,
-          [name]: value,
-        })
-      }
-    }
-  }
-  return results
-    .sort(sortByDate)
-    .map(dataNode => ({ ...dataNode, date: readableChartDate(dataNode.date) }))
 }
 
 export function isDateEarlier(a: string | number, b: string | number) {
