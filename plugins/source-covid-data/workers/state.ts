@@ -15,7 +15,10 @@ import {
   getJHUStateDataSingleDay,
   getStateHistoricData,
 } from "../utils/api"
-import { transformSortedStateNodes } from "../utils/transforms"
+import {
+  getStatePolicyUpdatesForDay,
+  transformSortedStateNodes,
+} from "../utils/transforms"
 import {
   calculateEstimatedCases,
   findFirstNodeWithMatchingMonth,
@@ -63,6 +66,11 @@ function addCustomDataToStateNode(
     deathPerMillion: getPerMillionPop(population, stateNode.death),
     unemploymentRate: unemploymentRate ? +unemploymentRate : 0.0,
     stringencyIndex: stringencyIndex ? +stringencyIndex : undefined,
+    policyUpdates: getStatePolicyUpdatesForDay(
+      stateNode.date,
+      code,
+      stringencyData
+    ),
   }
 }
 

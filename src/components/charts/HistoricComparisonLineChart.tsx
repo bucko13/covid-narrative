@@ -12,12 +12,8 @@ import {
 } from "recharts"
 import randomColor from "randomcolor"
 
-import {
-  createHistoricalComparisonDataSet,
-  readableChartDate,
-  sliceData,
-  getPerMPop,
-} from "../../utils/helpers"
+import { readableChartDate, sliceData, getPerMPop } from "../../utils/helpers"
+import { createHistoricalComparisonDataSet } from "../../utils/transforms"
 import { HistoricLineChartProps } from "../../types/charts"
 import { GraphFilter } from "../ui"
 

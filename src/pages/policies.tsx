@@ -18,6 +18,7 @@ import {
 } from "../components/charts"
 import { isClosestWeekend, isDateEarlier, isDateLater } from "../utils/helpers"
 import ExternalLink from "../components/ExternalLink"
+import { createReferenceLineDataSetFromPolicyUpdates } from "../utils/transforms"
 
 interface PageProps {
   data: {
@@ -193,15 +194,36 @@ const Policies = ({ data }: PageProps) => {
 
       <ChartDisplay title="Impact of Stringency Over Time">
         <AboutThisGraph>
-          We can try and infer something about the impacts of government policy
-          on COVID-19 outcomes by seeing how they track overtime with outbreaks.
-          One useful indicator is to see if increased stringency trails case
-          peaks, something that could indicate improvements happening naturally
-          as opposed to a reaction to specific policies. Alternatively, we can
-          try and see if increases track across different geographic regions (to
-          account for weather variations) when stringency is already high (i.e.
-          does consistent high stringency prevent future outbreaks) and if
-          stringency decreases map to increases.
+          <p>
+            We can try and infer something about the impacts of government
+            policy on COVID-19 outcomes by seeing how they track overtime with
+            outbreaks. One useful indicator is to see if increased stringency
+            trails case peaks, something that could indicate improvements
+            happening naturally as opposed to a reaction to specific policies.
+            Alternatively, we can try and see if increases track across
+            different geographic regions (to account for weather variations)
+            when stringency is already high (i.e. does consistent high
+            stringency prevent future outbreaks) and if stringency decreases map
+            to increases.
+          </p>
+          <p>
+            This chart also marks the dates when certain policies were either
+            tightened or relaxed. Only policies for masks, gatherings, and
+            stay-at-home orders are currently tracked. Though{" "}
+            <ExternalLink href="https://github.com/OxCGRT/covid-policy-tracker/blob/master/documentation/codebook.md">
+              all of the policies
+            </ExternalLink>{" "}
+            tracked by OxCGRT are available on request. This allows us to
+            observe how restrictions or the loosening of those restrictions
+            could have impacted outcome. We learn even more by comparing between
+            regions by observing if similar measures had the same impact or if
+            different outcomes are possibly attributable to other factors.
+          </p>
+
+          <p>
+            Hover over a date with a reference line to see the policy or
+            policies types that were changed.
+          </p>
         </AboutThisGraph>
         <LocationSelect
           locations={allLocations}
@@ -233,6 +255,13 @@ const Policies = ({ data }: PageProps) => {
                 : "New Cases per Million"
             }
             yAxisLabelRight="Stringency Index"
+            referenceLines={
+              historicStringencyData &&
+              createReferenceLineDataSetFromPolicyUpdates(
+                historicStringencyData,
+                ["C6", "H6", "C4"]
+              )
+            }
           />
         )}
       </ChartDisplay>
@@ -349,6 +378,12 @@ export const query = graphql`
           positiveIncreaseRollingAveragePerMillion
           deathIncreaseRollingAveragePerMillion
           stringencyIndexRollingAverage
+          policyUpdates {
+            code
+            flag
+            type
+            value
+          }
         }
       }
     }
@@ -375,6 +410,12 @@ export const query = graphql`
           positiveIncreaseRollingAveragePerMillion
           deathIncreaseRollingAveragePerMillion
           stringencyIndexRollingAverage
+          policyUpdates {
+            code
+            flag
+            type
+            value
+          }
         }
       }
     }

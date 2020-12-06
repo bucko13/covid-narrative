@@ -36,6 +36,7 @@ export interface ComparisonLineChartProps {
   yAxisLabelLeft?: string
   yAxisLabelRight?: string
   smallerPlotType?: "line" | "bar"
+  referenceLines?: ReferenceLineDataNode[]
 }
 
 export interface StackedAreaChartData {
@@ -58,4 +59,10 @@ export interface HistoricLineChartProps {
   yAxisLabel?: string
   excludeNodes?: string[]
   multi?: boolean
+}
+
+export interface ReferenceLineDataNode {
+  date: number
+  label: string
+  type: "tightened" | "loosened" | "removed" | ""
 }

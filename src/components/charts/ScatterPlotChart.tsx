@@ -43,7 +43,7 @@ interface TooltipProps {
 const CustomTooltip = ({ active, payload }: TooltipProps) => {
   if (active) {
     return (
-      <div className="scatter-tooltip">
+      <div className="custom-tooltip">
         <h6>{payload[0].payload.name}</h6>
         {payload.map(item => (
           <p key={item.dataKey}>
@@ -63,14 +63,7 @@ const CustomYAxisTick = ({
 }) => {
   return (
     <g>
-      <text
-        x={60}
-        y={payload.coordinate + 5}
-        // dx={16}
-        textAnchor="end"
-        fill="#666"
-        // transform="rotate(-35)"
-      >
+      <text x={60} y={payload.coordinate + 5} textAnchor="end" fill="#666">
         {payload.value.toFixed(2)}
       </text>
     </g>
@@ -232,11 +225,7 @@ const ScatterPlotChart = ({
           />
           <Tooltip content={<CustomTooltip />} />
 
-          <Scatter
-            data={chartNodes}
-            className="scatter-dot"
-            isAnimationActive={false}
-          >
+          <Scatter data={chartNodes} isAnimationActive={false}>
             <LabelList dataKey="name" position="insideTopRight" />
           </Scatter>
         </ScatterChart>
