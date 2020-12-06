@@ -89,7 +89,6 @@ export function getStatePolicyUpdatesForDay(
   data: StringencyData[]
 ): PolicyUpdateNode[] {
   const regionCode = `US_${stateCode.toUpperCase()}`
-  // const policyData: PolicyUpdateNode[] = []
   const policyDay = data.find(
     node =>
       node.RegionCode === regionCode &&
