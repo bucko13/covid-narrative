@@ -74,7 +74,12 @@ async function createCountryNodes({
     })
   })
 
-  await Promise.all(transforms)
+  try {
+    await Promise.all(transforms)
+  } catch (e) {
+    console.error("Problem creating country nodes:", e.message)
+    process.exit()
+  }
 }
 
 async function createStateNodes({ actions: { createNode } }: SourceNodesArgs) {

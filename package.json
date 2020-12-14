@@ -49,7 +49,8 @@
     "mocha": "^8.2.1",
     "prettier": "2.0.5",
     "tslint": "^6.1.3",
-    "tslint-config-prettier": "^1.18.0"
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-no-unused-expression-chai": "^0.1.4"
   },
   "keywords": [
     "gatsby"
@@ -65,8 +66,8 @@
     "clean": "gatsby clean",
     "tslint": "tslint --project tsconfig.json",
     "tslint:fix": "tslint --project tsconfig.json --fix",
-    "test": "mocha plugins/**/*.spec.ts --r ts-node/register",
-    "test:watch": "mocha plugins/**/*.spec.ts --r ts-node/register --watch --watch-files plugins/**/*.spec.ts, plugins/**/*.ts",
+    "test": "NODE_ENV=test mocha plugins/**/*.spec.ts --r ts-node/register",
+    "test:watch": "NODE_ENV=test mocha plugins/**/*.spec.ts --r ts-node/register --watch --watch-files plugins/**/*.spec.ts, plugins/**/*.ts",
     "test:app": "mocha src/tests/*.spec.ts --r ts-node/register --watch --watch-files \"src/**/!(.d)*.ts\""
   },
   "repository": {
