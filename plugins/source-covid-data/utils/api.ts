@@ -185,7 +185,7 @@ export const getStateUnemploymentData = async (): Promise<
           })
         return acc
       }, data)
-      if (process.env.SAVE_DATA_FILES) {
+      if (process.env.SAVE_DATA_FILES && process.env.NODE_ENV !== "test") {
         fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
       }
     } catch (e) {

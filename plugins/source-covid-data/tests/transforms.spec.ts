@@ -7,7 +7,7 @@ import { default as stringencyData_ } from "./fixtures/stringency_data_fixture.j
 const stringencyData: StringencyData[] = stringencyData_
 
 describe("transforms", () => {
-  describe.only("getStatePolicyUpatesForDay", () => {
+  describe("getStatePolicyUpatesForDay", () => {
     it("should return empty array for a state code and date that doesn't exist", () => {
       const policyUpdates = getStatePolicyUpdatesForDay(
         "20181212",

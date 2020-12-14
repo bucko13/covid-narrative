@@ -116,7 +116,7 @@ export async function getJsonFromApi(api: string) {
   // zip needs to be handle for some survey requests
   // they are just compressed csvs. May need to make this more
   // flexible in the future though
-  console.log("Requesting data from:", api)
+  if (!isTest()) console.log("Requesting data from:", api)
   if (api.includes(".zip")) {
     const result = await extractCsvFromRemoteZip(api)
     return parse(result, {
@@ -125,7 +125,6 @@ export async function getJsonFromApi(api: string) {
       skip_lines_with_error: true,
       trim: true,
     })
-    // return await csv().fromString(result)
   }
 
   const data = await get(api)
@@ -157,6 +156,7 @@ export function getLastDataPoint(
   if (!value) console.warn(`Could not find data point for ${key}`)
   return value
 }
+export const isTest = (): boolean => process.env.NODE_ENV === "test"
 
 export const getDataWrapper = async (
   api: string,
@@ -167,15 +167,15 @@ export const getDataWrapper = async (
   const DATA_FILE = path.resolve(__dirname, `../data/${fileName}.json`)
   let data
 
-  if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA) {
-    console.log(`(Re)loading ${dataName} data...`)
+  if (!fs.existsSync(DATA_FILE) || process.env.RELOAD_DATA || isTest()) {
+    if (!isTest()) console.log(`(Re)loading ${dataName} data...`)
     const response = await getJsonFromApi(api)
 
     data = dataKey ? response[dataKey] : response
-    if (process.env.SAVE_DATA_FILES) {
+    if (process.env.SAVE_DATA_FILES && !isTest()) {
       fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2))
     }
-    console.log(`Finished loading ${dataName} data`)
+    if (!isTest()) console.log(`Finished loading ${dataName} data`)
   } else {
     data = JSON.parse(fs.readFileSync(DATA_FILE, { encoding: "utf-8" }))
   }
