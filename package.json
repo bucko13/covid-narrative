@@ -58,7 +58,7 @@
   "license": "0BSD",
   "scripts": {
     "build": "gatsby build",
-    "develop": "NODE_OPTIONS=--max-old-space-size=16000 SAVE_DATA_FILES=true gatsby develop",
+    "develop": "NODE_OPTIONS=--max-old-space-size=32000 SAVE_DATA_FILES=true gatsby develop",
     "develop:reload": "RELOAD_DATA=true NODE_OPTIONS=--max-old-space-size=16000 SAVE_DATA_FILES=true gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",

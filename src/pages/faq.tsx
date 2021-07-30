@@ -63,16 +63,16 @@ const FAQPage = () => {
               different strains of the virus
             </ExternalLink>{" "}
             for example, some (notably the European strain which is what
-            primarily effected the U.S.) being more deadly than others.
+            primarily affected the U.S.) being more deadly than others.
           </p>
           <p>
-            New Zealand is often example of country that is widely considered to
-            have handled the pandemic well. However, if we consider their
-            situation, being incredibly remote, an island that is easier to
-            block travel to and from, and being much more sparsely populated
-            than other parts of the world, it doesn't give as useful of a
-            comparison in terms of situations that countries in Europe and North
-            America faced.
+            New Zealand is often given as an example of a country that is widely
+            considered to have handled the pandemic well. However, if we
+            consider their situation, being incredibly remote, an island that is
+            easier to block travel to and from, and being much more sparsely
+            populated than other parts of the world, it doesn't give as useful
+            of a comparison in terms of situations that countries in Europe and
+            North America faced.
           </p>
         </>
       ),
